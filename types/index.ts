@@ -1,4 +1,11 @@
-export type IndustryId = "ecommerce" | "edtech" | "healthtech" | "bfsi" | "hospitality";
+// /types/index.ts
+
+export type IndustryId =
+  | "ecommerce"
+  | "edtech"
+  | "healthtech"
+  | "bfsi"
+  | "hospitality";
 
 export interface Industry {
   id: IndustryId;
@@ -6,10 +13,11 @@ export interface Industry {
   color: string;
 }
 
-export interface Message {
-  role: string;
+export interface TranscriptMessage {
+  id?: string;
+  role: "agent" | "user";
   text: string;
-  timestamp?: number;
+  timestamp: number;
 }
 
 export interface Agent {
@@ -26,20 +34,11 @@ export interface Agent {
   status: "live" | "beta" | "coming-soon";
   metric: string;
   retellAgentId: string;
-  demoTranscript: Message[];
-  workflowTags?: string[];
   tagline?: string;
   latency?: string;
   accuracy?: string;
   callsToday?: string;
-  demoScript?: Message[];
+  workflowTags?: string[];
+  demoScript?: TranscriptMessage[];
+  demoTranscript?: TranscriptMessage[];
 }
-
-export const statusConfig = {
-  live: "Live",
-  beta: "Beta",
-  coming_soon: "Coming Soon"
-};
-
-
-
