@@ -1,0 +1,256 @@
+/* ============================================================================
+ * ACCESSIBILITY CORE
+ * WCAG AAA compliance foundation
+ * ============================================================================ */
+
+/* ---------------------------------------------------------------------------
+ * SCREEN READER UTILITIES
+ * --------------------------------------------------------------------------- */
+
+.sr-only,
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+
+  clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
+
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Focusable screen-reader content */
+
+.sr-only-focusable:focus,
+.sr-only-focusable:active {
+  position: static;
+  width: auto;
+  height: auto;
+  margin: 0;
+
+  overflow: visible;
+
+  clip: auto;
+  clip-path: none;
+
+  white-space: normal;
+}
+
+/* ============================================================================
+ * FOCUS MANAGEMENT
+ * ============================================================================ */
+
+/* Remove default browser focus */
+
+:focus {
+  outline: none;
+}
+
+/* Preserve keyboard accessibility */
+
+:focus-visible {
+  outline: 2px solid var(--focus-ring-color, var(--color-cyan));
+  outline-offset: 2px;
+}
+
+/* Focus-visible utility */
+
+.focus-visible-only:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Custom focus ring */
+
+.focus-ring {
+  outline: none;
+  transition:
+    outline-color 160ms var(--ease-smooth),
+    box-shadow 160ms var(--ease-smooth);
+}
+
+.focus-ring:focus-visible {
+  outline: 2px solid var(--focus-ring-color, var(--color-cyan));
+  outline-offset: 2px;
+
+  border-radius: inherit;
+
+  box-shadow:
+    0 0 0 4px rgba(34, 211, 238, 0.15);
+}
+
+/* High contrast accessibility */
+
+[data-high-contrast] .focus-ring:focus-visible {
+  outline-width: 3px;
+  outline-color: currentColor;
+
+  box-shadow: none;
+}
+
+/* ============================================================================
+ * REDUCED MOTION ACCESSIBILITY
+ * ============================================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+
+    transition-duration: 0.01ms !important;
+
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================================================
+ * REDUCED TRANSPARENCY
+ * ============================================================================ */
+
+@media (prefers-reduced-transparency: reduce) {
+  .glass,
+  .glass-strong {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+
+    background: var(--surface-elevated) !important;
+  }
+}
+
+/* ============================================================================
+ * HIGH CONTRAST MODE
+ * ============================================================================ */
+
+@media (prefers-contrast: more) {
+  :root {
+    --focus-ring-color: #FFFFFF;
+  }
+
+  * {
+    text-shadow: none !important;
+    box-shadow: none !important;
+  }
+}
+
+/* ============================================================================
+ * TOUCH TARGET ACCESSIBILITY
+ * Minimum 44x44px interactive areas
+ * ============================================================================ */
+
+@media (pointer: coarse) {
+  button,
+  [role='button'],
+  a,
+  input,
+  select,
+  textarea {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
+
+/* ============================================================================
+ * INTERACTION STATES
+ * ============================================================================ */
+
+[disabled],
+[aria-disabled='true'] {
+  cursor: not-allowed;
+  opacity: 0.5;
+
+  pointer-events: none;
+}
+
+/* ============================================================================
+ * TEXT OVERFLOW UTILITIES
+ * ============================================================================ */
+
+.truncate {
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Line Clamp Utilities */
+
+.line-clamp-1 {
+  overflow: hidden;
+
+  display: -webkit-box;
+
+  line-clamp: 1;
+  -webkit-line-clamp: 1;
+
+  -webkit-box-orient: vertical;
+}
+
+.line-clamp-2 {
+  overflow: hidden;
+
+  display: -webkit-box;
+
+  line-clamp: 2;
+  -webkit-line-clamp: 2;
+
+  -webkit-box-orient: vertical;
+}
+
+.line-clamp-3 {
+  overflow: hidden;
+
+  display: -webkit-box;
+
+  line-clamp: 3;
+  -webkit-line-clamp: 3;
+
+  -webkit-box-orient: vertical;
+}
+
+.line-clamp-4 {
+  overflow: hidden;
+
+  display: -webkit-box;
+
+  line-clamp: 4;
+  -webkit-line-clamp: 4;
+
+  -webkit-box-orient: vertical;
+}
+
+/* ============================================================================
+ * SELECTION ACCESSIBILITY
+ * ============================================================================ */
+
+::selection {
+  background: rgba(34, 211, 238, 0.25);
+  color: var(--text-primary);
+}
+
+/* ============================================================================
+ * SCROLL ACCESSIBILITY
+ * ============================================================================ */
+
+html {
+  scroll-padding-top: env(safe-area-inset-top, 0px);
+  scroll-padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* ============================================================================
+ * FORCED COLORS MODE
+ * ============================================================================ */
+
+@media (forced-colors: active) {
+  * {
+    forced-color-adjust: auto;
+  }
+
+  .focus-ring:focus-visible {
+    outline: 2px solid Highlight;
+  }
+}

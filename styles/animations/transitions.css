@@ -1,0 +1,41 @@
+/* styles/animations/transitions.css */
+.transition-fast {
+  transition: all var(--duration-fast) var(--easing-ease-in-out);
+}
+
+.transition-base {
+  transition: all var(--duration-base) var(--easing-ease-in-out);
+}
+
+.transition-slow {
+  transition: all var(--duration-slow) var(--easing-ease-in-out);
+}
+
+.transition-slower {
+  transition: all var(--duration-slower) var(--easing-ease-in-out);
+}
+
+.transition-colors {
+  transition: background-color var(--duration-base) var(--easing-ease-in-out),
+    border-color var(--duration-base) var(--easing-ease-in-out),
+    color var(--duration-base) var(--easing-ease-in-out);
+}
+
+.transition-transform {
+  transition: transform var(--duration-base) var(--easing-ease-in-out);
+}
+
+.transition-opacity {
+  transition: opacity var(--duration-base) var(--easing-ease-in-out);
+}
+
+.transition-shadow {
+  transition: box-shadow var(--duration-base) var(--easing-ease-in-out);
+}
+
+@media (hover: hover) {
+  button:hover,
+  a:hover {
+    transition: all var(--duration-fast) var(--easing-ease-out);
+  }
+}

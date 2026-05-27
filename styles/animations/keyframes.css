@@ -1,0 +1,167 @@
+/* styles/animations/keyframes.css */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slide-down {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slide-left {
+  from {
+    transform: translateX(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slide-right {
+  from {
+    transform: translateX(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes scale-in {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes scale-out {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+}
+
+@keyframes glow {
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(34, 211, 238, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(34, 211, 238, 0.4);
+  }
+}
+
+@keyframes neural-pulse {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in var(--duration-base) var(--easing-ease-in-out);
+}
+
+.animate-fade-out {
+  animation: fade-out var(--duration-base) var(--easing-ease-in-out);
+}
+
+.animate-slide-up {
+  animation: slide-up var(--duration-base) var(--easing-ease-in-out);
+}
+
+.animate-slide-down {
+  animation: slide-down var(--duration-base) var(--easing-ease-in-out);
+}
+
+.animate-slide-left {
+  animation: slide-left var(--duration-base) var(--easing-ease-in-out);
+}
+
+.animate-slide-right {
+  animation: slide-right var(--duration-base) var(--easing-ease-in-out);
+}
+
+.animate-scale-in {
+  animation: scale-in var(--duration-base) var(--easing-ease-in-out);
+}
+
+.animate-scale-out {
+  animation: scale-out var(--duration-base) var(--easing-ease-in-out);
+}
+
+.animate-glow {
+  animation: glow 2s var(--easing-ease-in-out) infinite;
+}
+
+.animate-pulse {
+  animation: neural-pulse 2s var(--easing-ease-in-out) infinite;
+}
+
+.animate-float {
+  animation: float 3s var(--easing-ease-in-out) infinite;
+}

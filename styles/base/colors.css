@@ -1,0 +1,67 @@
+/* styles/base/colors.css */
+:root {
+  --color-slate-50: #f8fafc;
+  --color-slate-100: #f1f5f9;
+  --color-slate-200: #e2e8f0;
+  --color-slate-300: #cbd5e1;
+  --color-slate-400: #94a3b8;
+  --color-slate-500: #64748b;
+  --color-slate-600: #475569;
+  --color-slate-700: #334155;
+  --color-slate-800: #1e293b;
+  --color-slate-900: #0f172a;
+  --color-slate-950: #020617;
+
+  --color-cyan-400: #22d3ee;
+  --color-cyan-500: #06b6d4;
+  --color-cyan-600: #0891b2;
+
+  --color-violet-400: #a78bfa;
+  --color-violet-500: #8b5cf6;
+  --color-violet-600: #7c3aed;
+
+  --color-emerald-400: #34d399;
+  --color-emerald-500: #10b981;
+
+  --color-rose-400: #fb7185;
+  --color-rose-500: #f43f5e;
+
+  --bg-primary: rgb(5, 5, 15);
+  --bg-secondary: rgb(15, 23, 42);
+  --bg-tertiary: rgb(30, 41, 59);
+  --bg-hover: rgba(255, 255, 255, 0.05);
+  --bg-active: rgba(255, 255, 255, 0.1);
+
+  --text-primary: rgb(243, 244, 246);
+  --text-secondary: rgb(209, 213, 219);
+  --text-tertiary: rgb(156, 163, 175);
+  --text-disabled: rgb(107, 114, 128);
+
+  --border-primary: rgba(255, 255, 255, 0.1);
+  --border-secondary: rgba(255, 255, 255, 0.05);
+
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  --shadow-glow: 0 0 20px rgba(34, 211, 238, 0.2);
+
+  --success: rgb(34, 197, 94);
+  --warning: rgb(251, 146, 60);
+  --danger: rgb(239, 68, 68);
+  --info: rgb(59, 130, 246);
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg-primary: rgb(255, 255, 255);
+    --bg-secondary: rgb(249, 250, 251);
+    --bg-tertiary: rgb(243, 244, 246);
+    --bg-hover: rgba(0, 0, 0, 0.05);
+    --bg-active: rgba(0, 0, 0, 0.1);
+
+    --text-primary: rgb(17, 24, 39);
+    --text-secondary: rgb(75, 85, 99);
+    --text-tertiary: rgb(107, 114, 128);
+  }
+}
