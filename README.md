@@ -437,12 +437,6 @@ This project is licensed under the **MIT License** — see the [`LICENSE`](./LIC
 *For enterprise pilots, custom agent configuration, or integration support:*
 
 <br />
-
-[![Website](https://img.shields.io/badge/Website-enlights.ai-6C63FF?style=for-the-badge)](https://enlights.ai)
-[![Email](https://img.shields.io/badge/Email-hello@enlights.ai-22C55E?style=for-the-badge&logo=gmail&logoColor=white)](mailto:hello@enlights.ai)
-
-<br />
-
 ---
 
 *Enlights AI — Powered by Enlights Lab*
