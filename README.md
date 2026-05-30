@@ -3,22 +3,22 @@
 <br />
 
 ```
-███████╗███╗   ██╗██╗     ██╗ ██████╗ ██╗  ██╗████████╗███████╗     █████╗ ██╗
-██╔════╝████╗  ██║██║     ██║██╔════╝ ██║  ██║╚══██╔══╝██╔════╝    ██╔══██╗██║
-█████╗  ██╔██╗ ██║██║     ██║██║  ███╗███████║   ██║   ███████╗    ███████║██║
-██╔══╝  ██║╚██╗██║██║     ██║██║   ██║██╔══██║   ██║   ╚════██║    ██╔══██║██║
-███████╗██║ ╚████║███████╗██║╚██████╔╝██║  ██║   ██║   ███████║    ██║  ██║██║
-╚══════╝╚═╝  ╚═══╝╚══════╝╚═╝ ╚═════╝ ╚═╝  ╚═╝   ╚═╝   ╚══════╝    ╚═╝  ╚═╝╚═╝
+███████╗███╗   ██╗██╗     ██╗ ██████╗ ██╗  ██╗████████╗     █████╗ ██╗
+██╔════╝████╗  ██║██║     ██║██╔════╝ ██║  ██║╚══██╔══╝    ██╔══██╗██║
+█████╗  ██╔██╗ ██║██║     ██║██║  ███╗███████║   ██║       ███████║██║
+██╔══╝  ██║╚██╗██║██║     ██║██║   ██║██╔══██║   ██║       ██╔══██║██║
+███████╗██║ ╚████║███████╗██║╚██████╔╝██║  ██║   ██║       ██║  ██║██║
+╚══════╝╚═╝  ╚═══╝╚══════╝╚═╝ ╚═════╝ ╚═╝  ╚═╝   ╚═╝       ╚═╝  ╚═╝╚═╝
 ```
 
-### **10 Autonomous Voice Agents. Real Workflows. Zero Human Intervention.**
+**10 Autonomous Voice Agents · Real Workflows · Zero Human Intervention**
 
 <br />
 
 [![Next.js](https://img.shields.io/badge/Next.js_14-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Retell AI](https://img.shields.io/badge/Retell_AI-WebRTC-6C63FF?style=for-the-badge)](https://retell.ai/)
-[![Render](https://img.shields.io/badge/Render-46E3B7?style=for-the-badge&logo=render&logoColor=black)](https://your-render-url.onrender.com)
+[![Render](https://img.shields.io/badge/Render-46E3B7?style=for-the-badge&logo=render&logoColor=black)](https://render.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-22C55E?style=for-the-badge)](./LICENSE)
 
 <br />
@@ -28,148 +28,105 @@
 
 <br />
 
-[**🎙 Try Live Demo**](https://enlights.ai) · [**📖 Documentation**](#getting-started) · [**🤝 Enterprise Pilots**](mailto:hello@enlights.ai)
-
-<br />
-
----
+[**🎙 Live Demo**](https://enlights.ai) &nbsp;·&nbsp; [**📖 Docs**](#getting-started) &nbsp;·&nbsp; [**🤝 Enterprise**](mailto:hello@enlight.ai)
 
 </div>
 
-<br />
+---
 
-## ✦ What Is Enlights AI?
+## Overview
 
-**Enlights AI** is a production-grade voice agent demonstration platform powered by Retell AI and WebRTC. Each of the 10 agents handles a *complete, real-world business workflow* — from fraud resolution and patient triage to hotel concierge and cart recovery — entirely through voice, with no human in the loop.
+**Enlight AI** is a production-grade voice agent platform built on [Retell AI](https://retell.ai) and WebRTC. Ten purpose-built agents each own a complete, real-world business workflow — from fraud resolution and patient triage to hotel concierge and abandoned cart recovery — with no human in the loop at any step.
 
-Built by **Enlights Lab** to showcase what autonomous voice AI looks like across industries — today, not hypothetically.
-
-<br />
+Built by **Enlight Lab** to demonstrate what truly autonomous voice AI looks like across verticals, today.
 
 ---
 
-<br />
-
-## ✦ Live Agents
-
-<br />
+## Agents
 
 ### 🛒 Ecommerce
 
-| Agent | Role | Capability |
-|:-----:|:-----|:-----------|
-| **SAM** | Support Agent | Resolves delivery issues, processes refunds & returns autonomously |
-| **MAX** | Sales Agent | Recovers abandoned carts and closes the checkout in real time |
-
-<br />
+| Agent | Role | What It Does |
+|:---:|:---|:---|
+| **SAM** | Support Agent | Resolves delivery issues, processes refunds and returns end-to-end |
+| **MAX** | Sales Agent | Re-engages abandoned carts and closes checkout in real time |
 
 ### 🎓 EdTech
 
-| Agent | Role | Capability |
-|:-----:|:-----|:-----------|
-| **ISHA** | Lead Qualifier | Qualifies leads, matches programs, books counsellor sessions |
-| **KIRAN** | Onboarding Agent | Onboards newly enrolled students end-to-end |
-
-<br />
+| Agent | Role | What It Does |
+|:---:|:---|:---|
+| **ISHA** | Lead Qualifier | Qualifies inbound leads, matches programs, books counsellor sessions |
+| **KIRAN** | Onboarding Agent | Guides newly enrolled students through the full onboarding flow |
 
 ### 🏥 HealthTech
 
-| Agent | Role | Capability |
-|:-----:|:-----|:-----------|
-| **SARA** | Scheduling Agent | Schedules appointments and verifies insurance |
-| **RIYA** | Triage Agent | Triages symptoms and classifies urgency for clinical routing |
-
-<br />
+| Agent | Role | What It Does |
+|:---:|:---|:---|
+| **SARA** | Scheduling Agent | Books appointments and verifies insurance without human involvement |
+| **RIYA** | Triage Agent | Assesses symptoms and classifies urgency for clinical routing |
 
 ### 🏦 BFSI
 
-| Agent | Role | Capability |
-|:-----:|:-----|:-----------|
-| **BHASKAR** | Fraud Resolution | Resolves disputes and issues provisional credits |
-| **ARYAN** | Claims Agent | Files FNOL (First Notice of Loss) and assigns adjusters |
-
-<br />
+| Agent | Role | What It Does |
+|:---:|:---|:---|
+| **BHASKAR** | Fraud Resolution | Resolves disputes and issues provisional credits autonomously |
+| **ARYAN** | Claims Agent | Files FNOL (First Notice of Loss) and assigns adjusters in one call |
 
 ### 🏨 Hospitality
 
-| Agent | Role | Capability |
-|:-----:|:-----|:-----------|
-| **LUCKY** | Concierge | Handles spa, dining, and local experience bookings |
-| **NIKITA** | Reservations | Manages reservations and processes checkout extensions |
-
-<br />
+| Agent | Role | What It Does |
+|:---:|:---|:---|
+| **LUCKY** | Concierge | Manages spa, dining, and local experience bookings |
+| **NIKITA** | Reservations | Handles room reservations and checkout extension requests |
 
 ---
 
-<br />
+## Tech Stack
 
-## ✦ Tech Stack
-
-<br />
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                        ENLIGHTS AI STACK                        │
-├──────────────────────┬──────────────────────────────────────────┤
-│  Framework           │  Next.js 14 (App Router)                 │
-│  Language            │  TypeScript                              │
-│  Voice AI            │  Retell AI (WebRTC)                      │
-│  Animation           │  Framer Motion                           │
-│  State Management    │  Zustand                                  │
-│  Styling             │  CSS Variables + Tailwind CSS            │
-│  Icons               │  Lucide React                            │
-│  Deployment          │  Vercel                                  │
-└──────────────────────┴──────────────────────────────────────────┘
-```
-
-<br />
+| Layer | Technology |
+|:---|:---|
+| Framework | Next.js 14 (App Router) |
+| Language | TypeScript |
+| Voice AI | Retell AI (WebRTC) |
+| Animation | Framer Motion |
+| State Management | Zustand |
+| Styling | Tailwind CSS + CSS Variables |
+| Icons | Lucide React |
+| Deployment | Render |
 
 ---
 
-<br />
-
-## ✦ Getting Started
-
-<br />
+## Getting Started
 
 ### Prerequisites
 
 - Node.js `18+`
-- A [Retell AI](https://retell.ai) account (or use the built-in fallback simulation)
+- A [Retell AI](https://retell.ai) account *(optional — the platform includes a built-in fallback simulation)*
 - `npm`, `yarn`, or `pnpm`
 
-<br />
-
-### 1 · Clone the Repository
+### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-org/enlights-ai.git
-cd enlights-ai
+git clone https://github.com/your-org/enlight-ai.git
+cd enlight-ai
 ```
 
-<br />
-
-### 2 · Install Dependencies
+### 2. Install Dependencies
 
 ```bash
-# npm
 npm install
-
-# yarn
+# or
 yarn install
-
-# pnpm
+# or
 pnpm install
 ```
 
-<br />
-
-### 3 · Configure Environment Variables
+### 3. Configure Environment Variables
 
 Create a `.env.local` file at the project root:
 
 ```env
-# ─── Retell Agent IDs ────────────────────────────────────────────
+# Retell Agent IDs
 NEXT_PUBLIC_RETELL_SAM_ID=your_sam_agent_id
 NEXT_PUBLIC_RETELL_MAX_ID=your_max_agent_id
 NEXT_PUBLIC_RETELL_ISHA_ID=your_isha_agent_id
@@ -181,15 +138,13 @@ NEXT_PUBLIC_RETELL_ARYAN_ID=your_aryan_agent_id
 NEXT_PUBLIC_RETELL_LUCKY_ID=your_lucky_agent_id
 NEXT_PUBLIC_RETELL_NIKITA_ID=your_nikita_agent_id
 
-# ─── Retell API Key (server-side only) ───────────────────────────
+# Retell API Key (server-side only — never expose to the client)
 RETELL_API_KEY=your_retell_api_key
 ```
 
-> 💡 **No credentials?** The platform includes a built-in fallback simulation — the full UI and demo flow works without any Retell configuration.
+> **No credentials?** The platform ships with a full fallback simulation — the entire UI and demo flow works without any Retell configuration.
 
-<br />
-
-### 4 · Start Development Server
+### 4. Start the Development Server
 
 ```bash
 npm run dev
@@ -197,90 +152,67 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-<br />
-
 ---
 
-<br />
-
-## ✦ Project Structure
+## Project Structure
 
 ```
-enlights-ai/
-│
+enlight-ai/
 ├── app/
-│   ├── page.tsx                        # Main page — agents, UI & call logic
-│   ├── layout.tsx                      # Root layout
+│   ├── page.tsx                          # Main page — agents, UI & call logic
+│   ├── layout.tsx                        # Root layout
 │   └── api/
 │       └── retell/
 │           └── create-web-call/
-│               └── route.ts            # Server route — Retell session creation
-│
+│               └── route.ts              # Server route — Retell session creation
 ├── store/
-│   └── callStore.ts                    # Zustand — global call state
-│
+│   └── callStore.ts                      # Zustand — global call state
 ├── types/
-│   └── index.ts                        # Shared TypeScript types
-│
+│   └── index.ts                          # Shared TypeScript types
 ├── components/
 │   └── UI/
-│       └── Button.tsx                  # Shared button component
-│
-└── public/                             # Static assets
+│       └── Button.tsx                    # Shared button component
+└── public/                               # Static assets
 ```
-
-<br />
 
 ---
 
-<br />
-
-## ✦ How a Call Works
+## Call Lifecycle
 
 ```
-  ┌─────────────────────────────────────────────────────────────┐
-  │                     CALL LIFECYCLE                          │
-  └─────────────────────────────────────────────────────────────┘
-
-  User clicks "Try Live"
-          │
-          ▼
-  🎙  Microphone permission requested
-          │
-          ▼
-  📡  POST /api/retell/create-web-call  {agentId}
-          │
-          ▼
-  🔑  Retell returns  access_token + call_id
-          │
-          ▼
-  🔗  RetellWebClient.startCall()
-          │
-          ▼
-  📶  WebRTC audio stream established
-          │
-          ▼
-  📝  Transcript streamed via "update" event (partial chunks merged)
-          │
-          ▼
-  ✋  User clicks "End Call"  →  stopCall()  →  modal closes
+User clicks "Try Live"
+        │
+        ▼
+Microphone permission requested
+        │
+        ▼
+POST /api/retell/create-web-call  { agentId }
+        │
+        ▼
+Retell returns  access_token  +  call_id
+        │
+        ▼
+RetellWebClient.startCall()
+        │
+        ▼
+WebRTC audio stream established
+        │
+        ▼
+Transcript streamed via "update" event  (partial chunks merged)
+        │
+        ▼
+User clicks "End Call"  →  stopCall()  →  modal closes
 ```
-
-<br />
 
 ---
 
-<br />
-
-## ✦ API Reference
-
-<br />
+## API Reference
 
 ### `POST /api/retell/create-web-call`
 
 Creates a Retell web call session server-side and returns an access token for WebRTC.
 
-**Request**
+**Request body**
 
 ```json
 {
@@ -297,90 +229,61 @@ Creates a Retell web call session server-side and returns an access token for We
 }
 ```
 
-<br />
-
 ---
 
-<br />
-
-## ✦ Key Features
-
-<br />
+## Features
 
 | Feature | Description |
-|:--------|:------------|
-| 🎙 **Live Voice Calls** | Real WebRTC audio via Retell AI — no phone lines, no SIP |
-| 📝 **Streaming Transcript** | Partial chunks merged in real time, no duplicate rows |
-| 🔒 **Overlap Prevention** | Only one active call at a time across the entire platform |
-| 🧪 **Fallback Simulation** | Full demo mode works without Retell credentials |
-| 🎤 **Mic Permission Handling** | Explicit browser permission flow with live status feedback |
-| 🧹 **Page Cleanup** | All calls, timers, and listeners torn down on unmount |
-| 🌗 **Dark / Light Mode** | System-aware theme toggle |
-| 〰️ **Animated Waveform** | Real-time audio visualisation during calls |
-| 🏷️ **Industry Tabs** | Filter agents by vertical (Ecommerce, Health, BFSI…) |
-| 🗺️ **Workflow Pipeline** | End-to-end process visualisation per industry |
-
-<br />
+|:---|:---|
+| 🎙 Live Voice Calls | Real WebRTC audio via Retell AI — no phone lines, no SIP trunks |
+| 📝 Streaming Transcript | Partial chunks merged in real time with no duplicate rows |
+| 🔒 Overlap Prevention | Exactly one active call at a time across the entire platform |
+| 🧪 Fallback Simulation | Full demo mode runs without any Retell credentials |
+| 🎤 Mic Permission Handling | Explicit browser permission flow with live status feedback |
+| 🧹 Page Cleanup | All calls, timers, and listeners torn down cleanly on unmount |
+| 🌗 Dark / Light Mode | System-aware theme toggle |
+| 〰️ Animated Waveform | Real-time audio visualisation during active calls |
+| 🏷️ Industry Tabs | Filter agents by vertical — Ecommerce, EdTech, Health, BFSI, Hospitality |
+| 🗺️ Workflow Pipeline | End-to-end process visualisation per industry |
 
 ---
 
-<br />
-
-## ✦ Retell AI Setup
+## Retell AI Setup
 
 1. Sign up at [retell.ai](https://retell.ai)
-2. Create an agent for each use case
-3. Copy the Agent ID for each agent
-4. Paste into `.env.local` as shown in the [configuration step](#3--configure-environment-variables)
+2. Create one agent per use case
+3. Copy each Agent ID from the Retell dashboard
+4. Add them to `.env.local` as shown in the [configuration step](#3-configure-environment-variables)
 5. Add your Retell API key to `RETELL_API_KEY`
 
-<br />
+---
+
+## Scripts
+
+```bash
+npm run dev      # Start development server with hot reload
+npm run build    # Create a production build
+npm run start    # Serve the production build
+npm run lint     # Run ESLint
+```
 
 ---
 
-<br />
+## Deployment
 
-## ✦ Scripts
+### Render (Recommended)
 
-```bash
-npm run dev        # Start development server (hot reload)
-npm run build      # Production build
-npm run start      # Serve production build
-npm run lint       # Run ESLint
-```
-
-<br />
-
----
-
-<br />
-
-## ✨ Deployment
-
-### Render
-
-1. Connect the repository to Render
-2. Set the build command:
-
-```bash
-npm install && npm run build
-```
-
-3. Set the start command:
-
-```bash
-npm start
-```
-
-4. Add all environment variables from `.env.local` in:
-
-Dashboard → Environment → Environment Variables
-
+1. Connect the repository to [Render](https://render.com)
+2. Set the **build command**:
+   ```bash
+   npm install && npm run build
+   ```
+3. Set the **start command**:
+   ```bash
+   npm start
+   ```
+4. Add all environment variables from `.env.local` under **Dashboard → Environment → Environment Variables**
 5. Deploy the service
-
-### Live Application
-
-https://YOUR-APP.onrender.com
 
 ### Self-Hosted
 
@@ -389,68 +292,43 @@ npm run build
 npm run start
 ```
 
-<br />
-
 ---
 
-<br />
-
-## ✦ Browser Requirements
+## Browser Requirements
 
 | Requirement | Detail |
-|:------------|:-------|
-| 🎤 Microphone | Required for live calls |
-| 📡 WebRTC | Chrome, Edge, Firefox, Safari 15+ |
-| ⚡ JavaScript | Must be enabled |
-
-<br />
+|:---|:---|
+| Microphone | Required for live voice calls |
+| WebRTC | Chrome 80+, Edge 80+, Firefox 78+, Safari 15+ |
+| JavaScript | Must be enabled |
 
 ---
 
-<br />
+## Contributing
 
-## ✦ Contributing
-
-Contributions are welcome! Please follow this workflow:
+Contributions are welcome. Please follow this workflow:
 
 ```bash
-# 1. Fork the repo and create your branch
+# 1. Fork the repo and create a feature branch
 git checkout -b feature/your-feature-name
 
-# 2. Make your changes and commit
-git commit -m "feat: add your feature description"
+# 2. Commit your changes with a descriptive message
+git commit -m "feat: describe your change"
 
 # 3. Push and open a Pull Request
 git push origin feature/your-feature-name
 ```
 
-Please ensure your code passes `npm run lint` before submitting a PR.
-
-<br />
+Ensure `npm run lint` passes before submitting a PR.
 
 ---
 
-<br />
+## License
 
-## ✦ License
-
-This project is licensed under the **MIT License** — see the [`LICENSE`](./LICENSE) file for details.
-
-<br />
+Licensed under the **MIT License** — see [`LICENSE`](./LICENSE) for details.
 
 ---
-
-<br />
 
 <div align="center">
 
-## ✦ Built by Enlights Lab
-
-*For enterprise pilots, custom agent configuration, or integration support:*
-
-<br />
----
-
-*Enlights AI — Powered by Enlights Lab*
-
-</div>
+Built by **Enlight Lab**
