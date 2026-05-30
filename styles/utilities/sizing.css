@@ -1,0 +1,21 @@
+/* styles/utilities/sizing.css */
+:root {
+  --size-screen-xs: 320px;
+  --size-screen-sm: 640px;
+  --size-screen-md: 768px;
+  --size-screen-lg: 1024px;
+  --size-screen-xl: 1280px;
+  --size-screen-2xl: 1536px;
+
+  --z-hide: -1;
+  --z-auto: auto;
+  --z-base: 0;
+  --z-dropdown: 1000;
+  --z-sticky: 1020;
+  --z-fixed: 1030;
+  --z-modal-backdrop: 1040;
+  --z-modal: 1050;
+  --z-popover: 1060;
+  --z-tooltip: 1070;
+  --z-notification: 1080;
+}

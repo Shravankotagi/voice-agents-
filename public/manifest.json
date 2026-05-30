@@ -1,0 +1,18 @@
+{
+  "name": "AI Voice Agents | Conversational Intelligence Platform",
+  "short_name": "AI Voice",
+  "description": "Human-Like AI Voice Agents For Real Industries",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0F1117",
+  "theme_color": "#22D3EE",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

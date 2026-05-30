@@ -1,0 +1,243 @@
+/* ============================================================================
+ * COLOR TOKENS
+ * Enterprise-grade scalable design token architecture
+ * ============================================================================ */
+
+@layer tokens {
+  :root {
+    /* -----------------------------------------------------------------------
+     * NEUTRAL PALETTE
+     * ----------------------------------------------------------------------- */
+    --neutral-0: #FFFFFF;
+    --neutral-50: #FAFAFA;
+    --neutral-100: #F4F4F5;
+    --neutral-200: #E4E4E7;
+    --neutral-300: #D4D4D8;
+    --neutral-400: #A1A1AA;
+    --neutral-500: #71717A;
+    --neutral-600: #52525B;
+    --neutral-700: #3F3F46;
+    --neutral-800: #27272A;
+    --neutral-900: #18181B;
+    --neutral-950: #09090B;
+    --neutral-1000: #000000;
+
+    /* -----------------------------------------------------------------------
+     * CYAN BRAND PALETTE
+     * ----------------------------------------------------------------------- */
+    --cyan-50: #ECFEFF;
+    --cyan-100: #CFFAFE;
+    --cyan-200: #A5F3FC;
+    --cyan-300: #67E8F9;
+    --cyan-400: #22D3EE;
+    --cyan-500: #06B6D4;
+    --cyan-600: #0891B2;
+    --cyan-700: #0E7490;
+    --cyan-800: #155E75;
+    --cyan-900: #164E63;
+    --cyan-950: #083344;
+
+    /* -----------------------------------------------------------------------
+     * VIOLET BRAND PALETTE
+     * ----------------------------------------------------------------------- */
+    --violet-50: #F5F3FF;
+    --violet-100: #EDE9FE;
+    --violet-200: #DDD6FE;
+    --violet-300: #C4B5FD;
+    --violet-400: #A78BFA;
+    --violet-500: #8B5CF6;
+    --violet-600: #7C3AED;
+    --violet-700: #6D28D9;
+    --violet-800: #5B21B6;
+    --violet-900: #4C1D95;
+    --violet-950: #2E1065;
+
+    /* -----------------------------------------------------------------------
+     * STATE COLORS
+     * ----------------------------------------------------------------------- */
+    --success-500: #10B981;
+    --warning-500: #F59E0B;
+    --error-500: #EF4444;
+    --info-500: #3B82F6;
+
+    /* -----------------------------------------------------------------------
+     * SEMANTIC SURFACES
+     * ----------------------------------------------------------------------- */
+    --surface-primary: var(--neutral-1000);
+    --surface-secondary: var(--neutral-950);
+    --surface-elevated: var(--neutral-900);
+    --surface-overlay: rgba(9, 9, 11, 0.75);
+    --surface-glass: rgba(24, 24, 27, 0.65);
+
+    /* -----------------------------------------------------------------------
+     * TEXT COLORS
+     * ----------------------------------------------------------------------- */
+    --text-primary: var(--neutral-0);
+    --text-secondary: var(--neutral-200);
+    --text-muted: var(--neutral-400);
+    --text-disabled: rgba(255, 255, 255, 0.4);
+
+    /* -----------------------------------------------------------------------
+     * BORDER COLORS
+     * ----------------------------------------------------------------------- */
+    --border-subtle: rgba(255, 255, 255, 0.05);
+    --border-default: rgba(255, 255, 255, 0.08);
+    --border-strong: rgba(255, 255, 255, 0.14);
+
+    /* -----------------------------------------------------------------------
+     * INTERACTIVE COLORS
+     * ----------------------------------------------------------------------- */
+    --interactive-primary: var(--cyan-400);
+    --interactive-primary-hover: var(--cyan-300);
+    --interactive-primary-active: var(--cyan-500);
+
+    --interactive-secondary: var(--violet-400);
+    --interactive-secondary-hover: var(--violet-300);
+    --interactive-secondary-active: var(--violet-500);
+
+    /* -----------------------------------------------------------------------
+     * STATE SURFACES
+     * ----------------------------------------------------------------------- */
+    --surface-success: rgba(16, 185, 129, 0.15);
+    --surface-warning: rgba(245, 158, 11, 0.15);
+    --surface-error: rgba(239, 68, 68, 0.15);
+    --surface-info: rgba(59, 130, 246, 0.15);
+
+    /* -----------------------------------------------------------------------
+     * GLOW SYSTEM
+     * ----------------------------------------------------------------------- */
+    --glow-cyan-sm:
+      0 0 10px rgba(34, 211, 238, 0.25);
+
+    --glow-cyan-md:
+      0 0 20px rgba(34, 211, 238, 0.35),
+      0 0 40px rgba(34, 211, 238, 0.15);
+
+    --glow-cyan-lg:
+      0 0 30px rgba(34, 211, 238, 0.45),
+      0 0 60px rgba(34, 211, 238, 0.25),
+      0 0 100px rgba(34, 211, 238, 0.1);
+
+    --glow-violet-md:
+      0 0 20px rgba(139, 92, 246, 0.35),
+      0 0 40px rgba(139, 92, 246, 0.15);
+
+    /* -----------------------------------------------------------------------
+     * GRADIENT SYSTEM
+     * ----------------------------------------------------------------------- */
+    --gradient-neural:
+      linear-gradient(
+        135deg,
+        var(--cyan-400),
+        var(--violet-500)
+      );
+
+    --gradient-neural-soft:
+      linear-gradient(
+        135deg,
+        rgba(34, 211, 238, 0.12),
+        rgba(139, 92, 246, 0.12)
+      );
+
+    --gradient-surface:
+      linear-gradient(
+        180deg,
+        var(--surface-elevated),
+        var(--surface-primary)
+      );
+
+    --gradient-glow:
+      radial-gradient(
+        ellipse at center,
+        rgba(34, 211, 238, 0.35) 0%,
+        transparent 70%
+      );
+
+    --gradient-mesh:
+      radial-gradient(circle at top left, rgba(34,211,238,0.18), transparent 35%),
+      radial-gradient(circle at bottom right, rgba(139,92,246,0.18), transparent 35%);
+
+    /* -----------------------------------------------------------------------
+     * OPACITY SCALE
+     * ----------------------------------------------------------------------- */
+    --opacity-disabled: 0.4;
+    --opacity-muted: 0.6;
+    --opacity-subtle: 0.75;
+    --opacity-ghost: 0.2;
+
+    /* -----------------------------------------------------------------------
+     * FOCUS SYSTEM
+     * ----------------------------------------------------------------------- */
+    --focus-ring-color: rgba(34, 211, 238, 0.55);
+    --focus-ring-width: 2px;
+    --focus-ring-offset: 2px;
+  }
+
+  /* ==========================================================================
+   * LIGHT THEME
+   * ========================================================================== */
+
+  [data-theme='light'] {
+    --surface-primary: #FAFAFA;
+    --surface-secondary: #F4F4F5;
+    --surface-elevated: #FFFFFF;
+    --surface-overlay: rgba(255, 255, 255, 0.75);
+    --surface-glass: rgba(255, 255, 255, 0.65);
+
+    --text-primary: #09090B;
+    --text-secondary: #27272A;
+    --text-muted: #71717A;
+    --text-disabled: rgba(0, 0, 0, 0.4);
+
+    --border-subtle: rgba(0, 0, 0, 0.05);
+    --border-default: rgba(0, 0, 0, 0.08);
+    --border-strong: rgba(0, 0, 0, 0.14);
+
+    --gradient-surface:
+      linear-gradient(
+        180deg,
+        #FFFFFF,
+        #F4F4F5
+      );
+  }
+
+  /* ==========================================================================
+   * HIGH CONTRAST MODE
+   * ========================================================================== */
+
+  @media (prefers-contrast: more) {
+    :root {
+      --border-default: rgba(255, 255, 255, 0.22);
+      --border-strong: rgba(255, 255, 255, 0.35);
+
+      --text-muted: #D4D4D8;
+
+      --glow-cyan-md:
+        0 0 12px rgba(34, 211, 238, 0.45);
+    }
+  }
+
+  /* ==========================================================================
+   * REDUCED TRANSPARENCY
+   * ========================================================================== */
+
+  @media (prefers-reduced-transparency: reduce) {
+    :root {
+      --surface-glass: var(--surface-secondary);
+      --surface-overlay: var(--surface-elevated);
+    }
+  }
+
+  /* ==========================================================================
+   * AMOLED MODE
+   * ========================================================================== */
+
+  [data-theme='amoled'] {
+    --surface-primary: #000000;
+    --surface-secondary: #000000;
+    --surface-elevated: #050505;
+
+    --border-subtle: rgba(255,255,255,0.04);
+    --border-default: rgba(255,255,255,0.06);
+  }
+}

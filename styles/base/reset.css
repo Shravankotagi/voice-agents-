@@ -1,0 +1,98 @@
+/* ============================================================================
+ * RESET & NORMALIZATION
+ * Modern CSS reset with sensible defaults
+ * ============================================================================ */
+
+/* Box sizing */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Remove default margins */
+html, body, h1, h2, h3, h4, h5, h6, p, ol, ul, li, form, fieldset, legend, figure, figcaption, blockquote, pre, hr, dl, dd {
+  margin: 0;
+  padding: 0;
+}
+
+/* Improve media defaults */
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+}
+
+/* Remove built-in form typography */
+input, button, textarea, select {
+  font: inherit;
+  color: inherit;
+}
+
+/* Remove default button styles */
+button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+}
+
+/* Improve link defaults */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Remove list styles */
+ol, ul, li {
+  list-style: none;
+}
+
+/* Improve table defaults */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* Root-level scroll margin */
+html {
+  scroll-padding-top: env(safe-area-inset-top, 0px);
+  scroll-padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Smooth scrolling with fallback */
+@supports (scroll-behavior: smooth) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Interactive elements cursor */
+a, button, input, select, textarea, [tabindex]:not([tabindex="-1"]) {
+  cursor: pointer;
+}
+
+[disabled] {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* Remove default input backgrounds */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px var(--color-surface) inset;
+  -webkit-text-fill-color: var(--color-text);
+  caret-color: var(--color-cyan);
+}
+
+/* Remove number spinner UI */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
