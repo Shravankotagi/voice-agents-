@@ -355,20 +355,32 @@ npm run lint       # Run ESLint
 
 <br />
 
-## ✦ Deployment
+## ✨ Deployment
 
-<br />
+### Render
 
-### Vercel *(recommended)*
+1. Connect the repository to Render
+2. Set the build command:
 
 ```bash
-npx vercel
+npm install && npm run build
 ```
 
-Then add all variables from `.env.local` to your Vercel project under:
-**Project Settings → Environment Variables**
+3. Set the start command:
 
-<br />
+```bash
+npm start
+```
+
+4. Add all environment variables from `.env.local` in:
+
+Dashboard → Environment → Environment Variables
+
+5. Deploy the service
+
+### Live Application
+
+https://YOUR-APP.onrender.com
 
 ### Self-Hosted
 
