@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono, Instrument_Serif } from "next/font/google";
+import { Inter, Poppins, Instrument_Serif } from "next/font/google";
 import "../styles/globals.css";
 
 const inter = Inter({
@@ -8,9 +8,10 @@ const inter = Inter({
   display: "swap",
 });
 
-const jetbrains = JetBrains_Mono({
+const poppins = Poppins({
   subsets: ["latin"],
-  variable: "--font-mono",
+  weight: ["400", "500", "600", "700", "800", "900"],
+  variable: "--font-display-sans",
   display: "swap",
 });
 
@@ -23,15 +24,37 @@ const instrument = Instrument_Serif({
 });
 
 export const metadata: Metadata = {
-  title: "Enlights AI � Voice AI that feels human",
-  description: "Production-grade voice agents for Ecommerce, EdTech, HealthTech, BFSI and Hospitality. Talk to one in real time.",
+  title: "Enlights AI — Enterprise AI Voice Agents",
+  description:
+    "Deploy production-grade AI voice agents for Healthcare, BFSI, Hospitality, Ecommerce, and EdTech. Automate customer support, appointment booking, fraud resolution, and more.",
+  keywords: [
+    "AI voice agents",
+    "enterprise AI",
+    "voice automation",
+    "customer support AI",
+    "healthcare AI",
+    "BFSI AI",
+  ],
+  openGraph: {
+    title: "Enlights AI — Enterprise AI Voice Agents",
+    description:
+      "Production-grade AI voice agents that handle real end-to-end workflows without a human in the loop.",
+    type: "website",
+  },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <html lang="en" data-theme="dark" className={`${inter.variable} ${jetbrains.variable} ${instrument.variable}`}>
+    <html
+      lang="en"
+      data-theme="light"
+      className={`${inter.variable} ${poppins.variable} ${instrument.variable}`}
+    >
       <body>{children}</body>
     </html>
   );
 }
-
