@@ -415,7 +415,6 @@ const WorkflowPipelineCard = memo(function WorkflowPipelineCard({ pipeline }: { 
   );
 });
 
-// ── KEY FIX: AgentCard is memoized so it never re-renders due to parent state changes ──
 const AgentCard = memo(function AgentCard({ agent, onLive }: { agent: Agent; onLive: () => void }) {
   return (
     <article className="agent-card" style={{ "--agent-color": agent.color } as React.CSSProperties}>
@@ -453,6 +452,22 @@ const AgentCard = memo(function AgentCard({ agent, onLive }: { agent: Agent; onL
   );
 });
 
+// ─── CHAT BUBBLE (memoized — animates in once, never re-renders) ─────
+const ChatBubble = memo(function ChatBubble({ msg }: { msg: TranscriptMessage }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 8, scale: 0.97 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ duration: 0.26, ease: [0.16, 1, 0.3, 1] }}
+      style={{ display: "flex", justifyContent: msg.role === "user" ? "flex-end" : "flex-start" }}
+    >
+      <span className="sr-only">{msg.role === "user" ? "You" : "Agent"}:</span>
+      <div className={"bubble bubble--" + msg.role}>{msg.text}</div>
+    </motion.div>
+  );
+});
+
+// ─── TRANSCRIPT ───────────────────────────────────────────────────────
 function Transcript({ messages }: { messages: TranscriptMessage[] }) {
   const bottomRef = useRef<HTMLDivElement>(null);
   const prevLenRef = useRef(0);
@@ -472,17 +487,9 @@ function Transcript({ messages }: { messages: TranscriptMessage[] }) {
           <span>Waiting for conversation to begin...</span>
         </div>
       )}
-      {messages.map((msg, i) => (
-        <motion.div
-          key={i}
-          initial={{ opacity: 0, y: 8, scale: 0.97 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 0.26, ease: [0.16, 1, 0.3, 1] }}
-          style={{ display: "flex", justifyContent: msg.role === "user" ? "flex-end" : "flex-start" }}
-        >
-          <span className="sr-only">{msg.role === "user" ? "You" : "Agent"}:</span>
-          <div className={"bubble bubble--" + msg.role}>{msg.text}</div>
-        </motion.div>
+      {messages.map((msg) => (
+        // stable key = timestamp so React never re-mounts existing bubbles
+        <ChatBubble key={msg.timestamp} msg={msg} />
       ))}
       <div ref={bottomRef} />
     </div>
@@ -663,8 +670,6 @@ function Footer() {
 }
 
 // ─── AGENT GRID (isolated from call store) ───────────────────────────
-// KEY FIX: Extracted into its own memoized component so call store
-// state changes (callActive, transcript, status) never re-render the grid.
 const AgentGrid = memo(function AgentGrid({
   activeIndustry,
   filteredAgents,
@@ -672,8 +677,6 @@ const AgentGrid = memo(function AgentGrid({
   activeIndustry: IndustryId;
   filteredAgents: Agent[];
 }) {
-  // Stable per-agent callbacks — recreated only when filteredAgents reference changes,
-  // which only happens when the industry tab switches (not on call state updates).
   const handlers = useRef<Map<string, () => void>>(new Map());
 
   filteredAgents.forEach((agent) => {
@@ -682,7 +685,6 @@ const AgentGrid = memo(function AgentGrid({
     }
   });
 
-  // Purge stale handlers when industry changes
   useEffect(() => {
     const ids = new Set(filteredAgents.map((a) => a.id));
     handlers.current.forEach((_, id) => { if (!ids.has(id)) handlers.current.delete(id); });
@@ -733,7 +735,6 @@ export default function Page() {
 
   const scrollTo = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
 
-  // Stable tab handler
   const handleIndustryChange = useCallback((id: IndustryId) => {
     setActiveIndustry(id);
   }, []);
