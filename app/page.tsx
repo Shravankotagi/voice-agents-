@@ -5,8 +5,7 @@ import Image from "next/image";
 import { RetellWebClient } from "retell-client-js-sdk";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import {
-  Phone, ArrowRight, MessageSquare,
-  CheckCircle2, Zap, Shield, Globe, Clock,
+  Phone, ArrowRight, MessageSquare, CheckCircle2,
 } from "lucide-react";
 import {
   useCallStore, useCallActive, useSelectedAgent,
@@ -357,7 +356,6 @@ async function runLiveCall(agent: Agent) {
         }) => {
           if (!update.transcript || update.transcript.length === 0) return;
 
-          // ── FIX: include `id` on every message so it matches TranscriptMessage ──
           const normalized: TranscriptMessage[] = update.transcript.map((entry, idx) => ({
             role: (entry.role === "agent" ? "agent" : "user") as "agent" | "user",
             text: entry.content,
@@ -391,7 +389,6 @@ async function runLiveCall(agent: Agent) {
   script.forEach((line, i) => {
     const statusIdx = Math.min(i + 1, statuses.length - 1);
     _liveTimeouts.push(setTimeout(() => {
-      // ── FIX: include `id` on every appended message ──
       store.appendTranscript({
         ...line,
         timestamp: Date.now(),
@@ -467,7 +464,7 @@ const AgentCard = memo(function AgentCard({ agent, onLive }: { agent: Agent; onL
   );
 });
 
-// ─── CHAT BUBBLE (memoized — animates in once, never re-renders) ─────
+// ─── CHAT BUBBLE ────────────────────────────────────────────────────
 const ChatBubble = memo(function ChatBubble({ msg }: { msg: TranscriptMessage }) {
   return (
     <motion.div
@@ -482,7 +479,7 @@ const ChatBubble = memo(function ChatBubble({ msg }: { msg: TranscriptMessage })
   );
 });
 
-// ─── TRANSCRIPT ───────────────────────────────────────────────────────
+// ─── TRANSCRIPT ──────────────────────────────────────────────────────
 function Transcript({ messages }: { messages: TranscriptMessage[] }) {
   const bottomRef = useRef<HTMLDivElement>(null);
   const prevLenRef = useRef(0);
@@ -503,7 +500,6 @@ function Transcript({ messages }: { messages: TranscriptMessage[] }) {
         </div>
       )}
       {messages.map((msg) => (
-        // stable key = id so React never re-mounts existing bubbles
         <ChatBubble key={msg.id} msg={msg} />
       ))}
       <div ref={bottomRef} />
@@ -610,10 +606,8 @@ function Navbar() {
         <Image src="/Layer_1.png" alt="Enlight AI" width={160} height={40} style={{ objectFit: "contain", height: "36px", width: "auto" }} priority />
         <div style={{ display: "flex", alignItems: "center", gap: "0.25rem" }}>
           {[
-            { label: "About",        id: "why-section" },
-            { label: "Services",     id: "agents-section" },
-            { label: "Industries",   id: "industries-section" },
-            { label: "Case Studies", id: "cases-section" },
+            { label: "Agents",       id: "agents-section" },
+            { label: "How It Works", id: "workflow-section" },
             { label: "Contact",      id: "contact-section" },
           ].map((item) => (
             <button key={item.label} onClick={() => scrollTo(item.id)}
@@ -684,7 +678,7 @@ function Footer() {
   );
 }
 
-// ─── AGENT GRID (isolated from call store) ───────────────────────────
+// ─── AGENT GRID ──────────────────────────────────────────────────────
 const AgentGrid = memo(function AgentGrid({
   activeIndustry,
   filteredAgents,
@@ -738,7 +732,9 @@ export default function Page() {
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      (entries) => entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("visible"); observer.unobserve(e.target); } }),
+      (entries) => entries.forEach((e) => {
+        if (e.isIntersecting) { e.target.classList.add("visible"); observer.unobserve(e.target); }
+      }),
       { threshold: 0.12 }
     );
     document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
@@ -788,98 +784,8 @@ export default function Page() {
         </div>
       </header>
 
-      {/* ── STATS ── */}
-      <section id="industries-section" className="max-w-7xl mx-auto px-6 reveal">
-        <div className="stats-row">
-          <div className="stat-card">
-            <div className="stat-number">38%</div>
-            <div className="stat-label">Faster Resolution</div>
-            <div className="stat-desc">Average improvement after deploying a custom AI voice agent in production.</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-number">92%</div>
-            <div className="stat-label">First-Call Completion</div>
-            <div className="stat-desc">Disputes, bookings, and onboarding closed end-to-end without a transfer.</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-number">8 Wks</div>
-            <div className="stat-label">Concept to Production</div>
-            <div className="stat-desc">Fully configured, compliance-tested, and deployed voice agent.</div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── METRIC STRIP ── */}
-      <section className="max-w-7xl mx-auto px-6 reveal">
-        <div className="metric-strip">
-          <div className="metric-item">
-            <div className="metric-eyebrow">Resolution</div>
-            <div className="metric-label">First-call completion</div>
-            <div className="metric-sub">Disputes, bookings, and onboarding closed end-to-end without a transfer.</div>
-          </div>
-          <div className="metric-item">
-            <div className="metric-eyebrow">Language</div>
-            <div className="metric-label">Mid-call switching</div>
-            <div className="metric-sub">Shifts to Hindi, Tamil, or Arabic mid-conversation without losing context.</div>
-          </div>
-          <div className="metric-item">
-            <div className="metric-eyebrow">Escalation</div>
-            <div className="metric-label">Context-aware routing</div>
-            <div className="metric-sub">Routes to a human only on policy breach — with full transcript attached.</div>
-          </div>
-          <div className="metric-item">
-            <div className="metric-eyebrow">Memory</div>
-            <div className="metric-label">Cross-session recall</div>
-            <div className="metric-sub">Customers never repeat themselves on follow-up calls.</div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── WHY US ── */}
-      <section id="why-section" className="max-w-7xl mx-auto px-6 reveal" style={{ marginBottom: "5rem" }}>
-        <div className="section-header" style={{ marginBottom: "2.5rem" }}>
-          <div>
-            <div className="section-eyebrow">Why Enlight AI</div>
-            <h2 className="section-title">
-              Built for outcomes,<br />
-              <span className="section-title-italic">not demonstrations.</span>
-            </h2>
-          </div>
-        </div>
-        <div className="feature-bar">
-          <div className="feature-item">
-            <div className="feature-icon"><Zap size={17} /></div>
-            <div>
-              <div className="feature-title">Streamlined Execution</div>
-              <div className="feature-text">No handoffs, no filler. Proven AI consultants end-to-end from strategy to deployment.</div>
-            </div>
-          </div>
-          <div className="feature-item">
-            <div className="feature-icon"><Shield size={17} /></div>
-            <div>
-              <div className="feature-title">Enterprise-Grade Security</div>
-              <div className="feature-text">SOC 2 compliant infrastructure. Every deployment meets your industry's regulatory requirements.</div>
-            </div>
-          </div>
-          <div className="feature-item">
-            <div className="feature-icon"><Globe size={17} /></div>
-            <div>
-              <div className="feature-title">Measurable Outcomes</div>
-              <div className="feature-text">Success is defined by resolved tickets, closed claims, and enrolled students — not activity.</div>
-            </div>
-          </div>
-          <div className="feature-item">
-            <div className="feature-icon"><Clock size={17} /></div>
-            <div>
-              <div className="feature-title">Flexible Engagement</div>
-              <div className="feature-text">From strategic sprints to fully managed delivery. Scale the engagement as your needs evolve.</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* ── AGENTS ── */}
-      <section id="agents-section" className="max-w-7xl mx-auto px-6">
+      <section id="agents-section" className="max-w-7xl mx-auto px-6" style={{ paddingTop: "5rem" }}>
         <div className="section-header reveal">
           <div>
             <div className="section-eyebrow">Live AI Voice Agents</div>
@@ -905,7 +811,7 @@ export default function Page() {
       </section>
 
       {/* ── WORKFLOW PIPELINE ── */}
-      <section id="enterprise-section" className="max-w-7xl mx-auto px-6 reveal" style={{ marginTop: "6rem" }}>
+      <section id="workflow-section" className="max-w-7xl mx-auto px-6 reveal" style={{ marginTop: "6rem" }}>
         <div className="section-header" style={{ marginBottom: "2.5rem" }}>
           <div>
             <div className="section-eyebrow">End-to-End Workflow</div>
@@ -916,14 +822,18 @@ export default function Page() {
           </div>
         </div>
         <AnimatePresence mode="wait">
-          <motion.div key={activeIndustry + "-pipeline"} initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}>
+          <motion.div
+            key={activeIndustry + "-pipeline"}
+            initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+          >
             <WorkflowPipelineCard pipeline={activePipeline} />
           </motion.div>
         </AnimatePresence>
       </section>
 
       {/* ── CTA BANNER ── */}
-      <section id="cases-section" className="max-w-7xl mx-auto px-6 reveal">
+      <section className="max-w-7xl mx-auto px-6 reveal" style={{ marginTop: "5rem" }}>
         <div className="cta-banner">
           <div className="cta-banner-content">
             <h2 className="cta-banner-title">
