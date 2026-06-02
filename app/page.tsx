@@ -235,6 +235,29 @@ const agentsByIndustry = agents.reduce<Record<string, Agent[]>>((acc, a) => {
   return acc;
 }, {});
 
+// ─── ORB COLORS per industry ─────────────────────────────────────────
+const orbGradients: Record<string, { from: string; mid: string; to: string }[]> = {
+  bfsi:        [{ from: "#5BA4F5", mid: "#3B82F6", to: "#1A56DB" }, { from: "#60A5FA", mid: "#2563EB", to: "#1E40AF" }],
+  healthtech:  [{ from: "#C084FC", mid: "#A855F7", to: "#7C3AED" }, { from: "#A78BFA", mid: "#8B5CF6", to: "#6D28D9" }],
+  edtech:      [{ from: "#34D399", mid: "#10B981", to: "#059669" }, { from: "#6EE7B7", mid: "#34D399", to: "#047857" }],
+  ecommerce:   [{ from: "#FB923C", mid: "#F97316", to: "#C2410C" }, { from: "#FDBA74", mid: "#FB923C", to: "#EA580C" }],
+  hospitality: [{ from: "#F472B6", mid: "#EC4899", to: "#BE185D" }, { from: "#F9A8D4", mid: "#F472B6", to: "#9D174D" }],
+};
+
+// ─── AGENT QUOTES (speech bubble text) ───────────────────────────────
+const agentQuotes: Record<string, string> = {
+  sam:     "Order #47821 — found it!",
+  max:     "Cart recovery in progress...",
+  isha:    "Which program interests you?",
+  kiran:   "Collecting your docs...",
+  sara:    "Dr. Kapoor available Thu...",
+  riya:    "Assessing your symptoms...",
+  bhaskar: "Verifying your card now...",
+  aryan:   "Filing your FNOL...",
+  lucky:   "Spa booking confirmed!",
+  nikita:  "Late checkout approved.",
+};
+
 const footerCols = [
   { title: "Services",     links: ["AI Voice Agents", "AI Consulting", "Automation Solutions", "Enterprise Integrations", "CRM Integration", "Custom Deployment"] },
   { title: "Industries",   links: ["Healthcare", "BFSI", "Hospitality", "Ecommerce", "EdTech"] },
@@ -390,7 +413,94 @@ async function runLiveCall(agent: Agent) {
   _liveTimeouts.push(setTimeout(() => store.setStatus("Listening..."), delay + 800));
 }
 
-// ─── COMPONENTS ──────────────────────────────────────────────────────
+// ─── ORB CARD COMPONENT ──────────────────────────────────────────────
+const OrbCard = memo(function OrbCard({
+  agent,
+  colorIdx,
+  onLive,
+}: {
+  agent: Agent;
+  colorIdx: number;
+  onLive: () => void;
+}) {
+  const gradients = orbGradients[agent.industry] ?? orbGradients.bfsi;
+  const c = gradients[colorIdx % gradients.length];
+  const quote = agentQuotes[agent.id] ?? "How can I help?";
+
+  return (
+    <div className="orb-wrap" onClick={onLive}>
+      <div className="orb-container">
+        <div className="orb-bubble">{quote}</div>
+        <div
+          className="orb-sphere"
+          style={{ background: `radial-gradient(circle at 35% 35%, ${c.from}, ${c.mid} 50%, ${c.to})` }}
+          aria-label={agent.name}
+        >
+          <div className="orb-shine" />
+          <div className="orb-shine2" />
+        </div>
+      </div>
+      <div className="orb-name">{agent.name}</div>
+      <div className="orb-role">{agent.role}</div>
+      <button
+        className="orb-call-btn"
+        onClick={(e) => { e.stopPropagation(); onLive(); }}
+        aria-label={`Call ${agent.name}`}
+      >
+        <Phone size={12} /> CALL
+      </button>
+    </div>
+  );
+});
+
+// ─── AGENT GRID (Orb version) ────────────────────────────────────────
+const AgentGrid = memo(function AgentGrid({
+  activeIndustry,
+  filteredAgents,
+}: {
+  activeIndustry: IndustryId;
+  filteredAgents: Agent[];
+}) {
+  const handlers = useRef<Map<string, () => void>>(new Map());
+
+  filteredAgents.forEach((agent) => {
+    if (!handlers.current.has(agent.id)) {
+      handlers.current.set(agent.id, () => runLiveCall(agent));
+    }
+  });
+
+  useEffect(() => {
+    const ids = new Set(filteredAgents.map((a) => a.id));
+    handlers.current.forEach((_, id) => { if (!ids.has(id)) handlers.current.delete(id); });
+  }, [filteredAgents]);
+
+  return (
+    <motion.div
+      key={activeIndustry + "-grid"}
+      className="orb-grid"
+      initial={{ opacity: 0, y: 14 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+    >
+      {filteredAgents.map((agent, i) => (
+        <motion.div
+          key={agent.id}
+          initial={{ opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: i * 0.07, ease: [0.16, 1, 0.3, 1] }}
+        >
+          <OrbCard
+            agent={agent}
+            colorIdx={i}
+            onLive={handlers.current.get(agent.id)!}
+          />
+        </motion.div>
+      ))}
+    </motion.div>
+  );
+});
+
+// ─── WORKFLOW PIPELINE ───────────────────────────────────────────────
 const WorkflowPipelineCard = memo(function WorkflowPipelineCard({ pipeline }: { pipeline: WorkflowPipeline }) {
   return (
     <div className="workflow-card">
@@ -415,44 +525,7 @@ const WorkflowPipelineCard = memo(function WorkflowPipelineCard({ pipeline }: { 
   );
 });
 
-const AgentCard = memo(function AgentCard({ agent, onLive }: { agent: Agent; onLive: () => void }) {
-  return (
-    <article className="agent-card" style={{ "--agent-color": agent.color } as React.CSSProperties}>
-      <div className="agent-card-glow" />
-      <div className="agent-header">
-        <div className="agent-identity">
-          <div className="agent-name-row">
-            <h3 className="agent-name">{agent.name}</h3>
-            <span className="status-badge"><span className="status-badge__dot" />Live</span>
-          </div>
-          <p className="agent-role">{agent.role}</p>
-        </div>
-        <div className="agent-avatar">{agent.name.slice(0, 2)}</div>
-      </div>
-      <div className="agent-live-status">
-        <span style={{ width: "5px", height: "5px", borderRadius: "50%", background: agent.color, display: "inline-block", flexShrink: 0, animation: "pulse-soft 2s ease-in-out infinite" }} />
-        {agent.currentStatus}
-      </div>
-      <p className="agent-description">{agent.description}</p>
-      <div className="use-case-row">
-        {agent.capabilities.map((cap) => (
-          <span key={cap} className="use-case-tag"><span className="use-case-dot" />{cap}</span>
-        ))}
-      </div>
-      <div className="channels-row">
-        <span className="channels-label">Channels</span>
-        {agent.channels.map((c) => <span key={c} className="channel-tag">{c}</span>)}
-      </div>
-      <div className="agent-footer">
-        <button onClick={onLive} className="btn-live" aria-label={`Start live call with ${agent.name}`}>
-          <Phone size={12} /> Speak with {agent.name}
-        </button>
-      </div>
-    </article>
-  );
-});
-
-// ─── CHAT BUBBLE (memoized — animates in once, never re-renders) ─────
+// ─── CHAT BUBBLE ─────────────────────────────────────────────────────
 const ChatBubble = memo(function ChatBubble({ msg }: { msg: TranscriptMessage }) {
   return (
     <motion.div
@@ -488,7 +561,6 @@ function Transcript({ messages }: { messages: TranscriptMessage[] }) {
         </div>
       )}
       {messages.map((msg) => (
-        // stable key = timestamp so React never re-mounts existing bubbles
         <ChatBubble key={msg.timestamp} msg={msg} />
       ))}
       <div ref={bottomRef} />
@@ -669,52 +741,6 @@ function Footer() {
   );
 }
 
-// ─── AGENT GRID (isolated from call store) ───────────────────────────
-const AgentGrid = memo(function AgentGrid({
-  activeIndustry,
-  filteredAgents,
-}: {
-  activeIndustry: IndustryId;
-  filteredAgents: Agent[];
-}) {
-  const handlers = useRef<Map<string, () => void>>(new Map());
-
-  filteredAgents.forEach((agent) => {
-    if (!handlers.current.has(agent.id)) {
-      handlers.current.set(agent.id, () => runLiveCall(agent));
-    }
-  });
-
-  useEffect(() => {
-    const ids = new Set(filteredAgents.map((a) => a.id));
-    handlers.current.forEach((_, id) => { if (!ids.has(id)) handlers.current.delete(id); });
-  }, [filteredAgents]);
-
-  return (
-    <motion.div
-      key={activeIndustry + "-grid"}
-      className="agent-grid"
-      initial={{ opacity: 0, y: 14 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-    >
-      {filteredAgents.map((agent, i) => (
-        <motion.div
-          key={agent.id}
-          initial={{ opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3, delay: i * 0.07, ease: [0.16, 1, 0.3, 1] }}
-        >
-          <AgentCard
-            agent={agent}
-            onLive={handlers.current.get(agent.id)!}
-          />
-        </motion.div>
-      ))}
-    </motion.div>
-  );
-});
-
 // ─── PAGE ────────────────────────────────────────────────────────────
 export default function Page() {
   const [activeIndustry, setActiveIndustry] = useState<IndustryId>("bfsi");
@@ -863,15 +889,17 @@ export default function Page() {
         </div>
       </section>
 
-      {/* ── AGENTS ── */}
+      {/* ── AGENTS WITH ORB GRID ── */}
       <section id="agents-section" className="max-w-7xl mx-auto px-6">
-        <div className="section-header reveal">
+        <div className="section-header reveal" style={{ flexDirection: "column", alignItems: "flex-start", gap: "1.5rem" }}>
           <div>
             <div className="section-eyebrow">Live AI Voice Agents</div>
-            <h2 className="section-title">
-              Select an industry.<br />
-              <span className="section-title-italic">Experience a live agent.</span>
+            <h2 className="agents-section-headline">
+              HEAR IT <span className="headline-highlight">FOR YOURSELF</span>
             </h2>
+            <p style={{ fontSize: "1rem", color: "var(--text-muted)", maxWidth: "540px", lineHeight: 1.6, marginTop: "0.75rem" }}>
+              No signup. No sales call. Just pick an agent below and start a live conversation right now.
+            </p>
           </div>
           <div className="industry-tabs" role="tablist" aria-label="Industries">
             {industries.map((ind) => (
@@ -884,7 +912,7 @@ export default function Page() {
             ))}
           </div>
         </div>
-        <div role="tabpanel">
+        <div role="tabpanel" style={{ marginTop: "2rem" }}>
           <AgentGrid activeIndustry={activeIndustry} filteredAgents={filteredAgents} />
         </div>
       </section>
