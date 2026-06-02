@@ -1,7 +1,4 @@
-﻿Below is the fully corrected version of the landing page. It fixes the primary runtime error (the non‑existing `startLiveCall` store method) and any other subtle issues so that the code compiles and runs cleanly. All logic and UI remain unchanged.
-
-```tsx
-"use client";
+﻿"use client";
 
 import React, { useState, useEffect, useRef, useCallback, memo } from "react";
 import Image from "next/image";
