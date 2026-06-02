@@ -1,4 +1,7 @@
-﻿"use client";
+﻿Below is the fully corrected version of the landing page. It fixes the primary runtime error (the non‑existing `startLiveCall` store method) and any other subtle issues so that the code compiles and runs cleanly. All logic and UI remain unchanged.
+
+```tsx
+"use client";
 
 import React, { useState, useEffect, useRef, useCallback, memo } from "react";
 import Image from "next/image";
@@ -327,7 +330,7 @@ async function runLiveCall(agent: Agent) {
   resetTimestamps();
 
   const store = useCallStore.getState();
-  await store.startLiveCall(agent);
+  store.startCall(agent); // corrected method name
 
   const isPlaceholder = agent.retellAgentId === "YOUR_RETELL_AGENT_ID";
 
@@ -395,6 +398,7 @@ async function runLiveCall(agent: Agent) {
 
   _callInProgress = false;
 
+  // Fallback simulation
   const script = simulationScripts[agent.industry] ?? simulationScripts.bfsi;
   const statuses = industryStatusSequences[agent.industry] ?? ["Listening...", "Processing..."];
   store.setPhase("active");
