@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef, useCallback, memo } from "react";
 import Image from "next/image";
 import { RetellWebClient } from "retell-client-js-sdk";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Phone, ArrowRight, MessageSquare,
   CheckCircle2, Zap, Shield, Globe, Clock,
@@ -14,12 +14,7 @@ import {
 } from "@/store/callStore";
 import type { Agent, Industry, IndustryId } from "../types/index";
 
-type TranscriptMessage = { 
-  role: "agent" | "user"; 
-  text: string; 
-  timestamp: number;
-  id: string;
-};
+type TranscriptMessage = { role: "agent" | "user"; text: string; timestamp: number };
 
 // ─── RETELL SINGLETON ────────────────────────────────────────────────
 let _retellClient: RetellWebClient | null = null;
@@ -40,105 +35,91 @@ const industries: Industry[] = [
 const agents: Agent[] = [
   {
     id: "sam", industry: "ecommerce", name: "SAM", role: "Customer Support AI",
-    color: "#fb923c", currentStatus: "Handling a return — Order #47821",
+    color: "#fb923c",
     description: "Resolves delivery issues, refund escalations, and return requests without human involvement.",
     capabilities: ["Delivery exceptions", "Refund escalations", "Return authorizations"],
-    useCases: ["Delivery exceptions", "Return authorizations", "Refund escalations"],
-    channels: ["Voice", "Chat", "WhatsApp"], status: "live", metric: "",
-    retellAgentId: process.env.NEXT_PUBLIC_RETELL_SAM_ID ?? "",
-    demoTranscript: [],
+    channels: ["Voice", "Chat", "WhatsApp"],
+    retellAgentId: process.env.NEXT_PUBLIC_RETELL_SAM_ID!,
   },
   {
     id: "max", industry: "ecommerce", name: "MAX", role: "Sales Conversion AI",
-    color: "#fb923c", currentStatus: "Running a cart recovery flow",
+    color: "#fb923c",
     description: "Recovers abandoned carts via voice and chat. Surfaces matched alternatives, applies offers, and closes checkout.",
     capabilities: ["Cart recovery", "Product matching", "Checkout assistance"],
-    useCases: ["Cart recovery", "Product matching", "Checkout assistance"],
-    channels: ["Voice", "Chat", "SMS"], status: "live", metric: "",
-    retellAgentId: process.env.NEXT_PUBLIC_RETELL_MAX_ID ?? "",
-    demoTranscript: [],
+    channels: ["Voice", "Chat", "SMS"],
+    retellAgentId: process.env.NEXT_PUBLIC_RETELL_MAX_ID!,
   },
   {
     id: "isha", industry: "edtech", name: "ISHA", role: "Lead Qualification AI",
-    color: "#2dd4bf", currentStatus: "Qualifying a prospective student",
+    color: "#2dd4bf",
     description: "Qualifies inbound leads, matches students to the right program, and books counsellor calls automatically.",
     capabilities: ["Student qualification", "Program matching", "Counsellor booking"],
-    useCases: ["Student qualification", "Program matching", "Counsellor booking"],
-    channels: ["Voice", "WhatsApp", "Chat"], status: "live", metric: "",
-    retellAgentId: process.env.NEXT_PUBLIC_RETELL_ISHA_ID ?? "",
-    demoTranscript: [],
+    channels: ["Voice", "WhatsApp", "Chat"],
+    retellAgentId: process.env.NEXT_PUBLIC_RETELL_ISHA_ID!,
   },
   {
     id: "kiran", industry: "edtech", name: "KIRAN", role: "Student Onboarding AI",
-    color: "#2dd4bf", currentStatus: "Collecting enrollment documents",
+    color: "#2dd4bf",
     description: "Walks enrolled students through document submission, payment setup, and LMS access without support staff.",
     capabilities: ["Document collection", "Payment guidance", "LMS setup"],
-    useCases: ["Document collection", "Payment guidance", "LMS setup"],
-    channels: ["Voice", "Email", "Chat"], status: "live", metric: "",
-    retellAgentId: process.env.NEXT_PUBLIC_RETELL_KIRAN_ID ?? "",
-    demoTranscript: [],
+    channels: ["Voice", "Email", "Chat"],
+    retellAgentId: process.env.NEXT_PUBLIC_RETELL_KIRAN_ID!,
   },
   {
     id: "sara", industry: "healthtech", name: "SARA", role: "Healthcare Reception & Patient Support AI",
-    color: "#a78bfa", currentStatus: "Scheduling orthopedic follow-up — Dr. Kapoor",
+    color: "#a78bfa",
     description: "Handles appointment scheduling, patient intake, insurance verification, rescheduling, follow-ups, and healthcare support workflows across providers without manual staff intervention.",
     capabilities: ["Appointment booking", "Insurance verification", "Pre-visit intake", "Appointment reminders", "Rescheduling", "Emergency routing"],
-    useCases: ["Patient appointment scheduling", "Insurance verification", "Pre-visit intake", "Follow-up coordination", "Appointment reminders", "Emergency handling"],
-    channels: ["Voice", "WhatsApp", "Web"], status: "live", metric: "92% automated appointment completion",
-    retellAgentId: process.env.NEXT_PUBLIC_RETELL_SARA_ID ?? "",
-    demoTranscript: [],
+    channels: ["Voice", "WhatsApp", "Web"],
+    retellAgentId: process.env.NEXT_PUBLIC_RETELL_SARA_ID!,
   },
   {
     id: "riya", industry: "healthtech", name: "RIYA", role: "Clinical Screening & Risk Assessment AI",
-    color: "#8b5cf6", currentStatus: "Assessing respiratory risk severity",
+    color: "#8b5cf6",
     description: "Performs structured symptom assessment, detects risk indicators, identifies emergency signals, and classifies urgency before routing patients to the appropriate care path.",
     capabilities: ["Symptom assessment", "Risk detection", "Emergency detection", "Urgency scoring", "Care pathway recommendation"],
-    useCases: ["Respiratory screening", "Emergency identification", "Pre-consultation symptom assessment", "Risk prioritization", "Patient severity classification"],
-    channels: ["Voice", "Chat"], status: "live", metric: "94% triage classification accuracy",
-    retellAgentId: process.env.NEXT_PUBLIC_RETELL_RIYA_ID ?? "",
-    demoTranscript: [],
+    channels: ["Voice", "Chat"],
+    retellAgentId: process.env.NEXT_PUBLIC_RETELL_RIYA_ID!,
   },
   {
     id: "bhaskar", industry: "bfsi", name: "BHASKAR", role: "Fraud Resolution Executive",
-    color: "#4f8ef7", currentStatus: "Verifying a disputed transaction",
+    color: "#4f8ef7",
     description: "Handles fraud disputes end-to-end — blocks cards, applies provisional credits, and assigns replacements per RBI guidelines.",
     capabilities: ["Transaction disputes", "Provisional credits", "Card replacement"],
-    useCases: ["Transaction disputes", "Provisional credits", "Card replacement"],
-    channels: ["Voice", "Phone", "WhatsApp"], status: "live", metric: "",
-    retellAgentId: process.env.NEXT_PUBLIC_RETELL_BHASKAR_ID ?? "",
-    demoTranscript: [],
+    channels: ["Voice", "WhatsApp"],
+    retellAgentId: process.env.NEXT_PUBLIC_RETELL_BHASKAR_ID!,
   },
   {
     id: "aryan", industry: "bfsi", name: "ARYAN", role: "Claims Processing AI",
-    color: "#4f8ef7", currentStatus: "Filing a motor insurance FNOL",
+    color: "#4f8ef7",
     description: "Files FNOL, verifies policy coverage, and assigns adjusters for motor and health claims in under 4 minutes.",
     capabilities: ["FNOL filing", "Policy verification", "Adjuster assignment"],
-    useCases: ["FNOL filing", "Policy verification", "Adjuster assignment"],
-    channels: ["Voice", "SMS", "Phone"], status: "live", metric: "",
-    retellAgentId: process.env.NEXT_PUBLIC_RETELL_ARYAN_ID ?? "",
-    demoTranscript: [],
+    channels: ["Voice", "SMS"],
+    retellAgentId: process.env.NEXT_PUBLIC_RETELL_ARYAN_ID!,
   },
   {
     id: "lucky", industry: "hospitality", name: "LUCKY", role: "Guest Experience & Concierge AI",
-    color: "#f472b6", currentStatus: "Arranging a spa reservation",
+    color: "#f472b6",
     description: "Handles in-stay requests — spa, dining, housekeeping, and local bookings — in the guest's preferred language.",
     capabilities: ["Spa & dining bookings", "Room service", "Multilingual support"],
-    useCases: ["Spa & dining bookings", "Room service", "Local recommendations"],
-    channels: ["Voice", "Chat", "WhatsApp"], status: "live", metric: "",
-    retellAgentId: process.env.NEXT_PUBLIC_RETELL_LUCKY_ID ?? "",
-    demoTranscript: [],
+    channels: ["Voice", "Chat", "WhatsApp"],
+    retellAgentId: process.env.NEXT_PUBLIC_RETELL_LUCKY_ID!,
   },
   {
     id: "nikita", industry: "hospitality", name: "NIKITA", role: "Reservation Management AI",
-    color: "#f472b6", currentStatus: "Processing a late checkout request",
+    color: "#f472b6",
     description: "Manages booking modifications, cancellations, early check-in, and late checkout against live occupancy data.",
     capabilities: ["Stay extensions", "Early/late checkout", "Group bookings"],
-    useCases: ["Stay extensions", "Early/late checkout", "Group bookings"],
-    channels: ["Voice", "Email", "Chat"], status: "live", metric: "",
-    retellAgentId: process.env.NEXT_PUBLIC_RETELL_NIKITA_ID ?? "",
-    demoTranscript: [],
+    channels: ["Voice", "Email", "Chat"],
+    retellAgentId: process.env.NEXT_PUBLIC_RETELL_NIKITA_ID!,
   },
 ];
+
+const agentsByIndustry = agents.reduce<<Record<string, Agent[]>>((acc, a) => {
+  if (!acc[a.industry]) acc[a.industry] = [];
+  acc[a.industry].push(a);
+  return acc;
+}, {});
 
 type WorkflowStep = { label: string; detail: string };
 type WorkflowPipeline = { industry: IndustryId; title: string; steps: WorkflowStep[] };
@@ -201,46 +182,13 @@ const workflowPipelines: WorkflowPipeline[] = [
   },
 ];
 
-type SimulationScript = { role: "agent" | "user"; text: string }[];
-
-const simulationScripts: Record<string, SimulationScript> = {
-  bfsi: [
-    { role: "user",  text: "Hi, I noticed an unfamiliar charge on my account." },
-    { role: "agent", text: "I'm pulling up your recent transactions now. Can you confirm the last four digits of your card?" },
-    { role: "user",  text: "It ends in 4821." },
-    { role: "agent", text: "Thank you. I can see a suspicious charge of ₹4,200 on the 3rd. I'm initiating a dispute and issuing a provisional credit within 2 business days." },
-  ],
-  healthtech: [
-    { role: "user",  text: "I need to book a follow-up with Dr. Kapoor." },
-    { role: "agent", text: "Of course. Dr. Kapoor has availability this Thursday at 10 AM or Friday at 2 PM — which works better for you?" },
-    { role: "user",  text: "Thursday at 10 works." },
-    { role: "agent", text: "Confirmed. I've booked Thursday at 10 AM and sent a pre-visit form to your registered number." },
-  ],
-  edtech: [
-    { role: "user",  text: "I'm interested in the data science program." },
-    { role: "agent", text: "Great choice. Could you tell me your current background — are you coming from a tech or non-tech field?" },
-    { role: "user",  text: "I have a business degree, some basic Excel skills." },
-    { role: "agent", text: "Perfect. I'd recommend our Business Analytics track — it's designed for exactly that profile. I can book a counsellor call for tomorrow if you'd like." },
-  ],
-  hospitality: [
-    { role: "user",  text: "I'd like to extend my stay by one night." },
-    { role: "agent", text: "Let me check availability for your room type. You're in a Deluxe King — yes, we have availability on the 14th. Shall I confirm the extension?" },
-    { role: "user",  text: "Yes please." },
-    { role: "agent", text: "Done. Your stay is now extended to the 14th. I've updated your folio and sent a confirmation to your email." },
-  ],
-  ecommerce: [
-    { role: "user",  text: "My order hasn't arrived and it was supposed to be here yesterday." },
-    { role: "agent", text: "I'm checking your order now. There's a carrier delay flagged on Order #47821. I can reroute, redeliver tomorrow, or process a full refund — what would you prefer?" },
-    { role: "user",  text: "Please redeliver tomorrow." },
-    { role: "agent", text: "Confirmed. Redelivery is scheduled for tomorrow between 10 AM and 2 PM. You'll receive an SMS update from the carrier." },
-  ],
+const orbGradients: Record<string, { from: string; mid: string; to: string }[]> = {
+  bfsi:        [{ from: "#5BA4F5", mid: "#3B82F6", to: "#1A56DB" }, { from: "#60A5FA", mid: "#2563EB", to: "#1E40AF" }],
+  healthtech:  [{ from: "#C084FC", mid: "#A855F7", to: "#7C3AED" }, { from: "#A78BFA", mid: "#8B5CF6", to: "#6D28D9" }],
+  edtech:      [{ from: "#34D399", mid: "#10B981", to: "#059669" }, { from: "#6EE7B7", mid: "#34D399", to: "#047857" }],
+  ecommerce:   [{ from: "#FB923C", mid: "#F97316", to: "#C2410C" }, { from: "#FDBA74", mid: "#FB923C", to: "#EA580C" }],
+  hospitality: [{ from: "#F472B6", mid: "#EC4899", to: "#BE185D" }, { from: "#F9A8D4", mid: "#F472B6", to: "#9D174D" }],
 };
-
-const agentsByIndustry = agents.reduce<Record<string, Agent[]>>((acc, a) => {
-  if (!acc[a.industry]) acc[a.industry] = [];
-  acc[a.industry].push(a);
-  return acc;
-}, {});
 
 const footerCols = [
   { title: "Services",     links: ["AI Voice Agents", "AI Consulting", "Automation Solutions", "Enterprise Integrations", "CRM Integration", "Custom Deployment"] },
@@ -249,296 +197,186 @@ const footerCols = [
   { title: "Company",      links: ["About Us", "Case Studies", "Blogs", "Careers", "Contact"] },
 ];
 
-const trustLogos = ["Mozilla Foundation", "Emblazer", "Go2Andaman", "Homeloft", "HUMA"];
+// ─── RETELL CALL HOOK ────────────────────────────────────────────────
+function useRetellCall() {
+  const abortRef = useRef<<AbortController | null>(null);
 
-// ─── WAVEFORM HOOK (FIXED) ───────────────────────────────────────────
-const BAR_COUNT = 48;
+  const endCall = useCallback(() => {
+    abortRef.current?.abort();
+    abortRef.current = null;
+    try {
+      const client = getRetellClient();
+      client.stopCall();
+      client.removeAllListeners();
+    } catch (_) {}
+    useCallStore.getState().endCall();
+  }, []);
 
-function useWaveform(active: boolean) {
-  const prefersReduced = useReducedMotion();
-  const [heights, setHeights] = useState<number[]>(() => Array(BAR_COUNT).fill(30));
-  const rafRef = useRef<number | null>(null);
-  const lastRef = useRef(0);
-
-  useEffect(() => {
-    if (!active || prefersReduced) {
-      setHeights(Array(BAR_COUNT).fill(30));
-      if (rafRef.current) {
-        cancelAnimationFrame(rafRef.current);
-        rafRef.current = null;
-      }
-      return;
-    }
-
-    function tick(ts: number) {
-      if (ts - lastRef.current >= 90) {
-        setHeights(Array.from({ length: BAR_COUNT }, (_, i) => {
-          const wave = Math.sin((Date.now() / 190) + i * 0.28) * 28;
-          return Math.max(12, Math.min(95, 50 + wave + (Math.random() * 38) - 20));
-        }));
-        lastRef.current = ts;
-      }
-      rafRef.current = requestAnimationFrame(tick);
-    }
-    
-    rafRef.current = requestAnimationFrame(tick);
-    
-    return () => {
-      if (rafRef.current) {
-        cancelAnimationFrame(rafRef.current);
-        rafRef.current = null;
-      }
-    };
-  }, [active, prefersReduced]);
-
-  return heights;
-}
-
-// ─── LIVE CALL RUNNER (FIXED) ────────────────────────────────────────
-const _liveTimeouts: ReturnType<typeof setTimeout>[] = [];
-let _callInProgress = false;
-
-function clearAll() {
-  _liveTimeouts.forEach(clearTimeout);
-  _liveTimeouts.length = 0;
-  try {
-    const client = getRetellClient();
-    client.stopCall();
-    client.removeAllListeners();
-  } catch (err) {
-    console.warn("Error during cleanup:", err);
-  }
-}
-
-const _msgTimestamps: number[] = [];
-function stableTimestamp(index: number): number {
-  if (_msgTimestamps[index] === undefined) {
-    _msgTimestamps[index] = Date.now() + index;
-  }
-  return _msgTimestamps[index];
-}
-function resetTimestamps() {
-  _msgTimestamps.length = 0;
-}
-
-const industryStatusSequences: Record<string, string[]> = {
-  bfsi:        ["Listening...", "Verifying identity...", "Retrieving account...", "Checking transaction history...", "Classifying dispute...", "Issuing credit..."],
-  healthtech:  ["Listening...", "Collecting intake...", "Assessing symptoms...", "Classifying urgency...", "Matching provider...", "Scheduling appointment..."],
-  edtech:      ["Listening...", "Assessing profile...", "Matching program...", "Retrieving availability...", "Booking counsellor..."],
-  hospitality: ["Listening...", "Retrieving reservation...", "Checking availability...", "Confirming booking...", "Updating itinerary..."],
-  ecommerce:   ["Listening...", "Retrieving order...", "Checking carrier status...", "Processing request...", "Confirming resolution..."],
-};
-
-type RetellTranscriptEntry = {
-  role: "agent" | "user";
-  content: string;
-};
-
-async function runLiveCall(agent: Agent) {
-  if (useCallStore.getState().callActive || _callInProgress) {
-    return;
-  }
-
-  _callInProgress = true;
-
-  try {
-    clearAll();
-    resetTimestamps();
-
+  const startCall = useCallback(async (agent: Agent) => {
     const store = useCallStore.getState();
-    await store.startLiveCall(agent);
+    if (store.callActive) return;
 
-    const hasValidAgentId = agent.retellAgentId && agent.retellAgentId.trim() !== "";
+    store.startLiveCall(agent);
+    store.setState({ transcript: [] });
+    store.setPhase("connecting");
+    store.setStatus("Connecting...");
 
-    if (hasValidAgentId) {
-      try {
-        // Request microphone permission
-        const micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        micStream.getTracks().forEach(t => t.stop());
+    const controller = new AbortController();
+    abortRef.current = controller;
 
-        const res = await fetch("/api/retell/create-web-call", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ agentId: agent.retellAgentId }),
-        });
+    try {
+      const res = await fetch("/api/retell/create-web-call", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ agentId: agent.retellAgentId }),
+        signal: controller.signal,
+      });
 
-        if (res.ok) {
-          const { access_token } = await res.json();
-          const retellClient = getRetellClient();
-          retellClient.removeAllListeners();
+      if (!res.ok) throw new Error(`Backend returned ${res.status}`);
 
-          retellClient.on("call_started", () => {
-            useCallStore.getState().setStatus("Connected — Listening...");
-            useCallStore.getState().setPhase("active");
-          });
+      const { access_token } = await res.json();
+      const client = getRetellClient();
+      client.removeAllListeners();
 
-          retellClient.on("call_ended", () => {
-            useCallStore.getState().setStatus("Call ended");
-            retellClient.removeAllListeners();
-            _liveTimeouts.forEach(clearTimeout);
-            _liveTimeouts.length = 0;
-            _callInProgress = false;
-            setTimeout(() => useCallStore.getState().endCall(), 800);
-          });
+      client.on("call_started", () => {
+        const s = useCallStore.getState();
+        s.setStatus("Connected — Listening...");
+        s.setPhase("active");
+      });
 
-          retellClient.on("error", (err: unknown) => {
-            console.error("Retell error:", err);
-            useCallStore.getState().setStatus("Connection error — ending call");
-            clearAll();
-            _callInProgress = false;
-            setTimeout(() => useCallStore.getState().endCall(), 1200);
-          });
+      client.on("call_ended", () => {
+        endCall();
+      });
 
-          retellClient.on("update", (update: {
-            transcript?: RetellTranscriptEntry[];
-          }) => {
-            if (!update.transcript || update.transcript.length === 0) return;
-            
-            const normalized: TranscriptMessage[] = update.transcript.map((entry, idx) => ({
-              role: entry.role,
-              text: entry.content,
-              timestamp: stableTimestamp(idx),
-              id: `${stableTimestamp(idx)}-${idx}`,
-            }));
-            
-            useCallStore.setState({ transcript: normalized });
-            
-            const last = update.transcript[update.transcript.length - 1];
-            useCallStore.getState().setStatus(
-              last?.role === "user" ? "Processing..." : "Listening..."
-            );
-          });
+      client.on("error", (err: unknown) => {
+        console.error("Retell error:", err);
+        useCallStore.getState().setStatus("Connection error");
+        setTimeout(endCall, 1200);
+      });
 
-          await retellClient.startCall({ accessToken: access_token });
-          return;
-        } else {
-          console.warn("Failed to create Retell call, falling back to simulation");
-        }
-      } catch (err) {
-        console.warn("Live call setup failed, falling back to simulation:", err);
-      }
-    }
+      client.on("update", (update: {
+        transcript?: { role: string; content: string }[];
+      }) => {
+        const tx = update.transcript;
+        if (!tx?.length) return;
 
-    // Fallback to simulation
-    const script = simulationScripts[agent.industry] ?? simulationScripts.bfsi;
-    const statuses = industryStatusSequences[agent.industry] ?? ["Listening...", "Processing..."];
-    
-    store.setPhase("active");
-    store.setStatus(statuses[0]);
+        const normalized: TranscriptMessage[] = tx.map((entry, idx) => ({
+          role: entry.role === "agent" ? "agent" : "user",
+          text: entry.content,
+          timestamp: Date.now() + idx,
+        }));
 
-    let delay = 600;
-    let messageId = 0;
+        useCallStore.setState({ transcript: normalized });
 
-    script.forEach((line, i) => {
-      const statusIdx = Math.min(i + 1, statuses.length - 1);
-      _liveTimeouts.push(setTimeout(() => {
-        const timestamp = Date.now();
-        store.appendTranscript({
-          ...line,
-          timestamp,
-          id: `sim-${messageId++}-${timestamp}`,
-        });
-        store.setStatus(
-          line.role === "user" 
-            ? (statuses[statusIdx] ?? "Processing...") 
-            : "Listening..."
+        const last = tx[tx.length - 1];
+        useCallStore.getState().setStatus(
+          last?.role === "user" ? "Processing..." : "Listening..."
         );
-      }, delay));
-      delay += line.role === "user" ? 1800 : 2600;
-    });
+      });
 
-    _liveTimeouts.push(
-      setTimeout(() => store.setStatus("Listening..."), delay + 800)
-    );
+      await client.startCall({ accessToken: access_token });
+    } catch (err) {
+      if ((err as Error).name === "AbortError") return;
+      console.error("Call failed:", err);
+      useCallStore.getState().setStatus("Connection failed");
+      setTimeout(endCall, 2000);
+    }
+  }, [endCall]);
 
-  } catch (error) {
-    console.error("runLiveCall failed:", error);
-    useCallStore.getState().setStatus("Error starting call");
-    setTimeout(() => useCallStore.getState().endCall(), 1500);
-  } finally {
-    _callInProgress = false;
-  }
+  return { startCall, endCall };
 }
 
-// ─── COMPONENTS ──────────────────────────────────────────────────────
-const WorkflowPipelineCard = memo(function WorkflowPipelineCard({ 
-  pipeline 
-}: { 
-  pipeline: WorkflowPipeline 
+// ─── ORB CARD ────────────────────────────────────────────────────────
+const OrbCard = memo(function OrbCard({
+  agent,
+  colorIdx,
+  onLive,
+}: {
+  agent: Agent;
+  colorIdx: number;
+  onLive: () => void;
 }) {
+  const gradients = orbGradients[agent.industry] ?? orbGradients.bfsi;
+  const c = gradients[colorIdx % gradients.length];
+
+  return (
+    <div className="orb-wrap">
+      <div className="orb-container">
+        <div
+          className="orb-sphere"
+          style={{ background: `radial-gradient(circle at 35% 35%, ${c.from}, ${c.mid} 50%, ${c.to})` }}
+          aria-label={agent.name}
+        >
+          <div className="orb-shine" />
+          <div className="orb-shine2" />
+        </div>
+      </div>
+      <div className="orb-name">{agent.name}</div>
+      <div className="orb-role">{agent.role}</div>
+      <button
+        className="orb-call-btn"
+        onClick={onLive}
+        aria-label={`Start call with ${agent.name}`}
+      >
+        <Phone size={12} /> CALL
+      </button>
+    </div>
+  );
+});
+
+// ─── AGENT GRID ─────────────────────────────────────────────────────
+const AgentGrid = memo(function AgentGrid({
+  activeIndustry,
+  filteredAgents,
+}: {
+  activeIndustry: IndustryId;
+  filteredAgents: Agent[];
+}) {
+  const { startCall } = useRetellCall();
+
+  return (
+    <motion.div
+      key={activeIndustry + "-grid"}
+      className="orb-grid"
+      initial={{ opacity: 0, y: 14 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+    >
+      {filteredAgents.map((agent, i) => (
+        <motion.div
+          key={agent.id}
+          initial={{ opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: i * 0.07, ease: [0.16, 1, 0.3, 1] }}
+        >
+          <OrbCard
+            agent={agent}
+            colorIdx={i}
+            onLive={() => startCall(agent)}
+          />
+        </motion.div>
+      ))}
+    </motion.div>
+  );
+});
+
+// ─── WORKFLOW PIPELINE ─────────────────────────────────────────────
+const WorkflowPipelineCard = memo(function WorkflowPipelineCard({ pipeline }: { pipeline: WorkflowPipeline }) {
   return (
     <div className="workflow-card">
-      <div style={{ 
-        fontSize: "0.6875rem", 
-        fontWeight: 700, 
-        color: "var(--blue)", 
-        textTransform: "uppercase", 
-        letterSpacing: "0.1em", 
-        marginBottom: "2.5rem" 
-      }}>
+      <div style={{ fontSize: "0.6875rem", fontWeight: 700, color: "var(--blue)", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: "2.5rem" }}>
         {pipeline.title}
       </div>
-      <div style={{ 
-        display: "grid", 
-        gridTemplateColumns: `repeat(${pipeline.steps.length}, 1fr)`, 
-        position: "relative" 
-      }}>
-        <div style={{ 
-          position: "absolute", 
-          top: "13px", 
-          left: `calc(100% / (2 * ${pipeline.steps.length}))`, 
-          right: `calc(100% / (2 * ${pipeline.steps.length}))`, 
-          height: "1px", 
-          background: "linear-gradient(to right, transparent, var(--blue), transparent)", 
-          opacity: 0.25, 
-          zIndex: 0 
-        }} />
+      <div style={{ display: "grid", gridTemplateColumns: `repeat(${pipeline.steps.length}, 1fr)`, position: "relative" }}>
+        <div style={{ position: "absolute", top: "13px", left: `calc(100% / (2 * ${pipeline.steps.length}))`, right: `calc(100% / (2 * ${pipeline.steps.length}))`, height: "1px", background: "linear-gradient(to right, transparent, var(--blue), transparent)", opacity: 0.25, zIndex: 0 }} />
         {pipeline.steps.map((step, i) => (
-          <div 
-            key={i} 
-            style={{ 
-              display: "flex", 
-              flexDirection: "column", 
-              alignItems: "center", 
-              gap: "0.75rem", 
-              padding: "0 0.5rem", 
-              position: "relative", 
-              zIndex: 1 
-            }}
-          >
-            <div style={{ 
-              width: "28px", 
-              height: "28px", 
-              borderRadius: "50%", 
-              flexShrink: 0, 
-              background: (i === 0 || i === pipeline.steps.length - 1) ? "var(--blue)" : "#fff", 
-              border: (i === 0 || i === pipeline.steps.length - 1) ? "none" : "1.5px solid #E5E7EB", 
-              display: "flex", 
-              alignItems: "center", 
-              justifyContent: "center", 
-              fontSize: "0.625rem", 
-              fontWeight: 700, 
-              color: (i === 0 || i === pipeline.steps.length - 1) ? "#fff" : "var(--text-muted)" 
-            }}>
+          <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.75rem", padding: "0 0.5rem", position: "relative", zIndex: 1 }}>
+            <div style={{ width: "28px", height: "28px", borderRadius: "50%", flexShrink: 0, background: (i === 0 || i === pipeline.steps.length - 1) ? "var(--blue)" : "#fff", border: (i === 0 || i === pipeline.steps.length - 1) ? "none" : "1.5px solid #E5E7EB", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.625rem", fontWeight: 700, color: (i === 0 || i === pipeline.steps.length - 1) ? "#fff" : "var(--text-muted)" }}>
               {i === pipeline.steps.length - 1 ? <CheckCircle2 size={13} /> : i + 1}
             </div>
             <div style={{ textAlign: "center" }}>
-              <div style={{ 
-                fontSize: "0.75rem", 
-                fontWeight: 600, 
-                color: "var(--text-heading)", 
-                marginBottom: "4px", 
-                lineHeight: 1.3 
-              }}>
-                {step.label}
-              </div>
-              <div style={{ 
-                fontSize: "0.6875rem", 
-                color: "var(--text-muted)", 
-                lineHeight: 1.45 
-              }}>
-                {step.detail}
-              </div>
+              <div style={{ fontSize: "0.75rem", fontWeight: 600, color: "var(--text-heading)", marginBottom: "4px", lineHeight: 1.3 }}>{step.label}</div>
+              <div style={{ fontSize: "0.6875rem", color: "var(--text-muted)", lineHeight: 1.45 }}>{step.detail}</div>
             </div>
           </div>
         ))}
@@ -547,81 +385,14 @@ const WorkflowPipelineCard = memo(function WorkflowPipelineCard({
   );
 });
 
-const AgentCard = memo(function AgentCard({ 
-  agent, 
-  onLive 
-}: { 
-  agent: Agent; 
-  onLive: () => void 
-}) {
-  return (
-    <article 
-      className="agent-card" 
-      style={{ "--agent-color": agent.color } as React.CSSProperties}
-    >
-      <div className="agent-card-glow" />
-      <div className="agent-header">
-        <div className="agent-identity">
-          <div className="agent-name-row">
-            <h3 className="agent-name">{agent.name}</h3>
-            <span className="status-badge">
-              <span className="status-badge__dot" />Live
-            </span>
-          </div>
-          <p className="agent-role">{agent.role}</p>
-        </div>
-        <div className="agent-avatar">{agent.name.slice(0, 2)}</div>
-      </div>
-      <div className="agent-live-status">
-        <span style={{ 
-          width: "5px", 
-          height: "5px", 
-          borderRadius: "50%", 
-          background: agent.color, 
-          display: "inline-block", 
-          flexShrink: 0, 
-          animation: "pulse-soft 2s ease-in-out infinite" 
-        }} />
-        {agent.currentStatus}
-      </div>
-      <p className="agent-description">{agent.description}</p>
-      <div className="use-case-row">
-        {agent.capabilities.map((cap) => (
-          <span key={cap} className="use-case-tag">
-            <span className="use-case-dot" />{cap}
-          </span>
-        ))}
-      </div>
-      <div className="channels-row">
-        <span className="channels-label">Channels</span>
-        {agent.channels.map((c) => (
-          <span key={c} className="channel-tag">{c}</span>
-        ))}
-      </div>
-      <div className="agent-footer">
-        <button 
-          onClick={onLive} 
-          className="btn-live" 
-          aria-label={`Start live call with ${agent.name}`}
-        >
-          <Phone size={12} /> Speak with {agent.name}
-        </button>
-      </div>
-    </article>
-  );
-});
-
-// ─── CHAT BUBBLE (FIXED) ─────────────────────────────────────────────
+// ─── CHAT BUBBLE ────────────────────────────────────────────────────
 const ChatBubble = memo(function ChatBubble({ msg }: { msg: TranscriptMessage }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 8, scale: 0.97 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.26, ease: [0.16, 1, 0.3, 1] }}
-      style={{ 
-        display: "flex", 
-        justifyContent: msg.role === "user" ? "flex-end" : "flex-start" 
-      }}
+      style={{ display: "flex", justifyContent: msg.role === "user" ? "flex-end" : "flex-start" }}
     >
       <span className="sr-only">{msg.role === "user" ? "You" : "Agent"}:</span>
       <div className={"bubble bubble--" + msg.role}>{msg.text}</div>
@@ -629,9 +400,9 @@ const ChatBubble = memo(function ChatBubble({ msg }: { msg: TranscriptMessage })
   );
 });
 
-// ─── TRANSCRIPT (FIXED) ──────────────────────────────────────────────
+// ─── TRANSCRIPT ───────────────────────────────────────────────────────
 function Transcript({ messages }: { messages: TranscriptMessage[] }) {
-  const bottomRef = useRef<HTMLDivElement>(null);
+  const bottomRef = useRef<<HTMLDivElement>(null);
   const prevLenRef = useRef(0);
 
   useEffect(() => {
@@ -642,12 +413,7 @@ function Transcript({ messages }: { messages: TranscriptMessage[] }) {
   }, [messages.length]);
 
   return (
-    <div 
-      className="transcript" 
-      role="log" 
-      aria-live="polite" 
-      aria-label="Call transcript"
-    >
+    <div className="transcript" role="log" aria-live="polite" aria-label="Call transcript">
       {messages.length === 0 && (
         <div className="transcript__empty">
           <div className="transcript__empty-icon">
@@ -656,82 +422,60 @@ function Transcript({ messages }: { messages: TranscriptMessage[] }) {
           <span>Waiting for conversation to begin...</span>
         </div>
       )}
-      {messages.map((msg) => (
-        <ChatBubble key={msg.id} msg={msg} />
+      {messages.map((msg, idx) => (
+        <ChatBubble key={`${msg.timestamp}-${idx}`} msg={msg} />
       ))}
       <div ref={bottomRef} />
     </div>
   );
 }
 
+// ─── WAVEFORM (CSS-driven, no RAF) ──────────────────────────────────
 function Waveform({ active }: { active: boolean }) {
-  const heights = useWaveform(active);
+  if (!active) return null;
+
+  const bars = Array.from({ length: 48 }, (_, i) => ({
+    id: i,
+    delay: (i % 12) * 0.08,
+    duration: 0.6 + (i % 5) * 0.15,
+  }));
+
   return (
-    <div 
-      className="waveform" 
-      role="img" 
-      aria-label="Audio waveform" 
-      aria-hidden="true"
-    >
-      {heights.map((h, i) => (
-        <div 
-          key={i} 
-          className="waveform-bar" 
-          style={{ 
-            transform: `scaleY(${h / 100})`, 
-            height: "100%" 
-          }} 
+    <div className="waveform" role="img" aria-label="Audio active" aria-hidden="true">
+      {bars.map((bar) => (
+        <div
+          key={bar.id}
+          className="waveform-bar"
+          style={{
+            animationDelay: `${bar.delay}s`,
+            animationDuration: `${bar.duration}s`,
+          }}
         />
       ))}
     </div>
   );
 }
 
-// ─── CALL MODAL (FIXED) ──────────────────────────────────────────────
+// ─── CALL MODAL ─────────────────────────────────────────────────────
 function CallModal() {
   const callActive = useCallActive();
   const agent = useSelectedAgent();
   const transcript = useTranscript();
   const callStatus = useCallStatus();
-  const { endCall } = useCallStore();
-  const modalRef = useRef<HTMLDivElement>(null);
-  const previousFocusRef = useRef<HTMLElement | null>(null);
-
-  const handleEndCall = useCallback(async () => {
-    clearAll();
-    resetTimestamps();
-    try {
-      getRetellClient().removeAllListeners();
-    } catch (err) {
-      console.warn("Error removing listeners:", err);
-    }
-    useCallStore.getState().setStatus("Call ended");
-    endCall();
-  }, [endCall]);
+  const { endCall } = useRetellCall();
 
   useEffect(() => {
     if (!callActive) return;
-
-    previousFocusRef.current = document.activeElement as HTMLElement;
-    
-    // Focus modal after render
-    setTimeout(() => {
-      modalRef.current?.focus();
-    }, 100);
-
-    function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape") handleEndCall();
-    }
-
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") endCall();
+    };
     document.addEventListener("keydown", onKey);
-    document.body.style.overflow = "hidden";
-
+    document.body.classList.add("overflow-hidden");
     return () => {
       document.removeEventListener("keydown", onKey);
-      document.body.style.overflow = "";
-      previousFocusRef.current?.focus();
+      document.body.classList.remove("overflow-hidden");
     };
-  }, [callActive, handleEndCall]);
+  }, [callActive, endCall]);
 
   return (
     <AnimatePresence>
@@ -743,20 +487,13 @@ function CallModal() {
           exit={{ opacity: 0 }}
           transition={{ duration: 0.18 }}
           onClick={(e) => {
-            if (e.target === e.currentTarget) handleEndCall();
+            if (e.target === e.currentTarget) endCall();
           }}
         >
-          <div 
-            role="status" 
-            aria-live="polite" 
-            aria-atomic="true" 
-            className="sr-only"
-          >
+          <div role="status" aria-live="polite" aria-atomic="true" className="sr-only">
             {callStatus}
           </div>
           <motion.div
-            ref={modalRef}
-            tabIndex={-1}
             className="modal-content"
             role="dialog"
             aria-modal="true"
@@ -769,27 +506,17 @@ function CallModal() {
           >
             <div className="modal-header">
               <div className="modal-agent">
-                <div 
-                  className="agent-avatar" 
-                  style={{ "--agent-color": agent.color } as React.CSSProperties}
-                >
+                <div className="agent-avatar" style={{ "--agent-color": agent.color } as React.CSSProperties}>
                   {agent.name.slice(0, 2)}
                 </div>
                 <div className="modal-agent-info">
-                  <div 
-                    className="modal-agent-name" 
-                    style={{ color: agent.color }}
-                  >
+                  <div className="modal-agent-name" style={{ color: agent.color }}>
                     {agent.name}
                   </div>
                   <div className="modal-agent-role">{agent.role}</div>
                 </div>
               </div>
-              <button 
-                onClick={handleEndCall} 
-                className="btn-end-call"
-                aria-label="End call"
-              >
+              <button onClick={endCall} className="btn-end-call">
                 End call
               </button>
             </div>
@@ -808,76 +535,24 @@ function CallModal() {
   );
 }
 
-// ─── NAVBAR (FIXED) ──────────────────────────────────────────────────
+// ─── NAVBAR ─────────────────────────────────────────────────────────
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    let ticking = false;
-    
-    const onScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          setScrolled(window.scrollY > 10);
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-    
+    const onScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const scrollTo = useCallback((id: string) => {
-    document.getElementById(id)?.scrollIntoView({ 
-      behavior: "smooth", 
-      block: "start" 
-    });
-  }, []);
+  const scrollTo = (id: string) =>
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
 
   return (
-    <nav 
-      aria-label="Main navigation" 
-      style={{ 
-        position: "sticky", 
-        top: 0, 
-        zIndex: 50, 
-        background: "#ffffff", 
-        borderBottom: "1px solid #E5E7EB", 
-        boxShadow: scrolled ? "0 2px 16px rgba(0,0,0,0.08)" : "none", 
-        transition: "box-shadow 0.2s ease", 
-        height: "68px", 
-        display: "flex", 
-        alignItems: "center" 
-      }}
-    >
-      <div style={{ 
-        maxWidth: "1200px", 
-        margin: "0 auto", 
-        padding: "0 2rem", 
-        width: "100%", 
-        display: "flex", 
-        alignItems: "center", 
-        justifyContent: "space-between" 
-      }}>
-        <Image 
-          src="/Layer_1.png" 
-          alt="Enlight AI" 
-          width={160} 
-          height={40} 
-          style={{ 
-            objectFit: "contain", 
-            height: "36px", 
-            width: "auto" 
-          }} 
-          priority 
-        />
-        <div style={{ 
-          display: "flex", 
-          alignItems: "center", 
-          gap: "0.25rem" 
-        }}>
+    <nav aria-label="Main navigation" style={{ position: "sticky", top: 0, zIndex: 50, background: "#ffffff", borderBottom: "1px solid #E5E7EB", boxShadow: scrolled ? "0 2px 16px rgba(0,0,0,0.08)" : "none", transition: "box-shadow 0.2s ease", height: "68px", display: "flex", alignItems: "center" }}>
+      <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 2rem", width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <Image src="/Layer_1.png" alt="Enlight AI" width={160} height={40} style={{ objectFit: "contain", height: "36px", width: "auto" }} priority />
+        <div style={{ display: "flex", alignItems: "center", gap: "0.25rem" }}>
           {[
             { label: "About",        id: "why-section" },
             { label: "Services",     id: "agents-section" },
@@ -885,56 +560,18 @@ function Navbar() {
             { label: "Case Studies", id: "cases-section" },
             { label: "Contact",      id: "contact-section" },
           ].map((item) => (
-            <button 
-              key={item.label} 
-              onClick={() => scrollTo(item.id)}
-              style={{ 
-                background: "none", 
-                border: "none", 
-                cursor: "pointer", 
-                fontSize: "0.9375rem", 
-                fontWeight: 500, 
-                color: "#374151", 
-                padding: "0.5rem 0.875rem", 
-                borderRadius: "6px", 
-                transition: "color 0.15s, background 0.15s" 
-              }}
-              onMouseEnter={e => { 
-                e.currentTarget.style.color = "#2563EB"; 
-                e.currentTarget.style.background = "#EFF6FF"; 
-              }}
-              onMouseLeave={e => { 
-                e.currentTarget.style.color = "#374151"; 
-                e.currentTarget.style.background = "none"; 
-              }}
-            >
-              {item.label}
-            </button>
+            <button key={item.label} onClick={() => scrollTo(item.id)}
+              style={{ background: "none", border: "none", cursor: "pointer", fontSize: "0.9375rem", fontWeight: 500, color: "#374151", padding: "0.5rem 0.875rem", borderRadius: "6px", transition: "color 0.15s, background 0.15s" }}
+              onMouseEnter={e => { e.currentTarget.style.color = "#2563EB"; e.currentTarget.style.background = "#EFF6FF"; }}
+              onMouseLeave={e => { e.currentTarget.style.color = "#374151"; e.currentTarget.style.background = "none"; }}
+            >{item.label}</button>
           ))}
         </div>
-        <button 
-          onClick={() => scrollTo("contact-section")}
-          style={{ 
-            background: "#2563EB", 
-            color: "#fff", 
-            border: "none", 
-            borderRadius: "8px", 
-            padding: "0.625rem 1.5rem", 
-            fontSize: "0.9375rem", 
-            fontWeight: 700, 
-            cursor: "pointer", 
-            transition: "background 0.15s", 
-            whiteSpace: "nowrap" 
-          }}
-          onMouseEnter={e => { 
-            e.currentTarget.style.background = "#1D4ED8"; 
-          }}
-          onMouseLeave={e => { 
-            e.currentTarget.style.background = "#2563EB"; 
-          }}
-        >
-          Get a Proposal
-        </button>
+        <button onClick={() => scrollTo("contact-section")}
+          style={{ background: "#2563EB", color: "#fff", border: "none", borderRadius: "8px", padding: "0.625rem 1.5rem", fontSize: "0.9375rem", fontWeight: 700, cursor: "pointer", transition: "background 0.15s", whiteSpace: "nowrap" }}
+          onMouseEnter={e => { e.currentTarget.style.background = "#1D4ED8"; }}
+          onMouseLeave={e => { e.currentTarget.style.background = "#2563EB"; }}
+        >Get a Proposal</button>
       </div>
     </nav>
   );
@@ -944,73 +581,21 @@ function Navbar() {
 function Footer() {
   return (
     <footer id="contact-section">
-      <div className="footer-trust-bar">
-        <div className="footer-trust-inner">
-          <span className="footer-trust-label">
-            Trusted by Fortune-Grade Global Leaders
-          </span>
-          <div className="footer-trust-logos">
-            {trustLogos.map((logo) => (
-              <span key={logo} className="footer-trust-logo">{logo}</span>
-            ))}
-          </div>
-        </div>
-      </div>
       <div className="site-footer">
         <div className="footer-main">
           <div className="footer-brand">
             <div style={{ marginBottom: "0.75rem" }}>
-              <Image 
-                src="/Layer_1.png" 
-                alt="Enlight AI" 
-                width={140} 
-                height={36} 
-                style={{ 
-                  objectFit: "contain", 
-                  height: "32px", 
-                  width: "auto" 
-                }} 
-              />
+              <Image src="/Layer_1.png" alt="Enlight AI" width={140} height={36} style={{ objectFit: "contain", height: "32px", width: "auto" }} />
             </div>
             <p className="footer-brand-tagline">
-              Enterprise AI Voice Agents for healthcare, BFSI, hospitality, 
-              ecommerce, and education.
+              Enterprise AI Voice Agents for healthcare, BFSI, hospitality, ecommerce, and education.
             </p>
-            <button style={{ 
-              background: "none", 
-              border: "none", 
-              cursor: "pointer", 
-              color: "#2563EB", 
-              fontSize: "0.875rem", 
-              fontWeight: 600, 
-              padding: 0, 
-              textAlign: "left", 
-              textDecoration: "underline", 
-              marginTop: "0.5rem" 
-            }}>
+            <button style={{ background: "none", border: "none", cursor: "pointer", color: "#2563EB", fontSize: "0.875rem", fontWeight: 600, padding: 0, textAlign: "left", textDecoration: "underline", marginTop: "0.5rem" }}>
               contact@enlightai.com
             </button>
-            <div style={{ 
-              display: "flex", 
-              gap: "0.5rem", 
-              marginTop: "1rem" 
-            }}>
+            <div style={{ display: "flex", gap: "0.5rem", marginTop: "1rem" }}>
               {["LinkedIn", "Twitter"].map((label) => (
-                <button 
-                  key={label} 
-                  style={{ 
-                    padding: "0.375rem 0.75rem", 
-                    borderRadius: "6px", 
-                    background: "#2563EB", 
-                    color: "#fff", 
-                    border: "none", 
-                    cursor: "pointer", 
-                    fontSize: "0.75rem", 
-                    fontWeight: 600 
-                  }}
-                >
-                  {label}
-                </button>
+                <button key={label} style={{ padding: "0.375rem 0.75rem", borderRadius: "6px", background: "#2563EB", color: "#fff", border: "none", cursor: "pointer", fontSize: "0.75rem", fontWeight: 600 }}>{label}</button>
               ))}
             </div>
           </div>
@@ -1019,21 +604,19 @@ function Footer() {
               <div className="footer-col-title">{col.title}</div>
               <div className="footer-col-links">
                 {col.links.map((link) => (
-                  <button key={link} className="footer-col-link">
+                  <span key={link} className="footer-col-link" aria-disabled="true">
                     {link}
-                  </button>
+                  </span>
                 ))}
               </div>
             </div>
           ))}
         </div>
         <div className="footer-bottom">
-          <p className="footer-copy">
-            Copyright © 2026 Enlight AI. All Rights Reserved.
-          </p>
+          <p className="footer-copy">Copyright © {new Date().getFullYear()} Enlight AI. All Rights Reserved.</p>
           <div className="footer-bottom-links">
-            <button className="footer-bottom-link">Privacy Policy</button>
-            <button className="footer-bottom-link">Terms of Use</button>
+            <span className="footer-bottom-link" aria-disabled="true">Privacy Policy</span>
+            <span className="footer-bottom-link" aria-disabled="true">Terms of Use</span>
           </div>
         </div>
       </div>
@@ -1041,87 +624,31 @@ function Footer() {
   );
 }
 
-// ─── AGENT GRID (FIXED) ──────────────────────────────────────────────
-const AgentGrid = memo(function AgentGrid({
-  activeIndustry,
-  filteredAgents,
-}: {
-  activeIndustry: IndustryId;
-  filteredAgents: Agent[];
-}) {
-  const handlers = useRef<Map<string, () => void>>(new Map());
-
-  useEffect(() => {
-    handlers.current.clear();
-    filteredAgents.forEach((agent) => {
-      handlers.current.set(agent.id, () => runLiveCall(agent));
-    });
-  }, [filteredAgents]);
-
-  return (
-    <motion.div
-      key={activeIndustry + "-grid"}
-      className="agent-grid"
-      initial={{ opacity: 0, y: 14 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-    >
-      {filteredAgents.map((agent, i) => (
-        <motion.div
-          key={agent.id}
-          initial={{ opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ 
-            duration: 0.3, 
-            delay: i * 0.07, 
-            ease: [0.16, 1, 0.3, 1] 
-          }}
-        >
-          <AgentCard
-            agent={agent}
-            onLive={handlers.current.get(agent.id)!}
-          />
-        </motion.div>
-      ))}
-    </motion.div>
-  );
-});
-
-// ─── PAGE ────────────────────────────────────────────────────────────
+// ─── PAGE ───────────────────────────────────────────────────────────
 export default function Page() {
-  const [activeIndustry, setActiveIndustry] = useState<IndustryId>("bfsi");
+  const [activeIndustry, setActiveIndustry] = useState<<IndustryId>("bfsi");
   const filteredAgents = agentsByIndustry[activeIndustry] ?? [];
-  const activePipeline = workflowPipelines.find(
-    (p) => p.industry === activeIndustry
-  )!;
+  const activePipeline = workflowPipelines.find((p) => p.industry === activeIndustry)!;
+  const { endCall } = useRetellCall();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      (entries) => entries.forEach((e) => {
-        if (e.isIntersecting) {
-          e.target.classList.add("visible");
-          observer.unobserve(e.target);
-        }
-      }),
+      (entries) => entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("visible"); observer.unobserve(e.target); } }),
       { threshold: 0.12 }
     );
-    
     document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
-    
     return () => observer.disconnect();
   }, []);
 
-  useEffect(() => {
-    document.documentElement.setAttribute("data-industry", activeIndustry);
-  }, [activeIndustry]);
+  useEffect(() => { document.documentElement.setAttribute("data-industry", activeIndustry); }, [activeIndustry]);
 
   useEffect(() => {
-    return () => clearAll();
-  }, []);
+    return () => {
+      if (useCallStore.getState().callActive) endCall();
+    };
+  }, [endCall]);
 
-  const scrollTo = useCallback((id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-  }, []);
+  const scrollTo = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
 
   const handleIndustryChange = useCallback((id: IndustryId) => {
     setActiveIndustry(id);
@@ -1134,46 +661,26 @@ export default function Page() {
       {/* ── HERO ── */}
       <header className="hero">
         <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 2rem" }}>
-          <motion.div 
-            initial={{ opacity: 0, y: 24 }} 
-            animate={{ opacity: 1, y: 0 }} 
-            transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <p style={{ 
-              fontSize: "1rem", 
-              fontWeight: 400, 
-              color: "#374151", 
-              marginBottom: "0.75rem" 
-            }}>
+          <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}>
+            <p style={{ fontSize: "1rem", fontWeight: 400, color: "#374151", marginBottom: "0.75rem" }}>
               Your Award-Winning AI Voice Technology Partner Delivering
             </p>
             <h1 className="hero-title">
               Enterprise AI Voice Agents<br />That Scale Operations
             </h1>
             <p className="hero-subtitle">
-              Deploy AI voice agents for customer support, appointment booking, 
-              lead qualification, collections, hospitality, healthcare, and banking. 
-              End-to-end automation without a human in the loop.
+              Deploy AI voice agents for customer support, appointment booking, lead qualification,
+              collections, hospitality, healthcare, and banking. End-to-end automation without a
+              human in the loop.
             </p>
-            <p style={{ 
-              fontSize: "0.9375rem", 
-              fontWeight: 700, 
-              color: "#111827", 
-              marginBottom: "2rem" 
-            }}>
+            <p style={{ fontSize: "0.9375rem", fontWeight: 700, color: "#111827", marginBottom: "2rem" }}>
               Scale Faster. Automate Smarter. Operate Confidently.
             </p>
             <div className="hero-cta">
-              <button 
-                className="btn-primary-cta" 
-                onClick={() => scrollTo("contact-section")}
-              >
+              <button className="btn-primary-cta" onClick={() => scrollTo("contact-section")}>
                 Book a Consultation
               </button>
-              <button 
-                className="btn-secondary-cta" 
-                onClick={() => scrollTo("agents-section")}
-              >
+              <button className="btn-secondary-cta" onClick={() => scrollTo("agents-section")}>
                 <Phone size={15} /> Talk to an AI Agent
               </button>
             </div>
@@ -1182,31 +689,22 @@ export default function Page() {
       </header>
 
       {/* ── STATS ── */}
-      <section 
-        id="industries-section" 
-        className="max-w-7xl mx-auto px-6 reveal"
-      >
+      <section id="industries-section" className="max-w-7xl mx-auto px-6 reveal">
         <div className="stats-row">
           <div className="stat-card">
             <div className="stat-number">38%</div>
             <div className="stat-label">Faster Resolution</div>
-            <div className="stat-desc">
-              Average improvement after deploying a custom AI voice agent in production.
-            </div>
+            <div className="stat-desc">Average improvement after deploying a custom AI voice agent in production.</div>
           </div>
           <div className="stat-card">
             <div className="stat-number">92%</div>
             <div className="stat-label">First-Call Completion</div>
-            <div className="stat-desc">
-              Disputes, bookings, and onboarding closed end-to-end without a transfer.
-            </div>
+            <div className="stat-desc">Disputes, bookings, and onboarding closed end-to-end without a transfer.</div>
           </div>
           <div className="stat-card">
             <div className="stat-number">8 Wks</div>
             <div className="stat-label">Concept to Production</div>
-            <div className="stat-desc">
-              Fully configured, compliance-tested, and deployed voice agent.
-            </div>
+            <div className="stat-desc">Fully configured, compliance-tested, and deployed voice agent.</div>
           </div>
         </div>
       </section>
@@ -1217,40 +715,28 @@ export default function Page() {
           <div className="metric-item">
             <div className="metric-eyebrow">Resolution</div>
             <div className="metric-label">First-call completion</div>
-            <div className="metric-sub">
-              Disputes, bookings, and onboarding closed end-to-end without a transfer.
-            </div>
+            <div className="metric-sub">Disputes, bookings, and onboarding closed end-to-end without a transfer.</div>
           </div>
           <div className="metric-item">
             <div className="metric-eyebrow">Language</div>
             <div className="metric-label">Mid-call switching</div>
-            <div className="metric-sub">
-              Shifts to Hindi, Tamil, or Arabic mid-conversation without losing context.
-            </div>
+            <div className="metric-sub">Shifts to Hindi, Tamil, or Arabic mid-conversation without losing context.</div>
           </div>
           <div className="metric-item">
             <div className="metric-eyebrow">Escalation</div>
             <div className="metric-label">Context-aware routing</div>
-            <div className="metric-sub">
-              Routes to a human only on policy breach — with full transcript attached.
-            </div>
+            <div className="metric-sub">Routes to a human only on policy breach — with full transcript attached.</div>
           </div>
           <div className="metric-item">
             <div className="metric-eyebrow">Memory</div>
             <div className="metric-label">Cross-session recall</div>
-            <div className="metric-sub">
-              Customers never repeat themselves on follow-up calls.
-            </div>
+            <div className="metric-sub">Customers never repeat themselves on follow-up calls.</div>
           </div>
         </div>
       </section>
 
       {/* ── WHY US ── */}
-      <section 
-        id="why-section" 
-        className="max-w-7xl mx-auto px-6 reveal" 
-        style={{ marginBottom: "5rem" }}
-      >
+      <section id="why-section" className="max-w-7xl mx-auto px-6 reveal" style={{ marginBottom: "5rem" }}>
         <div className="section-header" style={{ marginBottom: "2.5rem" }}>
           <div>
             <div className="section-eyebrow">Why Enlight AI</div>
@@ -1265,86 +751,63 @@ export default function Page() {
             <div className="feature-icon"><Zap size={17} /></div>
             <div>
               <div className="feature-title">Streamlined Execution</div>
-              <div className="feature-text">
-                No handoffs, no filler. Proven AI consultants end-to-end from 
-                strategy to deployment.
-              </div>
+              <div className="feature-text">No handoffs, no filler. Proven AI consultants end-to-end from strategy to deployment.</div>
             </div>
           </div>
           <div className="feature-item">
             <div className="feature-icon"><Shield size={17} /></div>
             <div>
               <div className="feature-title">Enterprise-Grade Security</div>
-              <div className="feature-text">
-                SOC 2 compliant infrastructure. Every deployment meets your 
-                industry's regulatory requirements.
-              </div>
+              <div className="feature-text">SOC 2 compliant infrastructure. Every deployment meets your industry's regulatory requirements.</div>
             </div>
           </div>
           <div className="feature-item">
             <div className="feature-icon"><Globe size={17} /></div>
             <div>
               <div className="feature-title">Measurable Outcomes</div>
-              <div className="feature-text">
-                Success is defined by resolved tickets, closed claims, and 
-                enrolled students — not activity.
-              </div>
+              <div className="feature-text">Success is defined by resolved tickets, closed claims, and enrolled students — not activity.</div>
             </div>
           </div>
           <div className="feature-item">
             <div className="feature-icon"><Clock size={17} /></div>
             <div>
               <div className="feature-title">Flexible Engagement</div>
-              <div className="feature-text">
-                From strategic sprints to fully managed delivery. Scale the 
-                engagement as your needs evolve.
-              </div>
+              <div className="feature-text">From strategic sprints to fully managed delivery. Scale the engagement as your needs evolve.</div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── AGENTS ── */}
+      {/* ── AGENTS WITH ORB GRID ── */}
       <section id="agents-section" className="max-w-7xl mx-auto px-6">
-        <div className="section-header reveal">
+        <div className="section-header reveal" style={{ flexDirection: "column", alignItems: "flex-start", gap: "1.5rem" }}>
           <div>
             <div className="section-eyebrow">Live AI Voice Agents</div>
-            <h2 className="section-title">
-              Select an industry.<br />
-              <span className="section-title-italic">Experience a live agent.</span>
+            <h2 className="agents-section-headline">
+              HEAR IT <span className="headline-highlight">FOR YOURSELF</span>
             </h2>
+            <p style={{ fontSize: "1rem", color: "var(--text-muted)", maxWidth: "540px", lineHeight: 1.6, marginTop: "0.75rem" }}>
+              No signup. No sales call. Just pick an agent below and start a live conversation right now.
+            </p>
           </div>
           <div className="industry-tabs" role="tablist" aria-label="Industries">
             {industries.map((ind) => (
               <button
-                key={ind.id}
-                role="tab"
+                key={ind.id} role="tab"
                 aria-selected={activeIndustry === ind.id}
                 onClick={() => handleIndustryChange(ind.id)}
-                className={
-                  "industry-tab" + 
-                  (activeIndustry === ind.id ? " industry-tab--active" : "")
-                }
-              >
-                {ind.name}
-              </button>
+                className={"industry-tab" + (activeIndustry === ind.id ? " industry-tab--active" : "")}
+              >{ind.name}</button>
             ))}
           </div>
         </div>
-        <div role="tabpanel">
-          <AgentGrid 
-            activeIndustry={activeIndustry} 
-            filteredAgents={filteredAgents} 
-          />
+        <div role="tabpanel" style={{ marginTop: "2rem" }}>
+          <AgentGrid activeIndustry={activeIndustry} filteredAgents={filteredAgents} />
         </div>
       </section>
 
       {/* ── WORKFLOW PIPELINE ── */}
-      <section 
-        id="enterprise-section" 
-        className="max-w-7xl mx-auto px-6 reveal" 
-        style={{ marginTop: "6rem" }}
-      >
+      <section id="enterprise-section" className="max-w-7xl mx-auto px-6 reveal" style={{ marginTop: "6rem" }}>
         <div className="section-header" style={{ marginBottom: "2.5rem" }}>
           <div>
             <div className="section-eyebrow">End-to-End Workflow</div>
@@ -1355,46 +818,27 @@ export default function Page() {
           </div>
         </div>
         <AnimatePresence mode="wait">
-          <motion.div 
-            key={activeIndustry + "-pipeline"} 
-            initial={{ opacity: 0, y: 14 }} 
-            animate={{ opacity: 1, y: 0 }} 
-            exit={{ opacity: 0, y: -8 }} 
-            transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-          >
+          <motion.div key={activeIndustry + "-pipeline"} initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}>
             <WorkflowPipelineCard pipeline={activePipeline} />
           </motion.div>
         </AnimatePresence>
       </section>
 
       {/* ── CTA BANNER ── */}
-      <section 
-        id="cases-section" 
-        className="max-w-7xl mx-auto px-6 reveal"
-      >
+      <section id="cases-section" className="max-w-7xl mx-auto px-6 reveal">
         <div className="cta-banner">
           <div className="cta-banner-content">
             <h2 className="cta-banner-title">
               Ready to automate your operations?
             </h2>
             <p className="cta-banner-subtitle">
-              Speak with a solutions engineer. We'll design a pilot agent around 
-              your real workflows — deployed and measured in 8 weeks.
+              Speak with a solutions engineer. We'll design a pilot agent around your real workflows — deployed and measured in 8 weeks.
             </p>
-            <div 
-              className="hero-cta" 
-              style={{ justifyContent: "center", marginTop: 0 }}
-            >
-              <button 
-                className="btn-primary-cta" 
-                onClick={() => scrollTo("contact-section")}
-              >
+            <div className="hero-cta" style={{ justifyContent: "center", marginTop: 0 }}>
+              <button className="btn-primary-cta" onClick={() => scrollTo("contact-section")}>
                 Book a Consultation <ArrowRight size={15} />
               </button>
-              <button 
-                className="btn-secondary-cta" 
-                onClick={() => scrollTo("agents-section")}
-              >
+              <button className="btn-secondary-cta" onClick={() => scrollTo("agents-section")}>
                 View Live Agents
               </button>
             </div>
