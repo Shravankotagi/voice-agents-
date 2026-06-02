@@ -203,22 +203,10 @@ const agentsByIndustry = agents.reduce<Record<string, Agent[]>>((acc, a) => {
 }, {});
 
 const footerCols = [
-  {
-    title: "Services",
-    links: ["AI Voice Agents", "AI Consulting", "Automation Solutions", "Enterprise Integrations", "CRM Integration", "Custom Deployment"],
-  },
-  {
-    title: "Industries",
-    links: ["Healthcare", "BFSI", "Hospitality", "Ecommerce", "EdTech"],
-  },
-  {
-    title: "Technologies",
-    links: ["Retell AI", "Voice Synthesis", "Real-time STT", "LLM Orchestration", "WhatsApp API", "CRM Connectors"],
-  },
-  {
-    title: "Company",
-    links: ["About Us", "Case Studies", "Blogs", "Careers", "Contact"],
-  },
+  { title: "Services",    links: ["AI Voice Agents", "AI Consulting", "Automation Solutions", "Enterprise Integrations", "CRM Integration", "Custom Deployment"] },
+  { title: "Industries",  links: ["Healthcare", "BFSI", "Hospitality", "Ecommerce", "EdTech"] },
+  { title: "Technologies",links: ["Retell AI", "Voice Synthesis", "Real-time STT", "LLM Orchestration", "WhatsApp API", "CRM Connectors"] },
+  { title: "Company",     links: ["About Us", "Case Studies", "Blogs", "Careers", "Contact"] },
 ];
 
 const trustLogos = ["Mozilla Foundation", "Emblazer", "Go2Andaman", "Homeloft", "HUMA"];
@@ -287,10 +275,29 @@ function getStatusSequence(industry: string): string[] {
   return industryStatusSequences[industry] ?? ["Listening...", "Processing...", "Listening..."];
 }
 
+// ─── STABLE MESSAGE TIMESTAMPS ───────────────────────────────────────
+// Each index in the Retell transcript array gets a stable timestamp
+// assigned the FIRST time we see that index. This prevents flicker:
+// subsequent updates to the same message (in-progress speech) reuse
+// the same timestamp → same React key → no unmount/remount.
+const _msgTimestamps: number[] = [];
+
+function stableTimestamp(index: number): number {
+  if (_msgTimestamps[index] === undefined) {
+    _msgTimestamps[index] = Date.now() + index; // unique but stable
+  }
+  return _msgTimestamps[index];
+}
+
+function resetTimestamps() {
+  _msgTimestamps.length = 0;
+}
+
 async function runLiveCall(agent: Agent) {
   if (useCallStore.getState().callActive || _callInProgress) return;
   _callInProgress = true;
   clearAll();
+  resetTimestamps();
 
   const store = useCallStore.getState();
   await store.startLiveCall(agent);
@@ -336,25 +343,28 @@ async function runLiveCall(agent: Agent) {
         });
 
         // ── TRANSCRIPT FIX ──────────────────────────────────────────
-        // Retell sends the FULL transcript array on every update event.
-        // We replace the entire store transcript each time so partial
-        // (in-progress) utterances update in real time and completed
-        // utterances are never duplicated.
+        // Retell fires "update" with the FULL transcript on every word.
+        // We build a normalized array using STABLE per-index timestamps
+        // so React keys never change for existing messages — eliminating
+        // flicker. The last entry may be in-progress (being transcribed),
+        // so we update its text in-place without changing its key.
         retellClient.on("update", (update: {
           transcript?: { role: string; content: string }[];
         }) => {
           if (!update.transcript || update.transcript.length === 0) return;
 
-          const normalized: TranscriptMessage[] = update.transcript.map((entry) => ({
+          const normalized: TranscriptMessage[] = update.transcript.map((entry, idx) => ({
             role: (entry.role === "agent" ? "agent" : "user") as "agent" | "user",
             text: entry.content,
-            timestamp: Date.now(),
+            // stableTimestamp: same index always gets the same timestamp
+            timestamp: stableTimestamp(idx),
           }));
 
-          // Replace the full transcript in the store
+          // Write the full normalized array directly to the store.
+          // We use setState here intentionally — setTranscript would
+          // append rather than replace, causing duplicates.
           useCallStore.setState({ transcript: normalized });
 
-          // Update status based on who spoke last
           const last = update.transcript[update.transcript.length - 1];
           useCallStore.getState().setStatus(
             last?.role === "user" ? "Processing..." : "Listening..."
@@ -378,12 +388,12 @@ async function runLiveCall(agent: Agent) {
   store.setPhase("active");
 
   const steps: [number, () => void][] = [
-    [500,  () => { store.setStatus(statuses[0]); store.appendTranscript({ role: "user", text: "Hi, I need some help with my account.", timestamp: Date.now() }); }],
+    [500,  () => { store.setStatus(statuses[0]); store.appendTranscript({ role: "user",  text: "Hi, I need some help with my account.", timestamp: Date.now() }); }],
     [1800, () => { store.setStatus(statuses[1] ?? "Retrieving account..."); }],
     [2800, () => { store.appendTranscript({ role: "agent", text: `Of course - I'm ${agent.name}. Can you give me your registered number or reference ID?`, timestamp: Date.now() }); store.setStatus(statuses[0]); }],
-    [4600, () => { store.appendTranscript({ role: "user", text: "I was charged twice for my last transaction.", timestamp: Date.now() }); store.setStatus(statuses[2] ?? "Checking account activity..."); }],
+    [4600, () => { store.appendTranscript({ role: "user",  text: "I was charged twice for my last transaction.", timestamp: Date.now() }); store.setStatus(statuses[2] ?? "Checking account activity..."); }],
     [6200, () => { store.setStatus(statuses[3] ?? "Verifying transaction..."); }],
-    [7400, () => { store.appendTranscript({ role: "agent", text: "I can see the duplicate charge. Reversal initiated - credit will appear within 2 to 3 business days.", timestamp: Date.now() }); store.setStatus(statuses[0]); }],
+    [7400, () => { store.appendTranscript({ role: "agent", text: "I can see the duplicate charge. Reversal initiated — credit will appear within 2 to 3 business days.", timestamp: Date.now() }); store.setStatus(statuses[0]); }],
     [9000, () => { store.setStatus("Listening..."); }],
   ];
 
@@ -394,57 +404,19 @@ async function runLiveCall(agent: Agent) {
 function WorkflowPipelineCard({ pipeline }: { pipeline: WorkflowPipeline }) {
   return (
     <div className="workflow-card">
-      <div style={{
-        fontSize: "0.6875rem", fontWeight: 700, color: "var(--blue)",
-        textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: "2.5rem",
-      }}>
+      <div style={{ fontSize: "0.6875rem", fontWeight: 700, color: "var(--blue)", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: "2.5rem" }}>
         {pipeline.title}
       </div>
-
-      <div style={{
-        display: "grid",
-        gridTemplateColumns: `repeat(${pipeline.steps.length}, 1fr)`,
-        position: "relative",
-      }}>
-        {/* Connector line */}
-        <div style={{
-          position: "absolute",
-          top: "13px",
-          left: `calc(100% / (2 * ${pipeline.steps.length}))`,
-          right: `calc(100% / (2 * ${pipeline.steps.length}))`,
-          height: "1px",
-          background: "linear-gradient(to right, transparent, var(--blue), transparent)",
-          opacity: 0.25,
-          zIndex: 0,
-        }} />
-
+      <div style={{ display: "grid", gridTemplateColumns: `repeat(${pipeline.steps.length}, 1fr)`, position: "relative" }}>
+        <div style={{ position: "absolute", top: "13px", left: `calc(100% / (2 * ${pipeline.steps.length}))`, right: `calc(100% / (2 * ${pipeline.steps.length}))`, height: "1px", background: "linear-gradient(to right, transparent, var(--blue), transparent)", opacity: 0.25, zIndex: 0 }} />
         {pipeline.steps.map((step, i) => (
-          <div key={i} style={{
-            display: "flex", flexDirection: "column", alignItems: "center",
-            gap: "0.75rem", padding: "0 0.5rem", position: "relative", zIndex: 1,
-          }}>
-            <div style={{
-              width: "28px", height: "28px", borderRadius: "50%", flexShrink: 0,
-              background: (i === 0 || i === pipeline.steps.length - 1)
-                ? "var(--blue)" : "#fff",
-              border: (i === 0 || i === pipeline.steps.length - 1)
-                ? "none" : "1.5px solid #E5E7EB",
-              display: "flex", alignItems: "center", justifyContent: "center",
-              fontSize: "0.625rem", fontWeight: 700,
-              color: (i === 0 || i === pipeline.steps.length - 1) ? "#fff" : "var(--text-muted)",
-            }}>
+          <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.75rem", padding: "0 0.5rem", position: "relative", zIndex: 1 }}>
+            <div style={{ width: "28px", height: "28px", borderRadius: "50%", flexShrink: 0, background: (i === 0 || i === pipeline.steps.length - 1) ? "var(--blue)" : "#fff", border: (i === 0 || i === pipeline.steps.length - 1) ? "none" : "1.5px solid #E5E7EB", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.625rem", fontWeight: 700, color: (i === 0 || i === pipeline.steps.length - 1) ? "#fff" : "var(--text-muted)" }}>
               {i === pipeline.steps.length - 1 ? <CheckCircle2 size={13} /> : i + 1}
             </div>
             <div style={{ textAlign: "center" }}>
-              <div style={{
-                fontSize: "0.75rem", fontWeight: 600,
-                color: "var(--text-heading)", marginBottom: "4px", lineHeight: 1.3,
-              }}>
-                {step.label}
-              </div>
-              <div style={{ fontSize: "0.6875rem", color: "var(--text-muted)", lineHeight: 1.45 }}>
-                {step.detail}
-              </div>
+              <div style={{ fontSize: "0.75rem", fontWeight: 600, color: "var(--text-heading)", marginBottom: "4px", lineHeight: 1.3 }}>{step.label}</div>
+              <div style={{ fontSize: "0.6875rem", color: "var(--text-muted)", lineHeight: 1.45 }}>{step.detail}</div>
             </div>
           </div>
         ))}
@@ -455,53 +427,32 @@ function WorkflowPipelineCard({ pipeline }: { pipeline: WorkflowPipeline }) {
 
 function AgentCard({ agent, onLive }: { agent: Agent; onLive: () => void }) {
   return (
-    <article
-      className="agent-card"
-      style={{ "--agent-color": agent.color } as React.CSSProperties}
-    >
+    <article className="agent-card" style={{ "--agent-color": agent.color } as React.CSSProperties}>
       <div className="agent-card-glow" />
       <div className="agent-header">
         <div className="agent-identity">
           <div className="agent-name-row">
             <h3 className="agent-name">{agent.name}</h3>
-            <span className="status-badge">
-              <span className="status-badge__dot" />
-              Live
-            </span>
+            <span className="status-badge"><span className="status-badge__dot" />Live</span>
           </div>
           <p className="agent-role">{agent.role}</p>
         </div>
         <div className="agent-avatar">{agent.name.slice(0, 2)}</div>
       </div>
-
       <div className="agent-live-status">
-        <span style={{
-          width: "5px", height: "5px", borderRadius: "50%",
-          background: agent.color,
-          display: "inline-block", flexShrink: 0,
-          animation: "pulse-soft 2s ease-in-out infinite",
-        }} />
+        <span style={{ width: "5px", height: "5px", borderRadius: "50%", background: agent.color, display: "inline-block", flexShrink: 0, animation: "pulse-soft 2s ease-in-out infinite" }} />
         {agent.currentStatus}
       </div>
-
       <p className="agent-description">{agent.description}</p>
-
       <div className="use-case-row">
         {agent.capabilities.map((cap) => (
-          <span key={cap} className="use-case-tag">
-            <span className="use-case-dot" />
-            {cap}
-          </span>
+          <span key={cap} className="use-case-tag"><span className="use-case-dot" />{cap}</span>
         ))}
       </div>
-
       <div className="channels-row">
         <span className="channels-label">Channels</span>
-        {agent.channels.map((c) => (
-          <span key={c} className="channel-tag">{c}</span>
-        ))}
+        {agent.channels.map((c) => <span key={c} className="channel-tag">{c}</span>)}
       </div>
-
       <div className="agent-footer">
         <button onClick={onLive} className="btn-live" aria-label={`Start live call with ${agent.name}`}>
           <Phone size={12} /> Try live
@@ -511,11 +462,21 @@ function AgentCard({ agent, onLive }: { agent: Agent; onLive: () => void }) {
   );
 }
 
+// ── TRANSCRIPT ────────────────────────────────────────────────────────
+// Key fix: use ONLY the stable index as the key — NOT timestamp.
+// This means React identifies each message position by its array slot,
+// so in-progress text updates without unmounting the bubble.
 function Transcript({ messages }: { messages: TranscriptMessage[] }) {
   const bottomRef = useRef<HTMLDivElement>(null);
+  const prevLenRef = useRef(0);
 
+  // Only scroll when a NEW message appears, not on every text update.
+  // This prevents the scroll jump while a word is being streamed in.
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (messages.length > prevLenRef.current) {
+      bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
+    prevLenRef.current = messages.length;
   }, [messages.length]);
 
   return (
@@ -530,7 +491,11 @@ function Transcript({ messages }: { messages: TranscriptMessage[] }) {
       )}
       {messages.map((msg, i) => (
         <motion.div
-          key={i + "-" + msg.timestamp}
+          // ── KEY FIX ──
+          // Use only the index as key so React never unmounts a bubble
+          // just because the timestamp changed. New messages get new
+          // indices; existing messages keep the same index → no flicker.
+          key={i}
           initial={{ opacity: 0, y: 8, scale: 0.97 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 0.26, ease: [0.16, 1, 0.3, 1] }}
@@ -550,11 +515,7 @@ function Waveform({ active }: { active: boolean }) {
   return (
     <div className="waveform" role="img" aria-label="Audio waveform" aria-hidden="true">
       {heights.map((h, i) => (
-        <div
-          key={i}
-          className="waveform-bar"
-          style={{ transform: `scaleY(${h / 100})`, height: "100%" }}
-        />
+        <div key={i} className="waveform-bar" style={{ transform: `scaleY(${h / 100})`, height: "100%" }} />
       ))}
     </div>
   );
@@ -569,6 +530,7 @@ function CallModal() {
 
   async function handleEndCall() {
     clearAll();
+    resetTimestamps();
     try { getRetellClient().removeAllListeners(); } catch {}
     useCallStore.getState().setStatus("Call ended");
     endCall();
@@ -590,20 +552,14 @@ function CallModal() {
       {callActive && agent && (
         <motion.div
           className="modal-overlay"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
           transition={{ duration: 0.18 }}
           onClick={(e) => { if (e.target === e.currentTarget) handleEndCall(); }}
         >
-          <div role="status" aria-live="polite" aria-atomic="true" className="sr-only">
-            {callStatus}
-          </div>
+          <div role="status" aria-live="polite" aria-atomic="true" className="sr-only">{callStatus}</div>
           <motion.div
             className="modal-content"
-            role="dialog"
-            aria-modal="true"
-            aria-label={"Call with " + agent.name}
+            role="dialog" aria-modal="true" aria-label={"Call with " + agent.name}
             initial={{ scale: 0.93, opacity: 0, y: 16 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.97, opacity: 0, y: 8 }}
@@ -616,9 +572,7 @@ function CallModal() {
                   {agent.name.slice(0, 2)}
                 </div>
                 <div className="modal-agent-info">
-                  <div className="modal-agent-name" style={{ color: agent.color }}>
-                    {agent.name}
-                  </div>
+                  <div className="modal-agent-name" style={{ color: agent.color }}>{agent.name}</div>
                   <div className="modal-agent-role">{agent.role}</div>
                 </div>
               </div>
@@ -627,14 +581,11 @@ function CallModal() {
                 <button onClick={handleEndCall} className="btn-end-call">End call</button>
               </div>
             </div>
-
             <div className="modal-status">
               <span className="status-indicator" />
               <span className="status-text">{callStatus}</span>
             </div>
-
             <Transcript messages={transcript} />
-
             <div className="modal-footer">
               <Waveform active={callActive} />
             </div>
@@ -660,35 +611,11 @@ function Navbar() {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
 
   return (
-    <nav
-      aria-label="Main navigation"
-      style={{
-        position: "sticky", top: 0, zIndex: 50,
-        background: "#ffffff",
-        borderBottom: "1px solid #E5E7EB",
-        boxShadow: scrolled ? "0 2px 16px rgba(0,0,0,0.08)" : "none",
-        transition: "box-shadow 0.2s ease",
-        height: "68px",
-        display: "flex", alignItems: "center",
-      }}
-    >
-      <div style={{
-        maxWidth: "1200px", margin: "0 auto", padding: "0 2rem",
-        width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between",
-      }}>
-        {/* Logo image */}
+    <nav aria-label="Main navigation" style={{ position: "sticky", top: 0, zIndex: 50, background: "#ffffff", borderBottom: "1px solid #E5E7EB", boxShadow: scrolled ? "0 2px 16px rgba(0,0,0,0.08)" : "none", transition: "box-shadow 0.2s ease", height: "68px", display: "flex", alignItems: "center" }}>
+      <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 2rem", width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <div style={{ display: "flex", alignItems: "center", flexShrink: 0 }}>
-          <Image
-            src="/Layer_1.png"
-            alt="Enlight AI"
-            width={160}
-            height={40}
-            style={{ objectFit: "contain", height: "36px", width: "auto" }}
-            priority
-          />
+          <Image src="/Layer_1.png" alt="Enlight AI" width={160} height={40} style={{ objectFit: "contain", height: "36px", width: "auto" }} priority />
         </div>
-
-        {/* Center nav links */}
         <div style={{ display: "flex", alignItems: "center", gap: "0.25rem" }}>
           {[
             { label: "About",        id: "why-section" },
@@ -697,51 +624,22 @@ function Navbar() {
             { label: "Case Studies", id: "cases-section" },
             { label: "Contact",      id: "contact-section" },
           ].map((item) => (
-            <button
-              key={item.label}
-              onClick={() => scrollTo(item.id)}
-              style={{
-                background: "none", border: "none", cursor: "pointer",
-                fontSize: "0.9375rem", fontWeight: 500, color: "#374151",
-                padding: "0.5rem 0.875rem", borderRadius: "6px",
-                transition: "color 0.15s, background 0.15s",
-              }}
+            <button key={item.label} onClick={() => scrollTo(item.id)}
+              style={{ background: "none", border: "none", cursor: "pointer", fontSize: "0.9375rem", fontWeight: 500, color: "#374151", padding: "0.5rem 0.875rem", borderRadius: "6px", transition: "color 0.15s, background 0.15s" }}
               onMouseEnter={e => { const b = e.currentTarget; b.style.color = "#2563EB"; b.style.background = "#EFF6FF"; }}
               onMouseLeave={e => { const b = e.currentTarget; b.style.color = "#374151"; b.style.background = "none"; }}
-            >
-              {item.label}
-            </button>
+            >{item.label}</button>
           ))}
         </div>
-
-        {/* Right: theme toggle + CTA */}
         <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-          <button
-            onClick={toggleTheme}
-            aria-label="Toggle theme"
-            style={{
-              width: "36px", height: "36px", borderRadius: "50%",
-              background: "#F9FAFB", border: "1px solid #E5E7EB",
-              display: "flex", alignItems: "center", justifyContent: "center",
-              cursor: "pointer", color: "#6B7280",
-              transition: "all 0.15s",
-            }}
-          >
+          <button onClick={toggleTheme} aria-label="Toggle theme" style={{ width: "36px", height: "36px", borderRadius: "50%", background: "#F9FAFB", border: "1px solid #E5E7EB", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", color: "#6B7280" }}>
             {theme === "dark" ? <Sun size={15} /> : <Moon size={15} />}
           </button>
-          <button
-            onClick={() => scrollTo("contact-section")}
-            style={{
-              background: "#2563EB", color: "#fff", border: "none",
-              borderRadius: "8px", padding: "0.625rem 1.5rem",
-              fontSize: "0.9375rem", fontWeight: 700, cursor: "pointer",
-              transition: "background 0.15s", whiteSpace: "nowrap",
-            }}
+          <button onClick={() => scrollTo("contact-section")}
+            style={{ background: "#2563EB", color: "#fff", border: "none", borderRadius: "8px", padding: "0.625rem 1.5rem", fontSize: "0.9375rem", fontWeight: 700, cursor: "pointer", transition: "background 0.15s", whiteSpace: "nowrap" }}
             onMouseEnter={e => { (e.currentTarget).style.background = "#1D4ED8"; }}
             onMouseLeave={e => { (e.currentTarget).style.background = "#2563EB"; }}
-          >
-            Get a Proposal
-          </button>
+          >Get a Proposal</button>
         </div>
       </div>
     </nav>
@@ -752,69 +650,37 @@ function Navbar() {
 function Footer() {
   return (
     <footer id="contact-section">
-      {/* Deep blue trust bar */}
       <div className="footer-trust-bar">
         <div className="footer-trust-inner">
           <span className="footer-trust-label">Trusted by Fortune-Grade Global Leaders</span>
           <div className="footer-trust-logos">
-            {trustLogos.map((logo) => (
-              <span key={logo} className="footer-trust-logo">{logo}</span>
-            ))}
+            {trustLogos.map((logo) => <span key={logo} className="footer-trust-logo">{logo}</span>)}
           </div>
         </div>
       </div>
-
-      {/* White multi-column footer */}
       <div className="site-footer">
         <div className="footer-main">
-          {/* Brand column */}
           <div className="footer-brand">
             <div style={{ marginBottom: "0.75rem" }}>
-              <Image
-                src="/Layer_1.png"
-                alt="Enlight AI"
-                width={140}
-                height={36}
-                style={{ objectFit: "contain", height: "32px", width: "auto" }}
-              />
+              <Image src="/Layer_1.png" alt="Enlight AI" width={140} height={36} style={{ objectFit: "contain", height: "32px", width: "auto" }} />
             </div>
             <p className="footer-brand-tagline">Tell us about the project</p>
-            <button style={{
-              background: "none", border: "none", cursor: "pointer",
-              color: "#2563EB", fontSize: "0.875rem", fontWeight: 600,
-              padding: 0, textAlign: "left", textDecoration: "underline",
-              marginTop: "0.25rem",
-            }}>
-              Write to us →
-            </button>
+            <button style={{ background: "none", border: "none", cursor: "pointer", color: "#2563EB", fontSize: "0.875rem", fontWeight: 600, padding: 0, textAlign: "left", textDecoration: "underline", marginTop: "0.25rem" }}>Write to us →</button>
             <div style={{ display: "flex", gap: "0.5rem", marginTop: "1rem" }}>
               {["f", "in"].map((icon) => (
-                <button key={icon} style={{
-                  width: "34px", height: "34px", borderRadius: "6px",
-                  background: "#2563EB", color: "#fff", border: "none",
-                  cursor: "pointer", fontSize: "0.75rem", fontWeight: 700,
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                }}>
-                  {icon}
-                </button>
+                <button key={icon} style={{ width: "34px", height: "34px", borderRadius: "6px", background: "#2563EB", color: "#fff", border: "none", cursor: "pointer", fontSize: "0.75rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>{icon}</button>
               ))}
             </div>
           </div>
-
-          {/* Link columns */}
           {footerCols.map((col) => (
             <div key={col.title}>
               <div className="footer-col-title">{col.title}</div>
               <div className="footer-col-links">
-                {col.links.map((link) => (
-                  <button key={link} className="footer-col-link">{link}</button>
-                ))}
+                {col.links.map((link) => <button key={link} className="footer-col-link">{link}</button>)}
               </div>
             </div>
           ))}
         </div>
-
-        {/* Bottom bar */}
         <div className="footer-bottom">
           <p className="footer-copy">Copyright © 2026 Enlight AI. All Rights Reserved.</p>
           <div className="footer-bottom-links">
@@ -830,76 +696,43 @@ function Footer() {
 // ─── PAGE ────────────────────────────────────────────────────────────
 export default function Page() {
   const [activeIndustry, setActiveIndustry] = useState<IndustryId>("bfsi");
-
   const filteredAgents = agentsByIndustry[activeIndustry] ?? [];
   const activePipeline = workflowPipelines.find((p) => p.industry === activeIndustry)!;
 
-  // Scroll-reveal
   useEffect(() => {
     const observer = new IntersectionObserver(
-      (entries) => entries.forEach((e) => {
-        if (e.isIntersecting) { e.target.classList.add("visible"); observer.unobserve(e.target); }
-      }),
+      (entries) => entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("visible"); observer.unobserve(e.target); } }),
       { threshold: 0.12 }
     );
     document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
     return () => observer.disconnect();
   }, []);
 
-  useEffect(() => {
-    document.documentElement.setAttribute("data-industry", activeIndustry);
-  }, [activeIndustry]);
-
+  useEffect(() => { document.documentElement.setAttribute("data-industry", activeIndustry); }, [activeIndustry]);
   useEffect(() => () => clearAll(), []);
 
-  const scrollTo = (id: string) =>
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+  const scrollTo = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
 
   return (
     <div style={{ minHeight: "100vh", background: "#F8F9FC" }}>
-
       <Navbar />
 
       {/* ── HERO ── */}
       <header className="hero">
         <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 2rem" }}>
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
-          >
+          <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}>
             <div className="hero-badge">
               <span className="hero-badge-tag">Live</span>
               <span>10 voice agents — Talk to one right now</span>
               <ArrowRight size={12} />
             </div>
-
-            <p className="hero-eyebrow">
-              Your Award-Winning AI Voice Technology Partner Delivering
-            </p>
-
-            <h1 className="hero-title">
-              Enterprise AI Voice Agents<br />
-              That Scale Operations
-            </h1>
-
-            <p className="hero-subtitle">
-              Deploy AI voice agents for customer support, appointment booking,
-              lead qualification, collections, hospitality, healthcare, and banking.
-              End-to-end automation without a human in the loop.
-            </p>
-
-            <p className="hero-tagline">
-              Scale Faster. Automate Smarter. Operate Confidently.
-            </p>
-
+            <p className="hero-eyebrow">Your Award-Winning AI Voice Technology Partner Delivering</p>
+            <h1 className="hero-title">Enterprise AI Voice Agents<br />That Scale Operations</h1>
+            <p className="hero-subtitle">Deploy AI voice agents for customer support, appointment booking, lead qualification, collections, hospitality, healthcare, and banking. End-to-end automation without a human in the loop.</p>
+            <p className="hero-tagline">Scale Faster. Automate Smarter. Operate Confidently.</p>
             <div className="hero-cta">
-              <button className="btn-primary-cta" onClick={() => scrollTo("contact-section")}>
-                Book Consultation
-              </button>
-              <button className="btn-secondary-cta" onClick={() => scrollTo("agents-section")}>
-                <Phone size={15} /> Talk to an AI Agent
-              </button>
+              <button className="btn-primary-cta" onClick={() => scrollTo("contact-section")}>Book Consultation</button>
+              <button className="btn-secondary-cta" onClick={() => scrollTo("agents-section")}><Phone size={15} /> Talk to an AI Agent</button>
             </div>
           </motion.div>
         </div>
@@ -920,47 +753,19 @@ export default function Page() {
       {/* ── STATS ── */}
       <section id="industries-section" className="max-w-7xl mx-auto px-6 reveal">
         <div className="stats-row">
-          <div className="stat-card">
-            <div className="stat-number">38%</div>
-            <div className="stat-label">Faster Resolution</div>
-            <div className="stat-desc">After deploying a custom AI voice agent in production.</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-number">92%</div>
-            <div className="stat-label">First-Call Finish</div>
-            <div className="stat-desc">Disputes, bookings, and onboarding closed without a transfer.</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-number">8 Wks</div>
-            <div className="stat-label">From Concept to Live</div>
-            <div className="stat-desc">Fully configured, tested, and deployed voice agent.</div>
-          </div>
+          <div className="stat-card"><div className="stat-number">38%</div><div className="stat-label">Faster Resolution</div><div className="stat-desc">After deploying a custom AI voice agent in production.</div></div>
+          <div className="stat-card"><div className="stat-number">92%</div><div className="stat-label">First-Call Finish</div><div className="stat-desc">Disputes, bookings, and onboarding closed without a transfer.</div></div>
+          <div className="stat-card"><div className="stat-number">8 Wks</div><div className="stat-label">From Concept to Live</div><div className="stat-desc">Fully configured, tested, and deployed voice agent.</div></div>
         </div>
       </section>
 
       {/* ── METRIC STRIP ── */}
       <section className="max-w-7xl mx-auto px-6 reveal">
         <div className="metric-strip">
-          <div className="metric-item">
-            <div className="metric-eyebrow">Resolution</div>
-            <div className="metric-label">First-call finish</div>
-            <div className="metric-sub">Disputes, bookings, and onboarding closed end-to-end without a transfer.</div>
-          </div>
-          <div className="metric-item">
-            <div className="metric-eyebrow">Language</div>
-            <div className="metric-label">Mid-call switching</div>
-            <div className="metric-sub">Shifts to Hindi, Tamil, or Arabic mid-conversation without losing context.</div>
-          </div>
-          <div className="metric-item">
-            <div className="metric-eyebrow">Escalation</div>
-            <div className="metric-label">Context-aware</div>
-            <div className="metric-sub">Routes to a human only on policy breach — with full transcript attached.</div>
-          </div>
-          <div className="metric-item">
-            <div className="metric-eyebrow">Memory</div>
-            <div className="metric-label">Cross-session</div>
-            <div className="metric-sub">Customers never repeat themselves on follow-up calls.</div>
-          </div>
+          <div className="metric-item"><div className="metric-eyebrow">Resolution</div><div className="metric-label">First-call finish</div><div className="metric-sub">Disputes, bookings, and onboarding closed end-to-end without a transfer.</div></div>
+          <div className="metric-item"><div className="metric-eyebrow">Language</div><div className="metric-label">Mid-call switching</div><div className="metric-sub">Shifts to Hindi, Tamil, or Arabic mid-conversation without losing context.</div></div>
+          <div className="metric-item"><div className="metric-eyebrow">Escalation</div><div className="metric-label">Context-aware</div><div className="metric-sub">Routes to a human only on policy breach — with full transcript attached.</div></div>
+          <div className="metric-item"><div className="metric-eyebrow">Memory</div><div className="metric-label">Cross-session</div><div className="metric-sub">Customers never repeat themselves on follow-up calls.</div></div>
         </div>
       </section>
 
@@ -969,41 +774,14 @@ export default function Page() {
         <div className="section-header" style={{ marginBottom: "2.5rem" }}>
           <div>
             <div className="section-eyebrow">Why Enlight AI</div>
-            <h2 className="section-title">
-              Built for outcomes,<br />
-              <span className="section-title-italic">not artifacts.</span>
-            </h2>
+            <h2 className="section-title">Built for outcomes,<br /><span className="section-title-italic">not artifacts.</span></h2>
           </div>
         </div>
         <div className="feature-bar">
-          <div className="feature-item">
-            <div className="feature-icon"><Zap size={17} /></div>
-            <div>
-              <div className="feature-title">Streamlined Execution</div>
-              <div className="feature-text">No handoffs, no filler. Proven AI consultants end-to-end from strategy to shipping.</div>
-            </div>
-          </div>
-          <div className="feature-item">
-            <div className="feature-icon"><Shield size={17} /></div>
-            <div>
-              <div className="feature-title">Senior-Only Talent</div>
-              <div className="feature-text">Every engineer and strategist on your project has shipped production systems at scale.</div>
-            </div>
-          </div>
-          <div className="feature-item">
-            <div className="feature-icon"><Globe size={17} /></div>
-            <div>
-              <div className="feature-title">Outcomes Over Output</div>
-              <div className="feature-text">Real achievement is measurable results — resolved tickets, closed claims, enrolled students.</div>
-            </div>
-          </div>
-          <div className="feature-item">
-            <div className="feature-icon"><Clock size={17} /></div>
-            <div>
-              <div className="feature-title">Flexible Engagement</div>
-              <div className="feature-text">Strategic sprints to leadership to fully managed delivery. Scale up or down as needed.</div>
-            </div>
-          </div>
+          <div className="feature-item"><div className="feature-icon"><Zap size={17} /></div><div><div className="feature-title">Streamlined Execution</div><div className="feature-text">No handoffs, no filler. Proven AI consultants end-to-end from strategy to shipping.</div></div></div>
+          <div className="feature-item"><div className="feature-icon"><Shield size={17} /></div><div><div className="feature-title">Senior-Only Talent</div><div className="feature-text">Every engineer and strategist on your project has shipped production systems at scale.</div></div></div>
+          <div className="feature-item"><div className="feature-icon"><Globe size={17} /></div><div><div className="feature-title">Outcomes Over Output</div><div className="feature-text">Real achievement is measurable results — resolved tickets, closed claims, enrolled students.</div></div></div>
+          <div className="feature-item"><div className="feature-icon"><Clock size={17} /></div><div><div className="feature-title">Flexible Engagement</div><div className="feature-text">Strategic sprints to leadership to fully managed delivery. Scale up or down as needed.</div></div></div>
         </div>
       </section>
 
@@ -1012,41 +790,18 @@ export default function Page() {
         <div className="section-header reveal">
           <div>
             <div className="section-eyebrow">AI Voice Agent Showroom</div>
-            <h2 className="section-title">
-              Select an industry.<br />
-              <span className="section-title-italic">Talk to a live agent.</span>
-            </h2>
+            <h2 className="section-title">Select an industry.<br /><span className="section-title-italic">Talk to a live agent.</span></h2>
           </div>
           <div className="industry-tabs" role="tablist" aria-label="Industries">
             {industries.map((ind) => (
-              <button
-                key={ind.id}
-                role="tab"
-                aria-selected={activeIndustry === ind.id}
-                onClick={() => setActiveIndustry(ind.id)}
-                className={"industry-tab" + (activeIndustry === ind.id ? " industry-tab--active" : "")}
-              >
-                {ind.name}
-              </button>
+              <button key={ind.id} role="tab" aria-selected={activeIndustry === ind.id} onClick={() => setActiveIndustry(ind.id)} className={"industry-tab" + (activeIndustry === ind.id ? " industry-tab--active" : "")}>{ind.name}</button>
             ))}
           </div>
         </div>
-
         <div role="tabpanel">
-          <motion.div
-            key={activeIndustry + "-grid"}
-            className="agent-grid"
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-          >
+          <motion.div key={activeIndustry + "-grid"} className="agent-grid" initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}>
             {filteredAgents.map((agent, i) => (
-              <motion.div
-                key={agent.id}
-                initial={{ opacity: 0, y: 14 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: i * 0.07, ease: [0.16, 1, 0.3, 1] }}
-              >
+              <motion.div key={agent.id} initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: i * 0.07, ease: [0.16, 1, 0.3, 1] }}>
                 <AgentCard agent={agent} onLive={() => runLiveCall(agent)} />
               </motion.div>
             ))}
@@ -1059,20 +814,11 @@ export default function Page() {
         <div className="section-header" style={{ marginBottom: "2.5rem" }}>
           <div>
             <div className="section-eyebrow">End-to-End Workflow</div>
-            <h2 className="section-title">
-              What the agent<br />
-              <span className="section-title-italic">actually resolves.</span>
-            </h2>
+            <h2 className="section-title">What the agent<br /><span className="section-title-italic">actually resolves.</span></h2>
           </div>
         </div>
         <AnimatePresence mode="wait">
-          <motion.div
-            key={activeIndustry + "-pipeline"}
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-          >
+          <motion.div key={activeIndustry + "-pipeline"} initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}>
             <WorkflowPipelineCard pipeline={activePipeline} />
           </motion.div>
         </AnimatePresence>
@@ -1082,27 +828,17 @@ export default function Page() {
       <section id="cases-section" className="max-w-7xl mx-auto px-6 reveal">
         <div className="cta-banner">
           <div className="cta-banner-content">
-            <h2 className="cta-banner-title">
-              See an agent handle your workflows.
-            </h2>
-            <p className="cta-banner-subtitle">
-              Talk to a solutions engineer. We'll configure a pilot agent
-              against your real use cases — no generic demos.
-            </p>
+            <h2 className="cta-banner-title">See an agent handle your workflows.</h2>
+            <p className="cta-banner-subtitle">Talk to a solutions engineer. We'll configure a pilot agent against your real use cases — no generic demos.</p>
             <div className="hero-cta" style={{ justifyContent: "center", marginTop: 0 }}>
-              <button className="btn-primary-cta" onClick={() => scrollTo("contact-section")}>
-                Book a pilot call <ArrowRight size={15} />
-              </button>
+              <button className="btn-primary-cta" onClick={() => scrollTo("contact-section")}>Book a pilot call <ArrowRight size={15} /></button>
               <button className="btn-secondary-cta">View case studies</button>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── FOOTER ── */}
       <Footer />
-
-      {/* ── CALL MODAL ── */}
       <CallModal />
     </div>
   );
