@@ -329,7 +329,7 @@ export default function HomePage() {
           <div className="footer-grid">
             <div className="footer-brand">
               <Image src="/enlight-lab-logo.png" alt="Enlight Lab" width={120} height={28} style={{ filter: "brightness(0) invert(1)", objectFit: "contain" }} />
-              <p className="footer-tagline">AI voice agents for every industry and use case.</p>
+              <p className="footer-tagline">AI voice agents for every business.</p>
             </div>
             {footerLinks.map((col) => (
               <div key={col.title}>
