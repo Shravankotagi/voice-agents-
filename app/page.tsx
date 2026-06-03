@@ -1,861 +1,354 @@
-﻿"use client";
+"use client";
 
-import React, { useState, useEffect, useRef, useCallback, memo } from "react";
+import { useState } from "react";
 import Image from "next/image";
-import { RetellWebClient } from "retell-client-js-sdk";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import {
-  Phone, ArrowRight, MessageSquare, CheckCircle2,
-} from "lucide-react";
-import {
-  useCallStore, useCallActive, useSelectedAgent,
-  useTranscript, useCallStatus,
-} from "@/store/callStore";
-import type { Agent, Industry, IndustryId } from "../types/index";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowRight, Check, ChevronDown, Phone, Calendar, MessageSquare, Shield, Users, TrendingUp, Clock, Star, Heart, ShoppingCart, Building, Home, Building2, Zap, Users2 } from "lucide-react";
+import { useCallStore } from "@/store/callStore";
 
-// ── TranscriptMessage matches the store type exactly (includes `id`) ──
-type TranscriptMessage = {
-  role: "agent" | "user";
-  text: string;
-  timestamp: number;
-  id: string;
-};
-
-// ─── RETELL SINGLETON ────────────────────────────────────────────────
-let _retellClient: RetellWebClient | null = null;
-function getRetellClient(): RetellWebClient {
-  if (!_retellClient) _retellClient = new RetellWebClient();
-  return _retellClient;
-}
-
-// ─── DATA ────────────────────────────────────────────────────────────
-const industries: Industry[] = [
-  { id: "ecommerce",   name: "Ecommerce",   color: "#fb923c" },
-  { id: "edtech",      name: "EdTech",      color: "#2dd4bf" },
-  { id: "healthtech",  name: "HealthTech",  color: "#a78bfa" },
-  { id: "bfsi",        name: "BFSI",        color: "#4f8ef7" },
-  { id: "hospitality", name: "Hospitality", color: "#f472b6" },
+const industries = [
+  { id: "healthcare", name: "Healthcare", icon: Heart, color: "#a78bfa" },
+  { id: "ecommerce", name: "Ecommerce", icon: ShoppingCart, color: "#fb923c" },
+  { id: "bfsi", name: "BFSI", icon: Building, color: "#4f8ef7" },
+  { id: "homeservices", name: "Home Services", icon: Home, color: "#10b981" },
+  { id: "realestate", name: "Real Estate", icon: Building2, color: "#f59e0b" },
+  { id: "hospitality", name: "Hospitality", icon: Users2, color: "#f472b6" },
 ];
 
-const agents: Agent[] = [
-  {
-    id: "sam", industry: "ecommerce", name: "SAM", role: "Customer Support AI",
-    color: "#fb923c", currentStatus: "Handling a return — Order #47821",
-    description: "Resolves delivery issues, refund escalations, and return requests without human involvement.",
-    capabilities: ["Delivery exceptions", "Refund escalations", "Return authorizations"],
-    useCases: ["Delivery exceptions", "Return authorizations", "Refund escalations"],
-    channels: ["Voice", "Chat", "WhatsApp"], status: "live", metric: "",
-    retellAgentId: process.env.NEXT_PUBLIC_RETELL_SAM_ID ?? "YOUR_RETELL_AGENT_ID",
-    demoTranscript: [],
-  },
-  {
-    id: "max", industry: "ecommerce", name: "MAX", role: "Sales Conversion AI",
-    color: "#fb923c", currentStatus: "Running a cart recovery flow",
-    description: "Recovers abandoned carts via voice and chat. Surfaces matched alternatives, applies offers, and closes checkout.",
-    capabilities: ["Cart recovery", "Product matching", "Checkout assistance"],
-    useCases: ["Cart recovery", "Product matching", "Checkout assistance"],
-    channels: ["Voice", "Chat", "SMS"], status: "live", metric: "",
-    retellAgentId: process.env.NEXT_PUBLIC_RETELL_MAX_ID ?? "YOUR_RETELL_AGENT_ID",
-    demoTranscript: [],
-  },
-  {
-    id: "isha", industry: "edtech", name: "ISHA", role: "Lead Qualification AI",
-    color: "#2dd4bf", currentStatus: "Qualifying a prospective student",
-    description: "Qualifies inbound leads, matches students to the right program, and books counsellor calls automatically.",
-    capabilities: ["Student qualification", "Program matching", "Counsellor booking"],
-    useCases: ["Student qualification", "Program matching", "Counsellor booking"],
-    channels: ["Voice", "WhatsApp", "Chat"], status: "live", metric: "",
-    retellAgentId: process.env.NEXT_PUBLIC_RETELL_ISHA_ID ?? "YOUR_RETELL_AGENT_ID",
-    demoTranscript: [],
-  },
-  {
-    id: "kiran", industry: "edtech", name: "KIRAN", role: "Student Onboarding AI",
-    color: "#2dd4bf", currentStatus: "Collecting enrollment documents",
-    description: "Walks enrolled students through document submission, payment setup, and LMS access without support staff.",
-    capabilities: ["Document collection", "Payment guidance", "LMS setup"],
-    useCases: ["Document collection", "Payment guidance", "LMS setup"],
-    channels: ["Voice", "Email", "Chat"], status: "live", metric: "",
-    retellAgentId: process.env.NEXT_PUBLIC_RETELL_KIRAN_ID ?? "YOUR_RETELL_AGENT_ID",
-    demoTranscript: [],
-  },
-  {
-    id: "sara", industry: "healthtech", name: "SARA", role: "Healthcare Reception & Patient Support AI",
-    color: "#a78bfa", currentStatus: "Scheduling orthopedic follow-up — Dr. Kapoor",
-    description: "Handles appointment scheduling, patient intake, insurance verification, rescheduling, follow-ups, and healthcare support workflows across providers without manual staff intervention.",
-    capabilities: ["Appointment booking", "Insurance verification", "Pre-visit intake", "Appointment reminders", "Rescheduling", "Emergency routing"],
-    useCases: ["Patient appointment scheduling", "Insurance verification", "Pre-visit intake", "Follow-up coordination", "Appointment reminders", "Emergency handling"],
-    channels: ["Voice", "WhatsApp", "Web"], status: "live", metric: "92% automated appointment completion",
-    retellAgentId: process.env.NEXT_PUBLIC_RETELL_SARA_ID ?? "YOUR_RETELL_AGENT_ID",
-    demoTranscript: [],
-  },
-  {
-    id: "riya", industry: "healthtech", name: "RIYA", role: "Clinical Screening & Risk Assessment AI",
-    color: "#8b5cf6", currentStatus: "Assessing respiratory risk severity",
-    description: "Performs structured symptom assessment, detects risk indicators, identifies emergency signals, and classifies urgency before routing patients to the appropriate care path.",
-    capabilities: ["Symptom assessment", "Risk detection", "Emergency detection", "Urgency scoring", "Care pathway recommendation"],
-    useCases: ["Respiratory screening", "Emergency identification", "Pre-consultation symptom assessment", "Risk prioritization", "Patient severity classification"],
-    channels: ["Voice", "Chat"], status: "live", metric: "94% triage classification accuracy",
-    retellAgentId: process.env.NEXT_PUBLIC_RETELL_RIYA_ID ?? "YOUR_RETELL_AGENT_ID",
-    demoTranscript: [],
-  },
-  {
-    id: "bhaskar", industry: "bfsi", name: "BHASKAR", role: "Fraud Resolution Executive",
-    color: "#4f8ef7", currentStatus: "Verifying a disputed transaction",
-    description: "Handles fraud disputes end-to-end — blocks cards, applies provisional credits, and assigns replacements per RBI guidelines.",
-    capabilities: ["Transaction disputes", "Provisional credits", "Card replacement"],
-    useCases: ["Transaction disputes", "Provisional credits", "Card replacement"],
-    channels: ["Voice", "Phone", "WhatsApp"], status: "live", metric: "",
-    retellAgentId: process.env.NEXT_PUBLIC_RETELL_BHASKAR_ID ?? "YOUR_RETELL_AGENT_ID",
-    demoTranscript: [],
-  },
-  {
-    id: "aryan", industry: "bfsi", name: "ARYAN", role: "Claims Processing AI",
-    color: "#4f8ef7", currentStatus: "Filing a motor insurance FNOL",
-    description: "Files FNOL, verifies policy coverage, and assigns adjusters for motor and health claims in under 4 minutes.",
-    capabilities: ["FNOL filing", "Policy verification", "Adjuster assignment"],
-    useCases: ["FNOL filing", "Policy verification", "Adjuster assignment"],
-    channels: ["Voice", "SMS", "Phone"], status: "live", metric: "",
-    retellAgentId: process.env.NEXT_PUBLIC_RETELL_ARYAN_ID ?? "YOUR_RETELL_AGENT_ID",
-    demoTranscript: [],
-  },
-  {
-    id: "lucky", industry: "hospitality", name: "LUCKY", role: "Guest Experience & Concierge AI",
-    color: "#f472b6", currentStatus: "Arranging a spa reservation",
-    description: "Handles in-stay requests — spa, dining, housekeeping, and local bookings — in the guest's preferred language.",
-    capabilities: ["Spa & dining bookings", "Room service", "Multilingual support"],
-    useCases: ["Spa & dining bookings", "Room service", "Local recommendations"],
-    channels: ["Voice", "Chat", "WhatsApp"], status: "live", metric: "",
-    retellAgentId: process.env.NEXT_PUBLIC_RETELL_LUCKY_ID ?? "YOUR_RETELL_AGENT_ID",
-    demoTranscript: [],
-  },
-  {
-    id: "nikita", industry: "hospitality", name: "NIKITA", role: "Reservation Management AI",
-    color: "#f472b6", currentStatus: "Processing a late checkout request",
-    description: "Manages booking modifications, cancellations, early check-in, and late checkout against live occupancy data.",
-    capabilities: ["Stay extensions", "Early/late checkout", "Group bookings"],
-    useCases: ["Stay extensions", "Early/late checkout", "Group bookings"],
-    channels: ["Voice", "Email", "Chat"], status: "live", metric: "",
-    retellAgentId: process.env.NEXT_PUBLIC_RETELL_NIKITA_ID ?? "YOUR_RETELL_AGENT_ID",
-    demoTranscript: [],
-  },
-];
-
-type WorkflowStep = { label: string; detail: string };
-type WorkflowPipeline = { industry: IndustryId; title: string; steps: WorkflowStep[] };
-
-const workflowPipelines: WorkflowPipeline[] = [
-  {
-    industry: "bfsi", title: "Fraud alert → resolution",
-    steps: [
-      { label: "Fraud alert triggered",  detail: "Unusual transaction pattern detected" },
-      { label: "Identity verified",      detail: "OTP and voice authentication confirmed" },
-      { label: "Transaction validated",  detail: "Cross-checked against location and device" },
-      { label: "Dispute classified",     detail: "Marked as first-party fraud or compromise" },
-      { label: "Provisional credit",     detail: "Issued per RBI mandate within 2 business days" },
-      { label: "Card replaced",          detail: "Old card blocked, replacement dispatched" },
-    ],
-  },
-  {
-    industry: "healthtech", title: "Symptom → care",
-    steps: [
-      { label: "Patient call received",  detail: "Inbound via voice or WhatsApp" },
-      { label: "Intake collected",       detail: "Validated triage protocol, vitals and history" },
-      { label: "Urgency classified",     detail: "Low, medium, or high urgency assigned" },
-      { label: "Provider matched",       detail: "By specialty, availability, and insurance" },
-      { label: "Slot confirmed",         detail: "Appointment booked, pre-visit form sent" },
-      { label: "Reminder triggered",     detail: "2 hours before appointment via WhatsApp" },
-    ],
-  },
-  {
-    industry: "edtech", title: "Lead → enrollment",
-    steps: [
-      { label: "Lead captured",          detail: "Inbound inquiry or form submission" },
-      { label: "Qualification call",     detail: "Background, goals, and program fit assessed" },
-      { label: "Course recommended",     detail: "Personalised track matched by profile" },
-      { label: "Counsellor booked",      detail: "Slot reserved without human handoff" },
-      { label: "Enrollment initiated",   detail: "Documents and payment collected" },
-      { label: "LMS access confirmed",   detail: "Portal access sent within 24 hours" },
-    ],
-  },
-  {
-    industry: "hospitality", title: "Booking → checkout",
-    steps: [
-      { label: "Booking request",        detail: "Availability confirmed, preferences noted" },
-      { label: "Reservation created",    detail: "Confirmation sent to email and WhatsApp" },
-      { label: "Pre-arrival outreach",   detail: "Preferences and in-stay requests collected" },
-      { label: "In-stay service",        detail: "Dining, spa, housekeeping handled live" },
-      { label: "Late checkout approved", detail: "Against live occupancy, no front desk needed" },
-      { label: "Post-stay follow-up",    detail: "Guest survey sent 2 hours after checkout" },
-    ],
-  },
-  {
-    industry: "ecommerce", title: "Order → resolution",
-    steps: [
-      { label: "Order confirmed",        detail: "Tracking ID assigned, confirmation sent" },
-      { label: "Exception detected",     detail: "Carrier delay flagged, customer contacted" },
-      { label: "Resolution offered",     detail: "Reroute, redeliver, or refund presented" },
-      { label: "Refund initiated",       detail: "Processed without agent involvement" },
-      { label: "Return authorised",      detail: "Label generated, pickup scheduled in-call" },
-      { label: "Ticket closed",          detail: "CSAT sent, resolution logged to CRM" },
-    ],
-  },
-];
-
-const simulationScripts: Record<string, { role: "agent" | "user"; text: string }[]> = {
-  bfsi: [
-    { role: "user",  text: "Hi, I noticed an unfamiliar charge on my account." },
-    { role: "agent", text: "I'm pulling up your recent transactions now. Can you confirm the last four digits of your card?" },
-    { role: "user",  text: "It ends in 4821." },
-    { role: "agent", text: "Thank you. I can see a suspicious charge of ₹4,200 on the 3rd. I'm initiating a dispute and issuing a provisional credit within 2 business days." },
-  ],
-  healthtech: [
-    { role: "user",  text: "I need to book a follow-up with Dr. Kapoor." },
-    { role: "agent", text: "Of course. Dr. Kapoor has availability this Thursday at 10 AM or Friday at 2 PM — which works better for you?" },
-    { role: "user",  text: "Thursday at 10 works." },
-    { role: "agent", text: "Confirmed. I've booked Thursday at 10 AM and sent a pre-visit form to your registered number." },
-  ],
-  edtech: [
-    { role: "user",  text: "I'm interested in the data science program." },
-    { role: "agent", text: "Great choice. Could you tell me your current background — are you coming from a tech or non-tech field?" },
-    { role: "user",  text: "I have a business degree, some basic Excel skills." },
-    { role: "agent", text: "Perfect. I'd recommend our Business Analytics track — it's designed for exactly that profile. I can book a counsellor call for tomorrow if you'd like." },
-  ],
-  hospitality: [
-    { role: "user",  text: "I'd like to extend my stay by one night." },
-    { role: "agent", text: "Let me check availability for your room type. You're in a Deluxe King — yes, we have availability on the 14th. Shall I confirm the extension?" },
-    { role: "user",  text: "Yes please." },
-    { role: "agent", text: "Done. Your stay is now extended to the 14th. I've updated your folio and sent a confirmation to your email." },
+const agents: Record<string, { name: string; role: string; description: string; capabilities: string[]; type: string; retellId: string }[]> = {
+  healthcare: [
+    { name: "SARA", role: "Patient Services Agent", description: "Schedules appointments, recommends doctors, and handles patient inquiries.", capabilities: ["Appointment scheduling", "Doctor recommendations", "Hospital info", "Emergency routing"], type: "Inbound", retellId: "agent_b7aeab2c389d64e0ae9ec3d999" },
+    { name: "RIYA", role: "Clinical Screening Agent", description: "Performs symptom assessment and patient triage before consultation.", capabilities: ["Symptom collection", "Risk assessment", "Urgency classification", "Care recommendations"], type: "Inbound", retellId: "agent_cce30852caccbdd3021ef4aa01" },
   ],
   ecommerce: [
-    { role: "user",  text: "My order hasn't arrived and it was supposed to be here yesterday." },
-    { role: "agent", text: "I'm checking your order now. There's a carrier delay flagged on Order #47821. I can reroute, redeliver tomorrow, or process a full refund — what would you prefer?" },
-    { role: "user",  text: "Please redeliver tomorrow." },
-    { role: "agent", text: "Confirmed. Redelivery is scheduled for tomorrow between 10 AM and 2 PM. You'll receive an SMS update from the carrier." },
+    { name: "SAM", role: "Customer Resolution Agent", description: "Handles delivery issues, refund escalations, and return requests.", capabilities: ["Delivery exceptions", "Refund processing", "Return authorization", "Order tracking"], type: "Inbound", retellId: "agent_111243055fdd3bec81dacfafbd" },
+    { name: "MAX", role: "Sales Conversion Agent", description: "Recovers abandoned carts via voice. Surfaces alternatives and closes checkout.", capabilities: ["Cart recovery", "Product matching", "Offer application", "Checkout assistance"], type: "Outbound", retellId: "agent_c4e856cd16c890eaa1d738e11d" },
+  ],
+  bfsi: [
+    { name: "BHASKAR", role: "Banking Fraud Agent", description: "Handles fraud disputes, blocks cards, and initiates dispute resolution.", capabilities: ["Fraud detection", "Card blocking", "Dispute filing", "Credit issuance"], type: "Inbound", retellId: "agent_71e0327cf0a27f63144aa74f09" },
+    { name: "ARYAN", role: "Insurance Claims Agent", description: "Files FNOL, verifies coverage, and assigns surveyors for claims processing.", capabilities: ["FNOL filing", "Coverage verification", "Surveyor assignment", "Claim tracking"], type: "Inbound", retellId: "agent_a8945a4965d741e547517361b0" },
+  ],
+  homeservices: [
+    { name: "Mike Thompson", role: "Plumbing Intake Agent", description: "Handles incoming plumbing requests, identifies emergencies, and schedules visits.", capabilities: ["Emergency detection", "Service scheduling", "Customer intake", "Urgent routing"], type: "Inbound", retellId: "agent_7a2e179e5304e28672360a15ee" },
+    { name: "Sarah Johnson", role: "HVAC Scheduling Agent", description: "Manages HVAC appointments, maintenance scheduling, and urgent service prioritization.", capabilities: ["AC/heating inquiries", "Repair booking", "Maintenance scheduling", "Priority handling"], type: "Inbound", retellId: "agent_015cf5b6284d3bb41708fcc29e" },
+    { name: "David Miller", role: "Electrician Quote Agent", description: "Qualifies electrical requests and schedules on-site estimates.", capabilities: ["Project capture", "Site inspection scheduling", "Quote requests", "Job qualification"], type: "Inbound", retellId: "agent_8821bb64745c21c48f2526b2b5" },
+  ],
+  realestate: [
+    { name: "Ryan Mitchell", role: "Real Estate Agent", description: "Qualifies buyers, sellers, and investors and schedules property consultations.", capabilities: ["Buyer requirements", "Seller info collection", "Investment qualification", "Tour booking"], type: "Inbound", retellId: "agent_b58c6c076b3e6a2a84d4f96afa" },
+  ],
+  hospitality: [
+    { name: "LUCKY", role: "Concierge Agent", description: "Arranges dining, spa, transportation, and special occasion bookings.", capabilities: ["Dining reservations", "Spa scheduling", "Transportation", "Local recommendations"], type: "Inbound", retellId: "agent_5ae818c99ed491aba70e90c4ad" },
+    { name: "NIKITA", role: "Reservations Agent", description: "Manages hotel reservations, booking modifications, and stay requests.", capabilities: ["Booking creation", "Modifications", "Room upgrades", "Group bookings"], type: "Inbound", retellId: "agent_c8ad0b041fba067ea02f6ca850" },
   ],
 };
 
-const agentsByIndustry = agents.reduce<Record<string, Agent[]>>((acc, a) => {
-  if (!acc[a.industry]) acc[a.industry] = [];
-  acc[a.industry].push(a);
-  return acc;
-}, {});
-
-const footerCols = [
-  { title: "Services",     links: ["AI Voice Agents", "AI Consulting", "Automation Solutions", "Enterprise Integrations", "CRM Integration", "Custom Deployment"] },
-  { title: "Industries",   links: ["Healthcare", "BFSI", "Hospitality", "Ecommerce", "EdTech"] },
-  { title: "Technologies", links: ["Retell AI", "Voice Synthesis", "Real-time STT", "LLM Orchestration", "WhatsApp API", "CRM Connectors"] },
-  { title: "Company",      links: ["About Us", "Case Studies", "Blogs", "Careers", "Contact"] },
+const integrations = [
+  { name: "HubSpot", desc: "CRM integration for lead management" },
+  { name: "Salesforce", desc: "Enterprise CRM synchronization" },
+  { name: "Zapier", desc: "Connect to 5000+ apps" },
+  { name: "Jobber", desc: "Field service scheduling" },
+  { name: "ServiceTitan", desc: "Enterprise dispatch integration" },
+  { name: "Housecall Pro", desc: "Home services software" },
 ];
 
-const trustLogos = ["Mozilla Foundation", "Emblazer", "Go2Andaman", "Homeloft", "HUMA"];
+const faqs = [
+  { q: "What exactly does the AI agent do?", a: "Our AI acts as a virtual team member that answers calls, handles inquiries, books appointments, and processes requests 24/7 without human involvement." },
+  { q: "How does it work with my existing phone system?", a: "It works with your existing business number. We route your calls through our AI, which handles the conversation and transfers or books as needed." },
+  { q: "What if the AI cannot answer a question?", a: "The AI knows when to escalate. If it cannot handle a request, it takes a message and notifies your team immediately via SMS and app notification." },
+  { q: "How long does setup take?", a: "Most businesses are up and running within 3 to 5 business days. We train the AI on your services, pricing, and business logic." },
+  { q: "Is there a free trial?", a: "Yes, we offer a 14-day pilot where you can test the AI with your actual callers. No credit card required." },
+];
 
-// ─── WAVEFORM HOOK ───────────────────────────────────────────────────
-const BAR_COUNT = 48;
+const footerLinks = [
+  { title: "Services", links: ["Inbound Agents", "Outbound Agents", "Appointment Booking", "Lead Qualification", "CRM Integration"] },
+  { title: "Industries", links: ["Healthcare", "Ecommerce", "BFSI", "Home Services", "Real Estate", "Hospitality"] },
+  { title: "Company", links: ["About Us", "Case Studies", "Pricing", "Contact", "Blog"] },
+  { title: "Legal", links: ["Privacy Policy", "Terms of Service", "Cookie Policy"] },
+];
 
-function useWaveform(active: boolean) {
-  const prefersReduced = useReducedMotion();
-  const [heights, setHeights] = useState<number[]>(() => Array(BAR_COUNT).fill(30));
-  const rafRef = useRef<number | null>(null);
-  const lastRef = useRef(0);
-
-  useEffect(() => {
-    if (!active || prefersReduced) { setHeights(Array(BAR_COUNT).fill(30)); return; }
-    function tick(ts: number) {
-      if (ts - lastRef.current >= 90) {
-        setHeights(Array.from({ length: BAR_COUNT }, (_, i) => {
-          const wave = Math.sin((Date.now() / 190) + i * 0.28) * 28;
-          return Math.max(12, Math.min(95, 50 + wave + (Math.random() * 38) - 20));
-        }));
-        lastRef.current = ts;
-      }
-      rafRef.current = requestAnimationFrame(tick);
-    }
-    rafRef.current = requestAnimationFrame(tick);
-    return () => { if (rafRef.current) cancelAnimationFrame(rafRef.current); };
-  }, [active, prefersReduced]);
-
-  return heights;
-}
-
-// ─── LIVE CALL RUNNER ────────────────────────────────────────────────
-const _liveTimeouts: ReturnType<typeof setTimeout>[] = [];
-let _callInProgress = false;
-
-function clearAll() {
-  _liveTimeouts.forEach(clearTimeout);
-  _liveTimeouts.length = 0;
-  try { getRetellClient().stopCall(); getRetellClient().removeAllListeners(); } catch (_) {}
-}
-
-const _msgTimestamps: number[] = [];
-function stableTimestamp(index: number): number {
-  if (_msgTimestamps[index] === undefined) _msgTimestamps[index] = Date.now() + index;
-  return _msgTimestamps[index];
-}
-function resetTimestamps() { _msgTimestamps.length = 0; }
-
-const industryStatusSequences: Record<string, string[]> = {
-  bfsi:        ["Listening...", "Verifying identity...", "Retrieving account...", "Checking transaction history...", "Classifying dispute...", "Issuing credit..."],
-  healthtech:  ["Listening...", "Collecting intake...", "Assessing symptoms...", "Classifying urgency...", "Matching provider...", "Scheduling appointment..."],
-  edtech:      ["Listening...", "Assessing profile...", "Matching program...", "Retrieving availability...", "Booking counsellor..."],
-  hospitality: ["Listening...", "Retrieving reservation...", "Checking availability...", "Confirming booking...", "Updating itinerary..."],
-  ecommerce:   ["Listening...", "Retrieving order...", "Checking carrier status...", "Processing request...", "Confirming resolution..."],
-};
-
-async function runLiveCall(agent: Agent) {
-  if (useCallStore.getState().callActive || _callInProgress) return;
-  _callInProgress = true;
-  clearAll();
-  resetTimestamps();
-
-  const store = useCallStore.getState();
-  await store.startLiveCall(agent);
-
-  const isPlaceholder = agent.retellAgentId === "YOUR_RETELL_AGENT_ID";
-
-  if (!isPlaceholder) {
-    try {
-      const micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      micStream.getTracks().forEach(t => t.stop());
-
-      const res = await fetch("/api/retell/create-web-call", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ agentId: agent.retellAgentId }),
-      });
-
-      if (res.ok) {
-        const { access_token } = await res.json();
-        const retellClient = getRetellClient();
-        retellClient.removeAllListeners();
-
-        retellClient.on("call_started", () => {
-          useCallStore.getState().setStatus("Connected — Listening...");
-          useCallStore.getState().setPhase("active");
-        });
-
-        retellClient.on("call_ended", () => {
-          useCallStore.getState().setStatus("Call ended");
-          retellClient.removeAllListeners();
-          _liveTimeouts.forEach(clearTimeout);
-          _liveTimeouts.length = 0;
-          _callInProgress = false;
-          setTimeout(() => useCallStore.getState().endCall(), 800);
-        });
-
-        retellClient.on("error", (err: unknown) => {
-          console.error("Retell error:", err);
-          useCallStore.getState().setStatus("Connection error — ending call");
-          clearAll();
-          _callInProgress = false;
-          setTimeout(() => useCallStore.getState().endCall(), 1200);
-        });
-
-        retellClient.on("update", (update: {
-          transcript?: { role: string; content: string }[];
-        }) => {
-          if (!update.transcript || update.transcript.length === 0) return;
-
-          const normalized: TranscriptMessage[] = update.transcript.map((entry, idx) => ({
-            role: (entry.role === "agent" ? "agent" : "user") as "agent" | "user",
-            text: entry.content,
-            timestamp: stableTimestamp(idx),
-            id: `retell-${idx}`,
-          }));
-
-          useCallStore.setState({ transcript: normalized });
-          const last = update.transcript[update.transcript.length - 1];
-          useCallStore.getState().setStatus(last?.role === "user" ? "Processing..." : "Listening...");
-        });
-
-        await retellClient.startCall({ accessToken: access_token });
-        _callInProgress = false;
-        return;
-      }
-    } catch (err) {
-      console.error("Live call setup failed, falling back to simulation:", err);
-      _callInProgress = false;
-    }
+async function startCall(agentId: string, agentName: string) {
+  try {
+    const { startLiveCall } = useCallStore.getState();
+    const agent = {
+      id: agentName.toLowerCase().replace(" ", "-"),
+      name: agentName,
+      role: "Demo Agent",
+      retellAgentId: agentId,
+    };
+    await startLiveCall(agent as any);
+  } catch (e) {
+    console.error("Failed to start call:", e);
   }
-
-  _callInProgress = false;
-
-  const script = simulationScripts[agent.industry] ?? simulationScripts.bfsi;
-  const statuses = industryStatusSequences[agent.industry] ?? ["Listening...", "Processing..."];
-  store.setPhase("active");
-  store.setStatus(statuses[0]);
-
-  let delay = 600;
-  script.forEach((line, i) => {
-    const statusIdx = Math.min(i + 1, statuses.length - 1);
-    _liveTimeouts.push(setTimeout(() => {
-      store.appendTranscript({
-        ...line,
-        timestamp: Date.now(),
-        id: `sim-${i}-${Date.now()}`,
-      });
-      store.setStatus(line.role === "user" ? (statuses[statusIdx] ?? "Processing...") : "Listening...");
-    }, delay));
-    delay += line.role === "user" ? 1800 : 2600;
-  });
-
-  _liveTimeouts.push(setTimeout(() => store.setStatus("Listening..."), delay + 800));
 }
 
-// ─── COMPONENTS ──────────────────────────────────────────────────────
-const WorkflowPipelineCard = memo(function WorkflowPipelineCard({ pipeline }: { pipeline: WorkflowPipeline }) {
+export default function HomePage() {
+  const [activeIndustry, setActiveIndustry] = useState("healthcare");
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const currentAgents = agents[activeIndustry] || [];
+
   return (
-    <div className="workflow-card">
-      <div style={{ fontSize: "0.6875rem", fontWeight: 700, color: "var(--blue)", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: "2.5rem" }}>
-        {pipeline.title}
-      </div>
-      <div style={{ display: "grid", gridTemplateColumns: `repeat(${pipeline.steps.length}, 1fr)`, position: "relative" }}>
-        <div style={{ position: "absolute", top: "13px", left: `calc(100% / (2 * ${pipeline.steps.length}))`, right: `calc(100% / (2 * ${pipeline.steps.length}))`, height: "1px", background: "linear-gradient(to right, transparent, var(--blue), transparent)", opacity: 0.25, zIndex: 0 }} />
-        {pipeline.steps.map((step, i) => (
-          <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.75rem", padding: "0 0.5rem", position: "relative", zIndex: 1 }}>
-            <div style={{ width: "28px", height: "28px", borderRadius: "50%", flexShrink: 0, background: (i === 0 || i === pipeline.steps.length - 1) ? "var(--blue)" : "#fff", border: (i === 0 || i === pipeline.steps.length - 1) ? "none" : "1.5px solid #E5E7EB", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.625rem", fontWeight: 700, color: (i === 0 || i === pipeline.steps.length - 1) ? "#fff" : "var(--text-muted)" }}>
-              {i === pipeline.steps.length - 1 ? <CheckCircle2 size={13} /> : i + 1}
-            </div>
-            <div style={{ textAlign: "center" }}>
-              <div style={{ fontSize: "0.75rem", fontWeight: 600, color: "var(--text-heading)", marginBottom: "4px", lineHeight: 1.3 }}>{step.label}</div>
-              <div style={{ fontSize: "0.6875rem", color: "var(--text-muted)", lineHeight: 1.45 }}>{step.detail}</div>
-            </div>
+    <div style={{ minHeight: "100vh", background: "#FFFFFF", fontFamily: "Inter, system-ui, sans-serif" }}>
+      {/* Navbar */}
+      <nav className="navbar">
+        <div className="container">
+          <div className="nav-brand">
+            <Image src="/enlight-lab-logo.png" alt="Enlight Lab" width={140} height={32} style={{ objectFit: "contain" }} />
           </div>
-        ))}
-      </div>
-    </div>
-  );
-});
-
-const AgentCard = memo(function AgentCard({ agent, onLive }: { agent: Agent; onLive: () => void }) {
-  return (
-    <article className="agent-card" style={{ "--agent-color": agent.color } as React.CSSProperties}>
-      <div className="agent-card-glow" />
-      <div className="agent-header">
-        <div className="agent-identity">
-          <div className="agent-name-row">
-            <h3 className="agent-name">{agent.name}</h3>
-            <span className="status-badge"><span className="status-badge__dot" />Live</span>
+          <div className="nav-links">
+            <button className="nav-link">How It Works</button>
+            <button className="nav-link">Industries</button>
+            <button className="nav-link">Pricing</button>
+            <button className="nav-link">FAQ</button>
           </div>
-          <p className="agent-role">{agent.role}</p>
+          <button className="btn btn-primary" style={{ padding: "0.5rem 1.25rem", fontSize: "0.875rem" }}>
+            Book Demo
+          </button>
         </div>
-        <div className="agent-avatar">{agent.name.slice(0, 2)}</div>
-      </div>
-      <div className="agent-live-status">
-        <span style={{ width: "5px", height: "5px", borderRadius: "50%", background: agent.color, display: "inline-block", flexShrink: 0, animation: "pulse-soft 2s ease-in-out infinite" }} />
-        {agent.currentStatus}
-      </div>
-      <p className="agent-description">{agent.description}</p>
-      <div className="use-case-row">
-        {agent.capabilities.map((cap) => (
-          <span key={cap} className="use-case-tag"><span className="use-case-dot" />{cap}</span>
-        ))}
-      </div>
-      <div className="channels-row">
-        <span className="channels-label">Channels</span>
-        {agent.channels.map((c) => <span key={c} className="channel-tag">{c}</span>)}
-      </div>
-      <div className="agent-footer">
-        <button onClick={onLive} className="btn-live" aria-label={`Start live call with ${agent.name}`}>
-          <Phone size={12} /> Speak with {agent.name}
-        </button>
-      </div>
-    </article>
-  );
-});
+      </nav>
 
-// ─── CHAT BUBBLE ────────────────────────────────────────────────────
-const ChatBubble = memo(function ChatBubble({ msg }: { msg: TranscriptMessage }) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 8, scale: 0.97 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{ duration: 0.26, ease: [0.16, 1, 0.3, 1] }}
-      style={{ display: "flex", justifyContent: msg.role === "user" ? "flex-end" : "flex-start" }}
-    >
-      <span className="sr-only">{msg.role === "user" ? "You" : "Agent"}:</span>
-      <div className={"bubble bubble--" + msg.role}>{msg.text}</div>
-    </motion.div>
-  );
-});
-
-// ─── TRANSCRIPT ──────────────────────────────────────────────────────
-function Transcript({ messages }: { messages: TranscriptMessage[] }) {
-  const bottomRef = useRef<HTMLDivElement>(null);
-  const prevLenRef = useRef(0);
-
-  useEffect(() => {
-    if (messages.length > prevLenRef.current) {
-      bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-    }
-    prevLenRef.current = messages.length;
-  }, [messages.length]);
-
-  return (
-    <div className="transcript" role="log" aria-live="polite" aria-label="Call transcript">
-      {messages.length === 0 && (
-        <div className="transcript__empty">
-          <div className="transcript__empty-icon"><MessageSquare size={20} color="#9CA3AF" /></div>
-          <span>Waiting for conversation to begin...</span>
-        </div>
-      )}
-      {messages.map((msg) => (
-        <ChatBubble key={msg.id} msg={msg} />
-      ))}
-      <div ref={bottomRef} />
-    </div>
-  );
-}
-
-function Waveform({ active }: { active: boolean }) {
-  const heights = useWaveform(active);
-  return (
-    <div className="waveform" role="img" aria-label="Audio waveform" aria-hidden="true">
-      {heights.map((h, i) => (
-        <div key={i} className="waveform-bar" style={{ transform: `scaleY(${h / 100})`, height: "100%" }} />
-      ))}
-    </div>
-  );
-}
-
-function CallModal() {
-  const callActive = useCallActive();
-  const agent = useSelectedAgent();
-  const transcript = useTranscript();
-  const callStatus = useCallStatus();
-  const { endCall } = useCallStore();
-
-  async function handleEndCall() {
-    clearAll();
-    resetTimestamps();
-    try { getRetellClient().removeAllListeners(); } catch {}
-    useCallStore.getState().setStatus("Call ended");
-    endCall();
-  }
-
-  useEffect(() => {
-    if (!callActive) return;
-    function onKey(e: KeyboardEvent) { if (e.key === "Escape") handleEndCall(); }
-    document.addEventListener("keydown", onKey);
-    document.body.style.overflow = "hidden";
-    return () => { document.removeEventListener("keydown", onKey); document.body.style.overflow = ""; };
-  }, [callActive]);
-
-  return (
-    <AnimatePresence>
-      {callActive && agent && (
-        <motion.div
-          className="modal-overlay"
-          initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-          transition={{ duration: 0.18 }}
-          onClick={(e) => { if (e.target === e.currentTarget) handleEndCall(); }}
-        >
-          <div role="status" aria-live="polite" aria-atomic="true" className="sr-only">{callStatus}</div>
-          <motion.div
-            className="modal-content"
-            role="dialog" aria-modal="true" aria-label={"Call with " + agent.name}
-            initial={{ scale: 0.93, opacity: 0, y: 16 }}
-            animate={{ scale: 1, opacity: 1, y: 0 }}
-            exit={{ scale: 0.97, opacity: 0, y: 8 }}
-            transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-            style={{ "--agent-color": agent.color } as React.CSSProperties}
-          >
-            <div className="modal-header">
-              <div className="modal-agent">
-                <div className="agent-avatar" style={{ "--agent-color": agent.color } as React.CSSProperties}>
-                  {agent.name.slice(0, 2)}
-                </div>
-                <div className="modal-agent-info">
-                  <div className="modal-agent-name" style={{ color: agent.color }}>{agent.name}</div>
-                  <div className="modal-agent-role">{agent.role}</div>
-                </div>
-              </div>
-              <button onClick={handleEndCall} className="btn-end-call">End call</button>
+      {/* Hero */}
+      <section className="hero">
+        <div className="container">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+            <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "#F3F4F6", padding: "0.5rem 1rem", borderRadius: "9999px", fontSize: "0.875rem", fontWeight: 500, color: "#6B7280", marginBottom: "1.5rem" }}>
+              <Star size={14} style={{ fill: "#F59E0B", color: "#F59E0B" }} />
+              Trusted by 500+ enterprises worldwide
             </div>
-            <div className="modal-status">
-              <span className="status-indicator" />
-              <span className="status-text">{callStatus}</span>
-            </div>
-            <Transcript messages={transcript} />
-            <div className="modal-footer">
-              <Waveform active={callActive} />
-            </div>
-          </motion.div>
-        </motion.div>
-      )}
-    </AnimatePresence>
-  );
-}
-
-// ─── NAVBAR ──────────────────────────────────────────────────────────
-function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 10);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  const scrollTo = (id: string) =>
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
-
-  return (
-    <nav aria-label="Main navigation" style={{ position: "sticky", top: 0, zIndex: 50, background: "#ffffff", borderBottom: "1px solid #E5E7EB", boxShadow: scrolled ? "0 2px 16px rgba(0,0,0,0.08)" : "none", transition: "box-shadow 0.2s ease", height: "68px", display: "flex", alignItems: "center" }}>
-      <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 2rem", width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <Image src="/Layer_1.png" alt="Enlight AI" width={160} height={40} style={{ objectFit: "contain", height: "36px", width: "auto" }} priority />
-        <div style={{ display: "flex", alignItems: "center", gap: "0.25rem" }}>
-          {[
-            { label: "Agents",       id: "agents-section" },
-            { label: "How It Works", id: "workflow-section" },
-            { label: "Contact",      id: "contact-section" },
-          ].map((item) => (
-            <button key={item.label} onClick={() => scrollTo(item.id)}
-              style={{ background: "none", border: "none", cursor: "pointer", fontSize: "0.9375rem", fontWeight: 500, color: "#374151", padding: "0.5rem 0.875rem", borderRadius: "6px", transition: "color 0.15s, background 0.15s" }}
-              onMouseEnter={e => { e.currentTarget.style.color = "#2563EB"; e.currentTarget.style.background = "#EFF6FF"; }}
-              onMouseLeave={e => { e.currentTarget.style.color = "#374151"; e.currentTarget.style.background = "none"; }}
-            >{item.label}</button>
-          ))}
-        </div>
-        <button onClick={() => scrollTo("contact-section")}
-          style={{ background: "#2563EB", color: "#fff", border: "none", borderRadius: "8px", padding: "0.625rem 1.5rem", fontSize: "0.9375rem", fontWeight: 700, cursor: "pointer", transition: "background 0.15s", whiteSpace: "nowrap" }}
-          onMouseEnter={e => { e.currentTarget.style.background = "#1D4ED8"; }}
-          onMouseLeave={e => { e.currentTarget.style.background = "#2563EB"; }}
-        >Get a Proposal</button>
-      </div>
-    </nav>
-  );
-}
-
-// ─── FOOTER ──────────────────────────────────────────────────────────
-function Footer() {
-  return (
-    <footer id="contact-section">
-      <div className="footer-trust-bar">
-        <div className="footer-trust-inner">
-          <span className="footer-trust-label">Trusted by Fortune-Grade Global Leaders</span>
-          <div className="footer-trust-logos">
-            {trustLogos.map((logo) => <span key={logo} className="footer-trust-logo">{logo}</span>)}
-          </div>
-        </div>
-      </div>
-      <div className="site-footer">
-        <div className="footer-main">
-          <div className="footer-brand">
-            <div style={{ marginBottom: "0.75rem" }}>
-              <Image src="/Layer_1.png" alt="Enlight AI" width={140} height={36} style={{ objectFit: "contain", height: "32px", width: "auto" }} />
-            </div>
-            <p className="footer-brand-tagline">
-              Enterprise AI Voice Agents for healthcare, BFSI, hospitality, ecommerce, and education.
-            </p>
-            <button style={{ background: "none", border: "none", cursor: "pointer", color: "#2563EB", fontSize: "0.875rem", fontWeight: 600, padding: 0, textAlign: "left", textDecoration: "underline", marginTop: "0.5rem" }}>
-              contact@enlightai.com
-            </button>
-            <div style={{ display: "flex", gap: "0.5rem", marginTop: "1rem" }}>
-              {["LinkedIn", "Twitter"].map((label) => (
-                <button key={label} style={{ padding: "0.375rem 0.75rem", borderRadius: "6px", background: "#2563EB", color: "#fff", border: "none", cursor: "pointer", fontSize: "0.75rem", fontWeight: 600 }}>{label}</button>
-              ))}
-            </div>
-          </div>
-          {footerCols.map((col) => (
-            <div key={col.title}>
-              <div className="footer-col-title">{col.title}</div>
-              <div className="footer-col-links">
-                {col.links.map((link) => <button key={link} className="footer-col-link">{link}</button>)}
-              </div>
-            </div>
-          ))}
-        </div>
-        <div className="footer-bottom">
-          <p className="footer-copy">Copyright © 2026 Enlight AI. All Rights Reserved.</p>
-          <div className="footer-bottom-links">
-            <button className="footer-bottom-link">Privacy Policy</button>
-            <button className="footer-bottom-link">Terms of Use</button>
-          </div>
-        </div>
-      </div>
-    </footer>
-  );
-}
-
-// ─── AGENT GRID ──────────────────────────────────────────────────────
-const AgentGrid = memo(function AgentGrid({
-  activeIndustry,
-  filteredAgents,
-}: {
-  activeIndustry: IndustryId;
-  filteredAgents: Agent[];
-}) {
-  const handlers = useRef<Map<string, () => void>>(new Map());
-
-  filteredAgents.forEach((agent) => {
-    if (!handlers.current.has(agent.id)) {
-      handlers.current.set(agent.id, () => runLiveCall(agent));
-    }
-  });
-
-  useEffect(() => {
-    const ids = new Set(filteredAgents.map((a) => a.id));
-    handlers.current.forEach((_, id) => { if (!ids.has(id)) handlers.current.delete(id); });
-  }, [filteredAgents]);
-
-  return (
-    <motion.div
-      key={activeIndustry + "-grid"}
-      className="agent-grid"
-      initial={{ opacity: 0, y: 14 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-    >
-      {filteredAgents.map((agent, i) => (
-        <motion.div
-          key={agent.id}
-          initial={{ opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3, delay: i * 0.07, ease: [0.16, 1, 0.3, 1] }}
-        >
-          <AgentCard
-            agent={agent}
-            onLive={handlers.current.get(agent.id)!}
-          />
-        </motion.div>
-      ))}
-    </motion.div>
-  );
-});
-
-// ─── PAGE ────────────────────────────────────────────────────────────
-export default function Page() {
-  const [activeIndustry, setActiveIndustry] = useState<IndustryId>("bfsi");
-  const filteredAgents = agentsByIndustry[activeIndustry] ?? [];
-  const activePipeline = workflowPipelines.find((p) => p.industry === activeIndustry)!;
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => entries.forEach((e) => {
-        if (e.isIntersecting) { e.target.classList.add("visible"); observer.unobserve(e.target); }
-      }),
-      { threshold: 0.12 }
-    );
-    document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
-  }, []);
-
-  useEffect(() => { document.documentElement.setAttribute("data-industry", activeIndustry); }, [activeIndustry]);
-  useEffect(() => () => clearAll(), []);
-
-  const scrollTo = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-
-  const handleIndustryChange = useCallback((id: IndustryId) => {
-    setActiveIndustry(id);
-  }, []);
-
-  return (
-    <div style={{ minHeight: "100vh", background: "#F8F9FC" }}>
-      <Navbar />
-
-      {/* ── HERO ── */}
-      <header className="hero">
-        <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 2rem" }}>
-          <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}>
-            <p style={{ fontSize: "1rem", fontWeight: 400, color: "#374151", marginBottom: "0.75rem" }}>
-              Your Award-Winning AI Voice Technology Partner Delivering
-            </p>
             <h1 className="hero-title">
-              Enterprise AI Voice Agents<br />That Scale Operations
+              AI Voice Agents for<br />
+              <span style={{ color: "#4F46E5" }}>Every Industry</span>
             </h1>
             <p className="hero-subtitle">
-              Deploy AI voice agents for customer support, appointment booking, lead qualification,
-              collections, hospitality, healthcare, and banking. End-to-end automation without a
-              human in the loop.
-            </p>
-            <p style={{ fontSize: "0.9375rem", fontWeight: 700, color: "#111827", marginBottom: "2rem" }}>
-              Scale Faster. Automate Smarter. Operate Confidently.
+              Inbound call handling and outbound outreach automation.<br />
+              AI that answers, qualifies, books, and follows up 24/7.
             </p>
             <div className="hero-cta">
-              <button className="btn-primary-cta" onClick={() => scrollTo("contact-section")}>
-                Book a Consultation
-              </button>
-              <button className="btn-secondary-cta" onClick={() => scrollTo("agents-section")}>
-                <Phone size={15} /> Talk to an AI Agent
-              </button>
+              <button className="btn btn-primary">Book a Demo <ArrowRight size={16} /></button>
+              <button className="btn btn-outline">See Agent Demos</button>
             </div>
+            <p style={{ marginTop: "1.5rem", fontSize: "0.875rem", color: "#6B7280" }}>
+              No em dashes here. Just clear pricing and results.
+            </p>
           </motion.div>
         </div>
-      </header>
+      </section>
 
-      {/* ── AGENTS ── */}
-      <section id="agents-section" className="max-w-7xl mx-auto px-6" style={{ paddingTop: "5rem" }}>
-        <div className="section-header reveal">
-          <div>
-            <div className="section-eyebrow">Live AI Voice Agents</div>
-            <h2 className="section-title">
-              Select an industry.<br />
-              <span className="section-title-italic">Experience a live agent.</span>
-            </h2>
-          </div>
-          <div className="industry-tabs" role="tablist" aria-label="Industries">
-            {industries.map((ind) => (
-              <button
-                key={ind.id} role="tab"
-                aria-selected={activeIndustry === ind.id}
-                onClick={() => handleIndustryChange(ind.id)}
-                className={"industry-tab" + (activeIndustry === ind.id ? " industry-tab--active" : "")}
-              >{ind.name}</button>
+      {/* Stats */}
+      <section style={{ padding: "3rem 0", background: "#F9FAFB", borderTop: "1px solid #E5E7EB", borderBottom: "1px solid #E5E7EB" }}>
+        <div className="container">
+          <div className="stats-grid">
+            {[{ v: "2M+", l: "Calls Handled" }, { v: "500+", l: "Businesses" }, { v: "40%", l: "Cost Reduction" }, { v: "99.9%", l: "Uptime" }].map((s) => (
+              <div key={s.l} className="stat-item">
+                <div className="stat-value">{s.v}</div>
+                <div className="stat-label">{s.l}</div>
+              </div>
             ))}
           </div>
         </div>
-        <div role="tabpanel">
-          <AgentGrid activeIndustry={activeIndustry} filteredAgents={filteredAgents} />
-        </div>
       </section>
 
-      {/* ── WORKFLOW PIPELINE ── */}
-      <section id="workflow-section" className="max-w-7xl mx-auto px-6 reveal" style={{ marginTop: "6rem" }}>
-        <div className="section-header" style={{ marginBottom: "2.5rem" }}>
-          <div>
-            <div className="section-eyebrow">End-to-End Workflow</div>
-            <h2 className="section-title">
-              What the agent<br />
-              <span className="section-title-italic">actually resolves.</span>
-            </h2>
+      {/* Industry Tabs */}
+      <section className="section">
+        <div className="container">
+          <div style={{ textAlign: "center", marginBottom: "2.5rem" }}>
+            <p style={{ fontSize: "0.75rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#4F46E5", marginBottom: "0.5rem" }}>Industries</p>
+            <h2 className="section-title">AI agents built for your industry</h2>
+          </div>
+          <div className="industry-tabs">
+            {industries.map((ind) => (
+              <button
+                key={ind.id}
+                onClick={() => setActiveIndustry(ind.id)}
+                className={`industry-tab ${activeIndustry === ind.id ? "active" : ""}`}
+                style={{ "--tab-color": ind.color } as React.CSSProperties}
+              >
+                <ind.icon size={18} />
+                {ind.name}
+              </button>
+            ))}
+          </div>
+
+          {/* Agent Demo Cards */}
+          <div className="agent-grid">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeIndustry}
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+                style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "1.5rem", width: "100%" }}
+              >
+                {currentAgents.map((agent) => (
+                  <div key={agent.name} className="agent-card">
+                    <div className="agent-header">
+                      <div>
+                        <div className="agent-type-badge">{agent.type}</div>
+                        <h3 className="agent-name">{agent.name}</h3>
+                        <p className="agent-role">{agent.role}</p>
+                      </div>
+                    </div>
+                    <p className="agent-description">{agent.description}</p>
+                    <div className="agent-capabilities">
+                      {agent.capabilities.map((cap) => (
+                        <span key={cap} className="capability-tag">{cap}</span>
+                      ))}
+                    </div>
+                    <button className="btn btn-primary" style={{ width: "100%", marginTop: "1rem", justifyContent: "center" }} onClick={() => startCall(agent.retellId, agent.name)}>
+                      <Phone size={16} /> Try Demo
+                    </button>
+                  </div>
+                ))}
+              </motion.div>
+            </AnimatePresence>
           </div>
         </div>
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={activeIndustry + "-pipeline"}
-            initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <WorkflowPipelineCard pipeline={activePipeline} />
-          </motion.div>
-        </AnimatePresence>
       </section>
 
-      {/* ── CTA BANNER ── */}
-      <section className="max-w-7xl mx-auto px-6 reveal" style={{ marginTop: "5rem" }}>
-        <div className="cta-banner">
-          <div className="cta-banner-content">
-            <h2 className="cta-banner-title">
-              Ready to automate your operations?
-            </h2>
-            <p className="cta-banner-subtitle">
-              Speak with a solutions engineer. We'll design a pilot agent around your real workflows — deployed and measured in 8 weeks.
-            </p>
-            <div className="hero-cta" style={{ justifyContent: "center", marginTop: 0 }}>
-              <button className="btn-primary-cta" onClick={() => scrollTo("contact-section")}>
-                Book a Consultation <ArrowRight size={15} />
-              </button>
-              <button className="btn-secondary-cta" onClick={() => scrollTo("agents-section")}>
-                View Live Agents
-              </button>
+      {/* How It Works */}
+      <section className="section section-alt">
+        <div className="container">
+          <div style={{ textAlign: "center", marginBottom: "3rem" }}>
+            <p style={{ fontSize: "0.75rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#4F46E5", marginBottom: "0.5rem" }}>How It Works</p>
+            <h2 className="section-title">From ring to resolution in one call</h2>
+          </div>
+          <div className="steps-list">
+            {[
+              { n: "01", title: "Answer", desc: "AI picks up every call 24/7, even when you are off the clock." },
+              { n: "02", title: "Qualify", desc: "Collects details, checks availability, and understands intent." },
+              { n: "03", title: "Resolve", desc: "Books appointments, processes requests, and follows up automatically." },
+            ].map((step) => (
+              <div key={step.n} className="step-item">
+                <div className="step-number">{step.n}</div>
+                <div className="step-content">
+                  <h3>{step.title}</h3>
+                  <p>{step.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Integrations */}
+      <section className="section">
+        <div className="container">
+          <div style={{ textAlign: "center", marginBottom: "3rem" }}>
+            <p style={{ fontSize: "0.75rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#4F46E5", marginBottom: "0.5rem" }}>Integrations</p>
+            <h2 className="section-title">Works with your existing tools</h2>
+          </div>
+          <div className="integrations-grid">
+            {integrations.map((int) => (
+              <div key={int.name} className="integration-card">
+                <div className="integration-logo">{int.name.charAt(0)}</div>
+                <h3 className="integration-name">{int.name}</h3>
+                <p className="integration-desc">{int.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing */}
+      <section className="section section-alt">
+        <div className="container">
+          <div style={{ textAlign: "center", marginBottom: "3rem" }}>
+            <p style={{ fontSize: "0.75rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#4F46E5", marginBottom: "0.5rem" }}>Pricing</p>
+            <h2 className="section-title">Simple, transparent pricing</h2>
+          </div>
+          <div className="pricing-grid">
+            {[
+              { name: "Growth", setup: "$199", monthly: "$99", desc: "Perfect for small teams and startups", feats: ["Up to 100 calls per month", "24/7 AI answering", "Appointment booking", "1 integration", "Email support"] },
+              { name: "Pro", setup: "$499", monthly: "$249", desc: "For established businesses ready to scale", feats: ["Unlimited calls", "24/7 AI answering", "Lead qualification", "All integrations", "Priority support", "Analytics dashboard"], popular: true },
+            ].map((p) => (
+              <div key={p.name} className={`pricing-card ${p.popular ? "popular" : ""}`}>
+                {p.popular && <span className="pricing-badge">Most Popular</span>}
+                <h3 className="pricing-name">{p.name}</h3>
+                <div style={{ display: "flex", gap: "0.5rem", alignItems: "baseline", justifyContent: "center", marginBottom: "0.5rem" }}>
+                  <span className="pricing-price">{p.monthly}</span>
+                  <span style={{ color: "#6B7280", fontSize: "1rem" }}>/month</span>
+                </div>
+                <p style={{ fontSize: "0.875rem", color: "#6B7280", marginBottom: "0.5rem" }}>+ {p.setup} setup fee</p>
+                <p className="pricing-desc">{p.desc}</p>
+                <ul className="pricing-features">
+                  {p.feats.map((f) => (
+                    <li key={f}><Check size={16} style={{ color: "#4F46E5" }} /> {f}</li>
+                  ))}
+                </ul>
+                <button className="btn btn-primary" style={{ width: "100%", justifyContent: "center" }}>
+                  Get Started <ArrowRight size={16} />
+                </button>
+              </div>
+            ))}
+          </div>
+          <p style={{ textAlign: "center", marginTop: "2rem", fontSize: "0.875rem", color: "#6B7280" }}>
+            Enterprise plans available with custom pricing and dedicated support
+          </p>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="section">
+        <div className="container">
+          <div style={{ textAlign: "center", marginBottom: "3rem" }}>
+            <p style={{ fontSize: "0.75rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#4F46E5", marginBottom: "0.5rem" }}>FAQ</p>
+            <h2 className="section-title">Common questions answered</h2>
+          </div>
+          <div className="faq-list">
+            {faqs.map((f, i) => (
+              <div key={i} className="faq-item">
+                <button className="faq-question" onClick={() => setOpenFaq(openFaq === i ? null : i)}>
+                  <span>{f.q}</span>
+                  <ChevronDown size={20} className={`faq-chevron ${openFaq === i ? "open" : ""}`} />
+                </button>
+                {openFaq === i && <div className="faq-answer"><p>{f.a}</p></div>}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section style={{ padding: "6rem 0", background: "#4F46E5", textAlign: "center" }}>
+        <div className="container">
+          <h2 style={{ fontSize: "clamp(1.875rem, 4vw, 2.5rem)", fontWeight: 700, color: "#fff", marginBottom: "1rem", letterSpacing: "-0.025em" }}>
+            Ready to automate your calls?
+          </h2>
+          <p style={{ fontSize: "1.125rem", color: "rgba(255,255,255,0.8)", marginBottom: "2rem" }}>
+            Book a free demo and see how AI voice agents can transform your business.
+          </p>
+          <button className="btn" style={{ background: "#fff", color: "#4F46E5", padding: "1rem 2rem", fontSize: "1rem" }}>
+            Book a Free Demo <ArrowRight size={16} />
+          </button>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="footer">
+        <div className="container">
+          <div className="footer-grid">
+            <div className="footer-brand">
+              <Image src="/enlight-lab-logo.png" alt="Enlight Lab" width={120} height={28} style={{ filter: "brightness(0) invert(1)", objectFit: "contain" }} />
+              <p className="footer-tagline">AI voice agents for every industry and use case.</p>
+            </div>
+            {footerLinks.map((col) => (
+              <div key={col.title}>
+                <div className="footer-col-title">{col.title}</div>
+                <div className="footer-col-links">
+                  {col.links.map((l) => <button key={l} className="footer-col-link">{l}</button>)}
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="footer-bottom">
+            <p className="footer-copy">Copyright 2026 Voice by Enlight Lab</p>
+            <div style={{ display: "flex", gap: "1.5rem" }}>
+              <button className="footer-col-link">Privacy Policy</button>
+              <button className="footer-col-link">Terms of Use</button>
             </div>
           </div>
         </div>
-      </section>
-
-      <Footer />
-      <CallModal />
+      </footer>
     </div>
   );
 }

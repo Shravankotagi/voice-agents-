@@ -24,7 +24,7 @@ const instrument = Instrument_Serif({
 });
 
 export const metadata: Metadata = {
-  title: "Enlights AI — Enterprise AI Voice Agents",
+  title: "Voice by Enlight Lab — Enterprise AI Voice Agents",
   description:
     "Deploy production-grade AI voice agents for Healthcare, BFSI, Hospitality, Ecommerce, and EdTech. Automate customer support, appointment booking, fraud resolution, and more.",
   keywords: [
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     "BFSI AI",
   ],
   openGraph: {
-    title: "Enlights AI — Enterprise AI Voice Agents",
+    title: "Voice by Enlight Lab — Enterprise AI Voice Agents",
     description:
       "Production-grade AI voice agents that handle real end-to-end workflows without a human in the loop.",
     type: "website",
