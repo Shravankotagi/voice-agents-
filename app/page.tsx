@@ -133,7 +133,7 @@ export default function HomePage() {
       {/* Hero */}
       <section style={{ padding: "5rem 0 4rem", background: "#fff" }}>
         <div className="container" style={{ maxWidth: "1280px" }}>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "4rem", alignItems: "center" }}>
+          <div className="hero-grid">
             
             {/* Left: Text */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>

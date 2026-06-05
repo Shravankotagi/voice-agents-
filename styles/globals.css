@@ -573,18 +573,63 @@ h1, h2, h3 { color: var(--text-primary); font-weight: 700; }
 }
 
 /* ── Mobile Responsive ── */
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
 @media (max-width: 768px) {
+
+  /* Hero */
+  .hero-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
 
   /* Navbar */
   .nav-links { display: none; }
   .navbar .container { height: 70px; }
 
-  /* Hero 2-col grid → stack */
-  section > .container > div[style*="grid-template-columns: 1fr 1fr"] {
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 2rem !important;
+  /* Sections padding */
+  .section { padding: 3rem 0; }
+  .container { padding: 0 1rem; }
+
+  /* Industry tabs scroll */
+  .industry-tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    justify-content: flex-start;
+    padding-bottom: 0.5rem;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
   }
+  .industry-tabs::-webkit-scrollbar { display: none; }
+  .industry-tab { flex-shrink: 0; }
+
+  /* Footer */
+  .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
+  .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
+
+  /* Testimonials */
+  div[style*="grid-template-columns: repeat(3, 1fr)"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Stats */
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+
+  /* Section title */
+  .section-title { font-size: 1.75rem; }
+
+  /* Pricing */
+  .pricing-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 480px) {
+  .footer-grid { grid-template-columns: 1fr; }
+}
 
   /* Hero agent cards grid → 2 col */
   section > .container > div > div[style*="grid-template-columns: 1fr 1fr"] {
