@@ -2,8 +2,9 @@ import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
+    console.log("API KEY LOADED:", process.env.RETELL_API_KEY);
     const { agentId } = await req.json();
-
+    
     const response = await fetch(
       "https://api.retellai.com/v2/create-web-call",
       {

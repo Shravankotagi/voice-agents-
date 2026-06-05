@@ -5,6 +5,7 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, Check, ChevronDown, Phone, Calendar, MessageSquare, Shield, Users, TrendingUp, Clock, Star, Heart, ShoppingCart, Building, Home, Building2, Zap, Users2 } from "lucide-react";
 import { useCallStore } from "@/store/callStore";
+import {LayoutTemplate, Settings2, Plug, Rocket } from "lucide-react";
 
 const industries = [
   { id: "healthcare", name: "Healthcare", icon: Heart, color: "#a78bfa" },
@@ -84,6 +85,7 @@ async function startCall(agentId: string, agentName: string) {
 export default function HomePage() {
   const [activeIndustry, setActiveIndustry] = useState("healthcare");
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [activePlan, setActivePlan] = useState("Growth");
   const currentAgents = agents[activeIndustry] || [];
 
   return (
@@ -92,44 +94,86 @@ export default function HomePage() {
       <nav className="navbar">
         <div className="container">
           <div className="nav-brand">
-            <Image src="/enlight-lab-logo.png" alt="Enlight Lab" width={140} height={32} style={{ objectFit: "contain" }} />
+            <Image src="/enlight-lab-logo.png" alt="Enlight Lab" width={200} height={42} style={{ objectFit: "contain" }} />
           </div>
           <div className="nav-links">
-            <button className="nav-link">How It Works</button>
-            <button className="nav-link">Industries</button>
-            <button className="nav-link">Pricing</button>
-            <button className="nav-link">FAQ</button>
+            <button className="nav-link" onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })}>How It Works</button>
+            <button className="nav-link" onClick={() => document.getElementById('industries')?.scrollIntoView({ behavior: 'smooth' })}>Industries</button>
+            <button className="nav-link" onClick={() => document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' })}>Pricing</button>
+            <button className="nav-link" onClick={() => document.getElementById('faq')?.scrollIntoView({ behavior: 'smooth' })}>FAQ</button>
           </div>
-          <button className="btn btn-primary" style={{ padding: "0.5rem 1.25rem", fontSize: "0.875rem" }}>
+          <a href="https://cal.com/dhananjay-goel/30min" target="_blank" rel="noopener noreferrer" className="btn btn-primary" style={{ padding: "0.5rem 1.25rem", fontSize: "0.875rem" }}>
             Book Demo
-          </button>
+          </a>
         </div>
       </nav>
 
       {/* Hero */}
-      <section className="hero">
-        <div className="container">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-            <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "#F3F4F6", padding: "0.5rem 1rem", borderRadius: "9999px", fontSize: "0.875rem", fontWeight: 500, color: "#6B7280", marginBottom: "1.5rem" }}>
-              <Star size={14} style={{ fill: "#F59E0B", color: "#F59E0B" }} />
-              Trusted by 500+ enterprises worldwide
-            </div>
-            <h1 className="hero-title">
-              AI Voice Agents for<br />
-              <span style={{ color: "#4F46E5" }}>Every Industry</span>
-            </h1>
-            <p className="hero-subtitle">
-              Inbound call handling and outbound outreach automation.<br />
-              AI that answers, qualifies, books, and follows up 24/7.
-            </p>
-            <div className="hero-cta">
-              <button className="btn btn-primary">Book a Demo <ArrowRight size={16} /></button>
-              <button className="btn btn-outline">See Agent Demos</button>
-            </div>
-            <p style={{ marginTop: "1.5rem", fontSize: "0.875rem", color: "#6B7280" }}>
-              No em dashes here. Just clear pricing and results.
-            </p>
-          </motion.div>
+      <section style={{ padding: "5rem 0 4rem", background: "#fff" }}>
+        <div className="container" style={{ maxWidth: "1280px" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "4rem", alignItems: "center" }}>
+            
+            {/* Left: Text */}
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+              <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "#F3F4F6", padding: "0.5rem 1rem", borderRadius: "9999px", fontSize: "0.875rem", fontWeight: 500, color: "#6B7280", marginBottom: "1.5rem" }}>
+                <Star size={14} style={{ fill: "#F59E0B", color: "#F59E0B" }} />
+                Trusted by 500+ enterprises worldwide
+              </div>
+              <h1 style={{ fontSize: "clamp(2.25rem, 4vw, 3.25rem)", fontWeight: 700, letterSpacing: "-0.025em", lineHeight: 1.1, marginBottom: "1.5rem", color: "#111827" }}>
+                AI Voice Agents for<br />
+                <span style={{ color: "#4F46E5" }}>Every Industry</span>
+              </h1>
+              <p style={{ fontSize: "1.25rem", color: "#6B7280", lineHeight: 1.6, marginBottom: "2rem" }}>
+                Industry-Specific AI Voice Agents That Actually Get Work Done
+                From customer support to bookings, sales, and follow ups fully automated, 24/7.
+              </p>
+              <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
+                <a href="https://cal.com/dhananjay-goel/30min" target="_blank" rel="noopener noreferrer" className="btn btn-primary">Book a Demo <ArrowRight size={16} /></a>
+                <button className="btn btn-outline" onClick={() => document.getElementById('industries')?.scrollIntoView({ behavior: 'smooth' })}>See Agent Demos</button>
+              </div>
+              <p style={{ marginTop: "1.5rem", fontSize: "0.875rem", color: "#6B7280" }}>
+                ✓ No credit card required &nbsp;&nbsp; ✓ Setup in 3 days &nbsp;&nbsp; ✓ Cancel anytime
+              </p>
+            </motion.div>
+
+            {/* Right: Agent Cards Grid */}
+            <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6, delay: 0.2 }}>
+              <p style={{ fontSize: "0.75rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#9CA3AF", marginBottom: "1rem", textAlign: "center" }}>
+                ↓ LIVE AGENTS — TAP TO CALL NOW
+              </p>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+                {[
+                  { name: "SARA", role: "Patient Services Agent", color: "#a78bfa", retellId: "agent_b7aeab2c389d64e0ae9ec3d999", industry: "Healthcare" },
+                  { name: "BHASKAR", role: "Banking Fraud Agent", color: "#4f8ef7", retellId: "agent_71e0327cf0a27f63144aa74f09", industry: "BFSI" },
+                  { name: "NIKITA", role: "Reservations Agent", color: "#f472b6", retellId: "agent_c8ad0b041fba067ea02f6ca850", industry: "Hospitality" },
+                  { name: "SAM", role: "Customer Resolution Agent", color: "#fb923c", retellId: "agent_111243055fdd3bec81dacfafbd", industry: "Ecommerce" },
+                ].map((agent) => (
+                  <div
+                    key={agent.name}
+                    onClick={() => startCall(agent.retellId, agent.name)}
+                    style={{ background: "#fff", border: "1px solid #E5E7EB", borderRadius: "16px", padding: "1.25rem", cursor: "pointer", transition: "all 0.2s", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", gap: "0.75rem" }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.boxShadow = `0 8px 24px ${agent.color}33`; (e.currentTarget as HTMLDivElement).style.borderColor = agent.color; }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.boxShadow = "none"; (e.currentTarget as HTMLDivElement).style.borderColor = "#E5E7EB"; }}
+                  >
+                    {/* Avatar circle */}
+                    <div style={{ width: "72px", height: "72px", borderRadius: "50%", background: `radial-gradient(circle at 35% 35%, ${agent.color}cc, ${agent.color})`, boxShadow: `0 4px 16px ${agent.color}66`, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                      <Phone size={24} color="#fff" />
+                    </div>
+                    <div>
+                      <p style={{ fontSize: "0.6875rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", color: "#9CA3AF", marginBottom: "0.25rem" }}>{agent.industry}</p>
+                      <p style={{ fontSize: "1rem", fontWeight: 700, color: "#111827", marginBottom: "0.2rem" }}>{agent.name}</p>
+                      <p style={{ fontSize: "0.75rem", color: "#6B7280" }}>{agent.role}</p>
+                    </div>
+                    <div style={{ display: "flex", alignItems: "center", gap: "0.375rem", background: "#F0FDF4", padding: "0.3rem 0.75rem", borderRadius: "9999px" }}>
+                      <div style={{ width: 7, height: 7, borderRadius: "50%", background: "#10B981" }} />
+                      <span style={{ fontSize: "0.7rem", fontWeight: 600, color: "#10B981" }}>Tap to call</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+
+          </div>
         </div>
       </section>
 
@@ -148,7 +192,7 @@ export default function HomePage() {
       </section>
 
       {/* Industry Tabs */}
-      <section className="section">
+      <section id="industries" className="section">
         <div className="container">
           <div style={{ textAlign: "center", marginBottom: "2.5rem" }}>
             <p style={{ fontSize: "0.75rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#4F46E5", marginBottom: "0.5rem" }}>Industries</p>
@@ -206,7 +250,7 @@ export default function HomePage() {
       </section>
 
       {/* How It Works */}
-      <section className="section section-alt">
+      <section id="how-it-works" className="section section-alt">
         <div className="container">
           <div style={{ textAlign: "center", marginBottom: "3rem" }}>
             <p style={{ fontSize: "0.75rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#4F46E5", marginBottom: "0.5rem" }}>How It Works</p>
@@ -230,8 +274,59 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Up and Running */}
+      <section className="section" style={{ background: "#fff" }}>
+        <div className="container">
+          <div style={{ textAlign: "center", marginBottom: "3rem" }}>
+            <p style={{ fontSize: "0.75rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#4F46E5", marginBottom: "0.5rem" }}>Setup</p>
+            <h2 className="section-title">
+              Up and running in{" "}
+              <span style={{ background: "#4F46E5", color: "#fff", padding: "0.1em 0.4em", borderRadius: "6px" }}>minutes</span>
+            </h2>
+            <p style={{ color: "#6B7280", fontSize: "1rem", marginTop: "0.75rem" }}>No complex setup. No coding required. Just results.</p>
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "1.5rem" }}>
+            {[
+              { n: "01", icon: LayoutTemplate, title: "Pick a Template", desc: "Choose from industry-specific agent templates built for your business type." },
+              { n: "02", icon: Settings2, title: "Customize", desc: "Add your business info, services, pricing, and brand personality." },
+              { n: "03", icon: Plug, title: "Connect Tools", desc: "Link your calendar, CRM, phone number, and booking system." },
+              { n: "04", icon: Rocket, title: "Go Live", desc: "Launch your agent and start answering calls, booking jobs, and capturing leads." },
+            ].map((step, i) => (
+              <motion.div
+                key={step.n}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: i * 0.1 }}
+                style={{ background: "#F9FAFB", border: "1px solid #E5E7EB", borderRadius: "16px", padding: "1.75rem", position: "relative", textAlign: "center" }}
+              >
+                {/* Step number badge */}
+                <div style={{ position: "absolute", top: "-12px", left: "50%", transform: "translateX(-50%)", background: "#4F46E5", color: "#fff", borderRadius: "9999px", width: "28px", height: "28px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.75rem", fontWeight: 700 }}>
+                  {step.n}
+                </div>
+                {/* Icon */}
+                <div style={{ width: "52px", height: "52px", borderRadius: "12px", background: "rgba(79,70,229,0.08)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0.5rem auto 1rem" }}>
+                  <step.icon size={26} color="#4F46E5" strokeWidth={1.5} />
+                </div>
+                {/* Title */}
+                <h3 style={{ fontSize: "0.9375rem", fontWeight: 700, color: "#111827", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "0.75rem" }}>{step.title}</h3>
+                {/* Desc */}
+                <p style={{ fontSize: "0.875rem", color: "#6B7280", lineHeight: 1.6 }}>{step.desc}</p>
+                {/* Connector arrow (not on last) */}
+                {i < 3 && (
+                  <div style={{ position: "absolute", right: "-16px", top: "50%", transform: "translateY(-50%)", color: "#D1D5DB", fontSize: "1.25rem", zIndex: 1 }}>→</div>
+                )}
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Integrations */}
-      <section className="section">
+      <section id="industries" className="section"></section>
+
+      {/* Integrations */}
+      <section id="industries" className="section">
         <div className="container">
           <div style={{ textAlign: "center", marginBottom: "3rem" }}>
             <p style={{ fontSize: "0.75rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#4F46E5", marginBottom: "0.5rem" }}>Integrations</p>
@@ -248,20 +343,75 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+      
+
+
+      {/* Testimonials */}
+      <section className="section">
+        <div className="container">
+          <h2 style={{ textAlign: "center", marginBottom: "2rem" }}>What our customers say</h2>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1.5rem" }}>
+            {[
+              { name: "John D.", biz: "HVAC Business Owner", quote: "Our AI agent books 15+ jobs a week without us lifting a finger." },
+              { name: "Priya M.", biz: "Healthcare Clinic", quote: "SARA handles 80% of our appointment calls. Patients love it." },
+              { name: "Mike R.", biz: "Plumbing Co.", quote: "We never miss a lead now. ROI paid for itself in week one." },
+            ].map(t => (
+              <div key={t.name} style={{ background: "#F9FAFB", borderRadius: "16px", padding: "1.5rem", border: "1px solid #E5E7EB" }}>
+                <div style={{ display: "flex", gap: "0.25rem", marginBottom: "0.75rem" }}>
+                  {[...Array(5)].map((_, i) => <Star key={i} size={14} style={{ fill: "#F59E0B", color: "#F59E0B" }} />)}
+                </div>
+                <p style={{ color: "#374151", marginBottom: "1rem", fontStyle: "italic" }}>"{t.quote}"</p>
+                <p style={{ fontWeight: 600, fontSize: "0.875rem" }}>{t.name}</p>
+                <p style={{ color: "#6B7280", fontSize: "0.75rem" }}>{t.biz}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
 
       {/* Pricing */}
-      <section className="section section-alt">
+      <section id="pricing" className="section section-alt">
         <div className="container">
           <div style={{ textAlign: "center", marginBottom: "3rem" }}>
             <p style={{ fontSize: "0.75rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#4F46E5", marginBottom: "0.5rem" }}>Pricing</p>
             <h2 className="section-title">Simple, transparent pricing</h2>
+            {/* Toggle */}
+            <div style={{ display: "inline-flex", background: "#F3F4F6", borderRadius: "9999px", padding: "0.25rem", marginTop: "1.5rem" }}>
+              {["Growth", "Pro"].map((plan) => (
+                <button
+                  key={plan}
+                  onClick={() => setActivePlan(plan)}
+                  style={{
+                    padding: "0.65rem 2.25rem",
+                    borderRadius: "9999px",
+                    border: "none",
+                    cursor: "pointer",
+                    fontSize: "1rem",
+                    fontWeight: 700,
+                    transition: "all 0.2s",
+                    background: activePlan === plan ? "#4F46E5" : "transparent",
+                    color: activePlan === plan ? "#fff" : "#111827",
+                  }}
+                >
+                  {plan}
+                </button>
+              ))}
+            </div>
           </div>
-          <div className="pricing-grid">
+
+          <div style={{ maxWidth: "480px", margin: "0 auto" }}>
             {[
               { name: "Growth", setup: "$199", monthly: "$99", desc: "Perfect for small teams and startups", feats: ["Up to 100 calls per month", "24/7 AI answering", "Appointment booking", "1 integration", "Email support"] },
               { name: "Pro", setup: "$499", monthly: "$249", desc: "For established businesses ready to scale", feats: ["Unlimited calls", "24/7 AI answering", "Lead qualification", "All integrations", "Priority support", "Analytics dashboard"], popular: true },
-            ].map((p) => (
-              <div key={p.name} className={`pricing-card ${p.popular ? "popular" : ""}`}>
+            ].filter((p) => p.name === activePlan).map((p) => (
+              <motion.div
+                key={p.name}
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+                className={`pricing-card ${p.popular ? "popular" : ""}`}
+              >
                 {p.popular && <span className="pricing-badge">Most Popular</span>}
                 <h3 className="pricing-name">{p.name}</h3>
                 <div style={{ display: "flex", gap: "0.5rem", alignItems: "baseline", justifyContent: "center", marginBottom: "0.5rem" }}>
@@ -275,12 +425,13 @@ export default function HomePage() {
                     <li key={f}><Check size={16} style={{ color: "#4F46E5" }} /> {f}</li>
                   ))}
                 </ul>
-                <button className="btn btn-primary" style={{ width: "100%", justifyContent: "center" }}>
+                <a href="https://cal.com/dhananjay-goel/30min" target="_blank" rel="noopener noreferrer" className="btn btn-primary" style={{ width: "100%", justifyContent: "center", display: "flex" }}>
                   Get Started <ArrowRight size={16} />
-                </button>
-              </div>
+                </a>
+              </motion.div>
             ))}
           </div>
+
           <p style={{ textAlign: "center", marginTop: "2rem", fontSize: "0.875rem", color: "#6B7280" }}>
             Enterprise plans available with custom pricing and dedicated support
           </p>
@@ -288,7 +439,7 @@ export default function HomePage() {
       </section>
 
       {/* FAQ */}
-      <section className="section">
+      <section id="faq" className="section">
         <div className="container">
           <div style={{ textAlign: "center", marginBottom: "3rem" }}>
             <p style={{ fontSize: "0.75rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#4F46E5", marginBottom: "0.5rem" }}>FAQ</p>
@@ -317,9 +468,9 @@ export default function HomePage() {
           <p style={{ fontSize: "1.125rem", color: "rgba(255,255,255,0.8)", marginBottom: "2rem" }}>
             Book a free demo and see how AI voice agents can transform your business.
           </p>
-          <button className="btn" style={{ background: "#fff", color: "#4F46E5", padding: "1rem 2rem", fontSize: "1rem" }}>
+          <a href="https://cal.com/dhananjay-goel/30min" target="_blank" rel="noopener noreferrer" className="btn" style={{ background: "#fff", color: "#4F46E5", padding: "1rem 2rem", fontSize: "1rem" }}>
             Book a Free Demo <ArrowRight size={16} />
-          </button>
+          </a>
         </div>
       </section>
 
@@ -328,7 +479,7 @@ export default function HomePage() {
         <div className="container">
           <div className="footer-grid">
             <div className="footer-brand">
-              <Image src="/enlight-lab-logo.png" alt="Enlight Lab" width={120} height={28} style={{ filter: "brightness(0) invert(1)", objectFit: "contain" }} />
+              <Image src="/enlight-lab-logo.png" alt="Enlight Lab" width={180} height={42} style={{ filter: "brightness(0) invert(1)", objectFit: "contain" }} />
               <p className="footer-tagline">AI voice agents for every business.</p>
             </div>
             {footerLinks.map((col) => (

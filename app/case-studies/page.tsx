@@ -1257,7 +1257,9 @@ export default function CaseStudiesPage() {
                   lineHeight: 1.6,
                 }}
               >
-                Join 500+ enterprises already transforming their operations with AI voice agents.
+                <button className="btn btn-outline" style={{ color: "#fff", borderColor: "rgba(255,255,255,0.4)" }}>
+                  See Live Demo
+                </button>
               </p>
               <div style={{ display: "flex", gap: "1rem", justifyContent: "center", flexWrap: "wrap" }}>
                 <button

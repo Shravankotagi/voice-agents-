@@ -17,6 +17,7 @@ interface CallState {
   callStatus: string;
   phase: CallPhase;
   demoMode: boolean;
+  _retellClient: any | null;
   startDemo: (agent: Agent) => void;
   startLiveCall: (agent: Agent) => Promise<void>;
   endCall: () => void;
@@ -25,13 +26,14 @@ interface CallState {
   setPhase: (phase: CallPhase) => void;
 }
 
-export const useCallStore = create<CallState>((set) => ({
+export const useCallStore = create<CallState>((set, get) => ({
   callActive: false,
   selectedAgent: null,
   transcript: [],
   callStatus: "Ready",
   phase: "idle",
   demoMode: false,
+  _retellClient: null,
 
   startDemo: (agent: Agent) => {
     set({
@@ -53,9 +55,69 @@ export const useCallStore = create<CallState>((set) => ({
       callStatus: "Connecting...",
       phase: "connecting",
     });
+
+    try {
+      const res = await fetch("/api/retell/create-web-call", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ agentId: agent.retellAgentId }),
+      });
+
+      const data = await res.json();
+
+      if (!data.access_token) {
+        console.error("No access token returned:", data);
+        set({ callStatus: "Failed to connect", phase: "ended", callActive: false });
+        return;
+      }
+
+      const { RetellWebClient } = await import("retell-client-js-sdk");
+      const retellClient = new RetellWebClient();
+
+      // Store client so endCall can stop it
+      set({ _retellClient: retellClient });
+
+      retellClient.on("call_started", () => {
+        set({ callStatus: "Connected", phase: "active" });
+      });
+
+      retellClient.on("call_ended", () => {
+        set({ callActive: false, phase: "ended", callStatus: "Call ended", _retellClient: null });
+      });
+
+      retellClient.on("error", (err) => {
+        console.error("Retell error:", err);
+        set({ callActive: false, phase: "ended", callStatus: "Error", _retellClient: null });
+      });
+
+      retellClient.on("update", (update) => {
+        if (update.transcript) {
+          const messages = update.transcript.map((msg: { role: string; content: string }, index: number) => ({
+            role: msg.role as "agent" | "user",
+            text: msg.content,
+            timestamp: Date.now(),
+            id: `msg-${index}`,
+          }));
+          useCallStore.setState({ transcript: messages });
+        }
+      });
+      await retellClient.startCall({ accessToken: data.access_token });
+
+    } catch (e) {
+      console.error("Failed to start call:", e);
+      set({ callStatus: "Failed to connect", phase: "ended", callActive: false, _retellClient: null });
+    }
   },
 
   endCall: () => {
+    const { _retellClient } = get();
+    if (_retellClient) {
+      try {
+        _retellClient.stopCall();
+      } catch (e) {
+        console.error("Error stopping call:", e);
+      }
+    }
     set({
       callActive: false,
       demoMode: false,
@@ -63,6 +125,7 @@ export const useCallStore = create<CallState>((set) => ({
       transcript: [],
       callStatus: "Ready",
       phase: "idle",
+      _retellClient: null,
     });
   },
 

@@ -99,7 +99,7 @@ h1, h2, h3 { color: var(--text-primary); font-weight: 700; }
   border-bottom: 1px solid var(--border);
 }
 .navbar .container {
-  height: 56px;
+  height: 100px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -132,7 +132,7 @@ h1, h2, h3 { color: var(--text-primary); font-weight: 700; }
   gap: 2rem;
 }
 .nav-link {
-  font-size: 0.875rem;
+  font-size: 1.125rem;
   font-weight: 500;
   color: var(--text-muted);
   background: none;

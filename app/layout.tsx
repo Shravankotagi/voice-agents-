@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Poppins, Instrument_Serif } from "next/font/google";
 import "../styles/globals.css";
+import CallModal from "@/components/CallModal";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -54,7 +55,10 @@ export default function RootLayout({
       data-theme="light"
       className={`${inter.variable} ${poppins.variable} ${instrument.variable}`}
     >
-      <body>{children}</body>
+      <body>
+        <CallModal />
+        {children}
+        </body>
     </html>
   );
 }
