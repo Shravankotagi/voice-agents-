@@ -61,19 +61,41 @@ const faqs = [
 ];
 
 const footerLinks = [
-  { title: "Services", links: ["Inbound Agents", "Outbound Agents", "Appointment Booking", "Lead Qualification", "CRM Integration"] },
-  { title: "Industries", links: ["Healthcare", "Ecommerce", "BFSI", "Home Services", "Real Estate", "Hospitality"] },
-  { title: "Company", links: ["About Us", "Case Studies", "Pricing", "Contact", "Blog"] },
-  { title: "Legal", links: ["Privacy Policy", "Terms of Service", "Cookie Policy"] },
+  { title: "Services", links: [
+    { label: "Inbound Agents", href: "/services/inbound-agents" },
+    { label: "Outbound Agents", href: "/services/outbound-agents" },
+    { label: "Appointment Booking", href: "/services/appointment-booking" },
+    { label: "Lead Qualification", href: "/services/lead-qualification" },
+    { label: "CRM Integration", href: "/services/crm-integration" },
+  ]},
+  { title: "Industries", links: [
+    { label: "Healthcare", href: "/industries/healthcare" },
+    { label: "Ecommerce", href: "/industries/ecommerce" },
+    { label: "BFSI", href: "/industries/bfsi" },
+    { label: "Home Services", href: "/industries/home-services" },
+    { label: "Real Estate", href: "/industries/real-estate" },
+    { label: "Hospitality", href: "/industries/hospitality" },
+  ]},
+  { title: "Company", links: [
+    { label: "About Us", href: "https://enlightlab.com/about" },
+    { label: "Case Studies", href: "https://enlightlab.com/case-studies" },
+    { label: "Contact", href: "https://enlightlab.com/contact" },
+    { label: "Blog", href: "https://enlightlab.com/blog" },
+  ]},
+  { title: "Legal", links: [
+    { label: "Privacy Policy", href: "https://enlightlab.com/privacy" },
+    { label: "Terms of Service", href: "https://enlightlab.com/terms" },
+    { label: "Cookie Policy", href: "https://enlightlab.com/cookies" },
+  ]},
 ];
 
-async function startCall(agentId: string, agentName: string) {
+async function startCall(agentId: string, agentName: string, agentRole: string = "Demo Agent") {
   try {
     const { startLiveCall } = useCallStore.getState();
     const agent = {
       id: agentName.toLowerCase().replace(" ", "-"),
       name: agentName,
-      role: "Demo Agent",
+      role: agentRole,
       retellAgentId: agentId,
     };
     await startLiveCall(agent as any);
@@ -323,9 +345,6 @@ export default function HomePage() {
       </section>
 
       {/* Integrations */}
-      <section id="industries" className="section"></section>
-
-      {/* Integrations */}
       <section id="industries" className="section">
         <div className="container">
           <div style={{ textAlign: "center", marginBottom: "3rem" }}>
@@ -368,76 +387,6 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
-
-      {/* Pricing */}
-      <section id="pricing" className="section section-alt">
-        <div className="container">
-          <div style={{ textAlign: "center", marginBottom: "3rem" }}>
-            <p style={{ fontSize: "0.75rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#4F46E5", marginBottom: "0.5rem" }}>Pricing</p>
-            <h2 className="section-title">Simple, transparent pricing</h2>
-            {/* Toggle */}
-            <div style={{ display: "inline-flex", background: "#F3F4F6", borderRadius: "9999px", padding: "0.25rem", marginTop: "1.5rem" }}>
-              {["Growth", "Pro"].map((plan) => (
-                <button
-                  key={plan}
-                  onClick={() => setActivePlan(plan)}
-                  style={{
-                    padding: "0.65rem 2.25rem",
-                    borderRadius: "9999px",
-                    border: "none",
-                    cursor: "pointer",
-                    fontSize: "1rem",
-                    fontWeight: 700,
-                    transition: "all 0.2s",
-                    background: activePlan === plan ? "#4F46E5" : "transparent",
-                    color: activePlan === plan ? "#fff" : "#111827",
-                  }}
-                >
-                  {plan}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div style={{ maxWidth: "480px", margin: "0 auto" }}>
-            {[
-              { name: "Growth", setup: "$199", monthly: "$99", desc: "Perfect for small teams and startups", feats: ["Up to 100 calls per month", "24/7 AI answering", "Appointment booking", "1 integration", "Email support"] },
-              { name: "Pro", setup: "$499", monthly: "$249", desc: "For established businesses ready to scale", feats: ["Unlimited calls", "24/7 AI answering", "Lead qualification", "All integrations", "Priority support", "Analytics dashboard"], popular: true },
-            ].filter((p) => p.name === activePlan).map((p) => (
-              <motion.div
-                key={p.name}
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3 }}
-                className={`pricing-card ${p.popular ? "popular" : ""}`}
-              >
-                {p.popular && <span className="pricing-badge">Most Popular</span>}
-                <h3 className="pricing-name">{p.name}</h3>
-                <div style={{ display: "flex", gap: "0.5rem", alignItems: "baseline", justifyContent: "center", marginBottom: "0.5rem" }}>
-                  <span className="pricing-price">{p.monthly}</span>
-                  <span style={{ color: "#6B7280", fontSize: "1rem" }}>/month</span>
-                </div>
-                <p style={{ fontSize: "0.875rem", color: "#6B7280", marginBottom: "0.5rem" }}>+ {p.setup} setup fee</p>
-                <p className="pricing-desc">{p.desc}</p>
-                <ul className="pricing-features">
-                  {p.feats.map((f) => (
-                    <li key={f}><Check size={16} style={{ color: "#4F46E5" }} /> {f}</li>
-                  ))}
-                </ul>
-                <a href="https://cal.com/dhananjay-goel/30min" target="_blank" rel="noopener noreferrer" className="btn btn-primary" style={{ width: "100%", justifyContent: "center", display: "flex" }}>
-                  Get Started <ArrowRight size={16} />
-                </a>
-              </motion.div>
-            ))}
-          </div>
-
-          <p style={{ textAlign: "center", marginTop: "2rem", fontSize: "0.875rem", color: "#6B7280" }}>
-            Enterprise plans available with custom pricing and dedicated support
-          </p>
-        </div>
-      </section>
-
       {/* FAQ */}
       <section id="faq" className="section">
         <div className="container">
@@ -486,7 +435,9 @@ export default function HomePage() {
               <div key={col.title}>
                 <div className="footer-col-title">{col.title}</div>
                 <div className="footer-col-links">
-                  {col.links.map((l) => <button key={l} className="footer-col-link">{l}</button>)}
+                  {col.links.map((l) => (
+                    <a key={l.label} href={l.href} target="_blank" rel="noopener noreferrer" className="footer-col-link">{l.label}</a>
+                  ))}
                 </div>
               </div>
             ))}
@@ -494,8 +445,8 @@ export default function HomePage() {
           <div className="footer-bottom">
             <p className="footer-copy">Copyright 2026 Voice by Enlight Lab</p>
             <div style={{ display: "flex", gap: "1.5rem" }}>
-              <button className="footer-col-link">Privacy Policy</button>
-              <button className="footer-col-link">Terms of Use</button>
+              <a href="https://enlightlab.com/privacy" target="_blank" rel="noopener noreferrer" className="footer-col-link">Privacy Policy</a>
+              <a href="https://enlightlab.com/website-service-usage-terms-conditions/" target="_blank" rel="noopener noreferrer" className="footer-col-link">Terms of Use</a>
             </div>
           </div>
         </div>
