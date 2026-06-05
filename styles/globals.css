@@ -675,7 +675,7 @@ h1, h2, h3 { color: var(--text-primary); font-weight: 700; }
 
   /* Section title size */
   .section-title { font-size: 1.75rem; }
-}
+
 
 @media (max-width: 480px) {
   /* Agent cards 1 col on very small screens */
