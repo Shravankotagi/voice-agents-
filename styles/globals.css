@@ -684,3 +684,20 @@ h1, h2, h3 { color: var(--text-primary); font-weight: 700; }
   }
   .footer-grid { grid-template-columns: 1fr; }
 }
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .hero-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  .hero-grid > div:last-child {
+    width: 100%;
+  }
+}
