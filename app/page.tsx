@@ -119,6 +119,7 @@ export default function HomePage() {
             <Image src="/enlight-lab-logo.png" alt="Enlight Lab" width={200} height={42} style={{ objectFit: "contain" }} />
           </div>
           <div className="nav-links">
+            <button className="nav-link" onClick={() => document.getElementById('solutions')?.scrollIntoView({ behavior: 'smooth' })}>Solutions</button>
             <button className="nav-link" onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}>Features</button>
             <button className="nav-link" onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })}>How It Works</button>
             <button className="nav-link" onClick={() => document.getElementById('industries')?.scrollIntoView({ behavior: 'smooth' })}>Industries</button>
@@ -290,39 +291,175 @@ export default function HomePage() {
           {/* Agent Demo Cards */}
           <div className="agent-grid">
             <AnimatePresence mode="wait">
-              <motion.div
-                key={activeIndustry}
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.3 }}
-                style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "1.5rem", width: "100%" }}
-              >
-                {currentAgents.map((agent) => (
-                  <div key={agent.name} className="agent-card">
-                    <div className="agent-header">
-                      <div>
-                        <div className="agent-type-badge">{agent.type}</div>
-                        <h3 className="agent-name">{agent.name}</h3>
-                        <p className="agent-role">{agent.role}</p>
+            <motion.div
+              key={activeIndustry}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              style={{ marginTop: "2rem" }}
+            >
+              {(() => {
+                const industryInfo: Record<string, {
+                  headline: string;
+                  desc: string;
+                  features: string[];
+                  stat: string;
+                  statLabel: string;
+                  color: string;
+                }> = {
+                  healthcare: {
+                    headline: "AI that speaks patient — not tech.",
+                    desc: "From appointment scheduling to clinical screening, our HIPAA-compliant agents handle the full patient communication lifecycle so your staff can focus on care.",
+                    features: ["Schedule & confirm appointments 24/7", "Pre-visit symptom triage & intake", "Insurance verification before visits", "Post-visit follow-up calls", "Emergency routing to on-call staff", "HIPAA compliant by design"],
+                    stat: "92%", statLabel: "of appointment calls automated", color: "#a78bfa",
+                  },
+                  ecommerce: {
+                    headline: "Turn missed calls into completed orders.",
+                    desc: "AI agents recover abandoned carts, resolve support tickets, and drive repeat purchases — all without adding headcount to your support team.",
+                    features: ["Abandoned cart recovery via voice", "Order tracking & delivery updates", "Return & refund authorization", "Upsell during support calls", "Post-purchase review collection", "CRM sync after every interaction"],
+                    stat: "23%", statLabel: "cart recovery rate on average", color: "#fb923c",
+                  },
+                  bfsi: {
+                    headline: "Compliance-ready. Enterprise-grade.",
+                    desc: "Built for the strict compliance demands of banking and insurance. Our agents handle fraud resolution, FNOL filing, and account management with full audit trails.",
+                    features: ["Fraud dispute detection & resolution", "Card blocking & re-issuance", "FNOL filing in under 4 minutes", "Loan inquiry qualification", "Account balance & transaction queries", "RBI, SEBI & IRDAI compliance ready"],
+                    stat: "4 min", statLabel: "average FNOL filing time", color: "#4f8ef7",
+                  },
+                  homeservices: {
+                    headline: "Never miss a job while you're on one.",
+                    desc: "While your team is on-site, our AI agents answer every inbound call, qualify the job, and book the appointment — integrated with ServiceTitan and Jobber.",
+                    features: ["Answer every call 24/7", "Emergency detection & routing", "Job scheduling & dispatch", "Arrival time updates to customers", "Post-service review requests", "ServiceTitan & Jobber integration"],
+                    stat: "15+", statLabel: "jobs booked per week on autopilot", color: "#10b981",
+                  },
+                  realestate: {
+                    headline: "Qualify leads before your agents pick up.",
+                    desc: "AI agents pre-qualify every buyer, seller, and investor lead — collecting requirements, budget, and timeline — so your agents only spend time on sales-ready prospects.",
+                    features: ["Buyer & seller intake qualification", "Investment criteria collection", "Property tour scheduling", "Long-term lead nurturing follow-ups", "CRM auto-logging after every call", "New listing match notifications"],
+                    stat: "3x", statLabel: "more qualified leads for your team", color: "#f59e0b",
+                  },
+                  hospitality: {
+                    headline: "5-star service at every touchpoint.",
+                    desc: "From room reservations to concierge requests, our multilingual agents deliver exceptional guest experiences around the clock — without adding front desk staff.",
+                    features: ["Room booking & modifications", "Dining & spa reservations", "Transportation arrangements", "In-stay service requests", "Multilingual guest support", "Upsell room upgrades automatically"],
+                    stat: "3.2x", statLabel: "more bookings via proactive outreach", color: "#f472b6",
+                  },
+                };
+                const info = industryInfo[activeIndustry];
+                if (!info) return null;
+                return (
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "3rem", alignItems: "center", background: "#F9FAFB", borderRadius: "20px", padding: "2.5rem", border: "1px solid #E5E7EB" }}>
+                    {/* Left */}
+                    <div>
+                      <h3 style={{ fontSize: "clamp(1.5rem, 3vw, 2rem)", fontWeight: 800, color: "#111827", letterSpacing: "-0.025em", lineHeight: 1.2, marginBottom: "1rem" }}>{info.headline}</h3>
+                      <p style={{ fontSize: "1rem", color: "#6B7280", lineHeight: 1.7, marginBottom: "1.75rem" }}>{info.desc}</p>
+                      <div style={{ background: "#fff", border: `1.5px solid ${info.color}40`, borderRadius: "12px", padding: "1.25rem 1.5rem", display: "inline-flex", alignItems: "center", gap: "1rem", marginBottom: "1.75rem" }}>
+                        <span style={{ fontSize: "2.25rem", fontWeight: 800, color: info.color, letterSpacing: "-0.03em" }}>{info.stat}</span>
+                        <span style={{ fontSize: "0.875rem", color: "#6B7280", lineHeight: 1.4, maxWidth: "140px" }}>{info.statLabel}</span>
                       </div>
+                      <br />
+                      <a href="https://cal.com/dhananjay-goel/30min" target="_blank" rel="noopener noreferrer"
+                        style={{ background: info.color, color: "#fff", padding: "0.875rem 1.75rem", borderRadius: "10px", textDecoration: "none", fontWeight: 700, fontSize: "0.9375rem", display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
+                        Book a Demo <ArrowRight size={15} />
+                      </a>
                     </div>
-                    <p className="agent-description">{agent.description}</p>
-                    <div className="agent-capabilities">
-                      {agent.capabilities.map((cap) => (
-                        <span key={cap} className="capability-tag">{cap}</span>
+                    {/* Right: features */}
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem" }}>
+                      {info.features.map((feat) => (
+                        <div key={feat} style={{ display: "flex", alignItems: "flex-start", gap: "0.625rem", background: "#fff", border: "1px solid #E5E7EB", borderRadius: "10px", padding: "0.875rem 1rem" }}>
+                          <Check size={15} color={info.color} strokeWidth={2.5} style={{ flexShrink: 0, marginTop: "2px" }} />
+                          <span style={{ fontSize: "0.8125rem", fontWeight: 500, color: "#374151", lineHeight: 1.4 }}>{feat}</span>
+                        </div>
                       ))}
                     </div>
-                    <button className="btn btn-primary" style={{ width: "100%", marginTop: "1rem", justifyContent: "center" }} onClick={() => startCall(agent.retellId, agent.name)}>
-                      <Phone size={16} /> Try Demo
-                    </button>
                   </div>
-                ))}
-              </motion.div>
-            </AnimatePresence>
+                );
+              })()}
+            </motion.div>
+          </AnimatePresence>
           </div>
         </div>
       </section>
+
+      {/* Hear it for yourself */}
+      <section id="solutions" className="section section-alt">
+        <div className="container">
+          <div style={{ textAlign: "center", marginBottom: "3rem" }}>
+            <p style={{ fontSize: "0.75rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#4F46E5", marginBottom: "0.5rem" }}>Live Demos</p>
+            <h2 className="section-title">
+              HEAR IT{" "}
+              <span style={{ background: "#4F46E5", color: "#fff", padding: "0.1em 0.4em", borderRadius: "6px" }}>FOR YOURSELF.</span>
+            </h2>
+            <p style={{ color: "#6B7280", fontSize: "1rem", marginTop: "0.75rem" }}>Tap any agent to start a live AI call right now.</p>
+          </div>
+          <div className="agents-showcase-grid">
+            {[
+              { name: "SARA", role: "Patient Services Agent", industry: "Healthcare", color: "#a78bfa", retellId: "agent_b7aeab2c389d64e0ae9ec3d999" },
+              { name: "BHASKAR", role: "Banking Fraud Agent", industry: "BFSI", color: "#4f8ef7", retellId: "agent_71e0327cf0a27f63144aa74f09" },
+              { name: "NIKITA", role: "Reservations Agent", industry: "Hospitality", color: "#f472b6", retellId: "agent_c8ad0b041fba067ea02f6ca850" },
+              { name: "SAM", role: "Customer Resolution Agent", industry: "Ecommerce", color: "#fb923c", retellId: "agent_111243055fdd3bec81dacfafbd" },
+              { name: "RIYA", role: "Clinical Screening Agent", industry: "Healthcare", color: "#818cf8", retellId: "agent_cce30852caccbdd3021ef4aa01" },
+              { name: "ARYAN", role: "Insurance Claims Agent", industry: "BFSI", color: "#3b82f6", retellId: "agent_a8945a4965d741e547517361b0" },
+              { name: "MAX", role: "Sales Conversion Agent", industry: "Ecommerce", color: "#f97316", retellId: "agent_c4e856cd16c890eaa1d738e11d" },
+              { name: "LUCKY", role: "Concierge Agent", industry: "Hospitality", color: "#ec4899", retellId: "agent_5ae818c99ed491aba70e90c4ad" },
+              { name: "Ryan Mitchell", role: "Real Estate Agent", industry: "Real Estate", color: "#f59e0b", retellId: "agent_b58c6c076b3e6a2a84d4f96afa" },
+              { name: "Mike Thompson", role: "Plumbing Intake Agent", industry: "Home Services", color: "#10b981", retellId: "agent_7a2e179e5304e28672360a15ee" },
+              { name: "Sarah Johnson", role: "HVAC Scheduling Agent", industry: "Home Services", color: "#059669", retellId: "agent_015cf5b6284d3bb41708fcc29e" },
+              { name: "David Miller", role: "Electrician Quote Agent", industry: "Home Services", color: "#047857", retellId: "agent_8821bb64745c21c48f2526b2b5" },
+            ].map((agent, i) => (
+              <motion.div
+                key={agent.name}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.06 }}
+                onClick={() => startCall(agent.retellId, agent.name, agent.role)}
+                style={{
+                  background: "#fff",
+                  border: "1.5px solid #F3F4F6",
+                  borderRadius: "20px",
+                  padding: "1.75rem 1.25rem",
+                  cursor: "pointer",
+                  transition: "all 0.25s",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  textAlign: "center",
+                  gap: "0.875rem",
+                  boxShadow: "0 2px 12px rgba(0,0,0,0.06)",
+                }}
+                onMouseEnter={e => {
+                  const el = e.currentTarget as HTMLDivElement;
+                  el.style.boxShadow = `0 8px 32px ${agent.color}40`;
+                  el.style.borderColor = `${agent.color}60`;
+                  el.style.transform = "translateY(-4px)";
+                }}
+                onMouseLeave={e => {
+                  const el = e.currentTarget as HTMLDivElement;
+                  el.style.boxShadow = "0 2px 12px rgba(0,0,0,0.06)";
+                  el.style.borderColor = "#F3F4F6";
+                  el.style.transform = "translateY(0)";
+                }}
+              >
+                <div style={{ width: "72px", height: "72px", borderRadius: "50%", background: `radial-gradient(circle at 35% 30%, ${agent.color}ee, ${agent.color})`, boxShadow: `0 4px 16px ${agent.color}66`, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <Phone size={24} color="#fff" strokeWidth={1.75} />
+                </div>
+                <div>
+                  <p style={{ fontSize: "0.6875rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#9CA3AF", marginBottom: "0.3rem" }}>{agent.industry}</p>
+                  <p style={{ fontSize: "1rem", fontWeight: 800, color: "#111827", marginBottom: "0.2rem" }}>{agent.name}</p>
+                  <p style={{ fontSize: "0.75rem", color: "#6B7280" }}>{agent.role}</p>
+                </div>
+                <div style={{ display: "flex", alignItems: "center", gap: "0.375rem", background: "#F0FDF4", border: "1px solid #BBF7D0", padding: "0.35rem 0.875rem", borderRadius: "9999px" }}>
+                  <div style={{ width: 7, height: 7, borderRadius: "50%", background: "#10B981" }} />
+                  <span style={{ fontSize: "0.7rem", fontWeight: 700, color: "#10B981" }}>Tap to call</span>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Features */}
 
       {/* Features */}
       <section id="features" className="section" style={{ background: "#EFF6FF" }}>
@@ -331,7 +468,7 @@ export default function HomePage() {
             <p style={{ fontSize: "0.75rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#4F46E5", marginBottom: "0.5rem" }}>Features</p>
             <h2 className="section-title">
               Answer every call.{" "}
-              <span style={{ background: "#111827", color: "#fff", padding: "0.1em 0.4em", borderRadius: "6px" }}>Book every job.</span>
+              <span style={{ background: "#4F46E5", color: "#fff", padding: "0.1em 0.4em", borderRadius: "6px" }}>Book every job.</span>
             </h2>
             <p style={{ color: "#6B7280", fontSize: "1rem", marginTop: "0.75rem" }}>
               Voice by Enlight Lab handles the phone so you can stay on the job.

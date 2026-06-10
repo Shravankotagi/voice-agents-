@@ -666,3 +666,21 @@ h1, h2, h3 { color: var(--text-primary); font-weight: 700; }
 @media (max-width: 640px) {
   .features-section-grid { grid-template-columns: 1fr; }
 }
+
+/* Agents Showcase Grid */
+.agents-showcase-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+}
+@media (max-width: 1024px) {
+  .agents-showcase-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 640px) {
+  .agents-showcase-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
+  div[style*="grid-template-columns: 1fr 1fr"][style*="borderRadius: \"20px\""] {
+    grid-template-columns: 1fr !important;
+  }
+}
