@@ -41,11 +41,25 @@ export default function LeadQualificationPage() {
             <Image src="/enlight-lab-logo.png" alt="Enlight Lab" width={200} height={42} style={{ objectFit: "contain" }} />
           </div>
           <div className="nav-links">
-            <button className="nav-link" onClick={() => document.getElementById('solutions')?.scrollIntoView({ behavior: 'smooth' })}>Solutions</button>
-            <button className="nav-link" onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}>Features</button>
-            <button className="nav-link" onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })}>How It Works</button>
-            <button className="nav-link" onClick={() => document.getElementById('industries')?.scrollIntoView({ behavior: 'smooth' })}>Industries</button>
-            <button className="nav-link" onClick={() => document.getElementById('faq')?.scrollIntoView({ behavior: 'smooth' })}>FAQ</button>
+            <Link href="/#solutions" className="nav-link">
+              Solutions
+            </Link>
+
+            <Link href="/#features" className="nav-link">
+              Features
+            </Link>
+
+            <Link href="/#how-it-works" className="nav-link">
+              How It Works
+            </Link>
+
+            <Link href="/#industries" className="nav-link">
+              Industries
+            </Link>
+
+            <Link href="/#faq" className="nav-link">
+              FAQ
+            </Link>
           </div>
           <a href="https://cal.com/dhananjay-goel/30min" target="_blank" rel="noopener noreferrer" className="btn btn-primary" style={{ padding: "0.5rem 1.25rem", fontSize: "0.875rem" }}>
             Book Demo

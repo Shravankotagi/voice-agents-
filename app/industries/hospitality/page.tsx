@@ -43,11 +43,25 @@ export default function HomeServicesPage() {
             <Image src="/enlight-lab-logo.png" alt="Enlight Lab" width={200} height={42} style={{ objectFit: "contain" }} />
           </div>
           <div className="nav-links">
-            <button className="nav-link" onClick={() => document.getElementById('solutions')?.scrollIntoView({ behavior: 'smooth' })}>Solutions</button>
-            <button className="nav-link" onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}>Features</button>
-            <button className="nav-link" onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })}>How It Works</button>
-            <button className="nav-link" onClick={() => document.getElementById('industries')?.scrollIntoView({ behavior: 'smooth' })}>Industries</button>
-            <button className="nav-link" onClick={() => document.getElementById('faq')?.scrollIntoView({ behavior: 'smooth' })}>FAQ</button>
+            <Link href="/#solutions" className="nav-link">
+              Solutions
+            </Link>
+
+            <Link href="/#features" className="nav-link">
+              Features
+            </Link>
+
+            <Link href="/#how-it-works" className="nav-link">
+              How It Works
+            </Link>
+
+            <Link href="/#industries" className="nav-link">
+              Industries
+            </Link>
+
+            <Link href="/#faq" className="nav-link">
+              FAQ
+            </Link>
           </div>
           <a href="https://cal.com/dhananjay-goel/30min" target="_blank" rel="noopener noreferrer" className="btn btn-primary" style={{ padding: "0.5rem 1.25rem", fontSize: "0.875rem" }}>
             Book Demo
@@ -94,19 +108,144 @@ export default function HomeServicesPage() {
             <p style={{ fontSize: "0.75rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#f472b6", marginBottom: "0.5rem" }}>Live Agents</p>
             <h2 style={{ fontSize: "clamp(1.75rem, 3vw, 2.5rem)", fontWeight: 800, color: "#111827", letterSpacing: "-0.025em" }}>Your home services AI team</h2>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1.5rem" }}>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(2, 1fr)",
+              gap: "1.5rem",
+              maxWidth: "900px",
+              margin: "0 auto",
+            }}
+          >
             {agents.map((agent, i) => (
-              <motion.div key={agent.name} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}
-                style={{ background: "#fff", border: "1px solid #E5E7EB", borderRadius: "16px", padding: "2rem" }}>
-                <div style={{ width: "64px", height: "64px", borderRadius: "50%", background: `radial-gradient(circle at 35% 35%, ${agent.color}cc, ${agent.color})`, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "1.25rem" }}>
-                  <Phone size={24} color="#fff" />
+              <motion.div
+                key={agent.name}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                onClick={() => startCall(agent.retellId, agent.name, agent.role)}
+                style={{
+                  background: "#fff",
+                  border: "1.5px solid #F3F4F6",
+                  borderRadius: "20px",
+                  padding: "1.75rem 1.25rem",
+                  cursor: "pointer",
+                  transition: "all 0.25s",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  textAlign: "center",
+                  gap: "0.875rem",
+                  boxShadow: "0 2px 12px rgba(0,0,0,0.06)",
+                }}
+                onMouseEnter={e => {
+                  const el = e.currentTarget as HTMLDivElement;
+                  el.style.boxShadow = `0 8px 32px ${agent.color}40`;
+                  el.style.borderColor = `${agent.color}60`;
+                  el.style.transform = "translateY(-4px)";
+                }}
+                onMouseLeave={e => {
+                  const el = e.currentTarget as HTMLDivElement;
+                  el.style.boxShadow = "0 2px 12px rgba(0,0,0,0.06)";
+                  el.style.borderColor = "#F3F4F6";
+                  el.style.transform = "translateY(0)";
+                }}
+              >
+                <div style={{ position: "relative" }}>
+                  <div
+                    style={{
+                      position: "absolute",
+                      inset: "-6px",
+                      borderRadius: "50%",
+                      background: `radial-gradient(circle, ${agent.color}30 0%, transparent 70%)`,
+                    }}
+                  />
+
+                  <div
+                    style={{
+                      width: "90px",
+                      height: "90px",
+                      borderRadius: "50%",
+                      background: `radial-gradient(circle at 35% 30%, ${agent.color}ee, ${agent.color})`,
+                      boxShadow: `0 8px 24px ${agent.color}66, inset 0 -4px 8px rgba(0,0,0,0.15), inset 0 4px 8px rgba(255,255,255,0.3)`,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      position: "relative",
+                    }}
+                  >
+                    <Phone size={28} color="#fff" strokeWidth={1.75} />
+                  </div>
                 </div>
-                <h3 style={{ fontSize: "1.1rem", fontWeight: 800, color: "#111827", marginBottom: "0.25rem" }}>{agent.name}</h3>
-                <p style={{ fontSize: "0.8rem", fontWeight: 600, color: agent.color, marginBottom: "0.75rem" }}>{agent.role}</p>
-                <p style={{ fontSize: "0.875rem", color: "#6B7280", lineHeight: 1.6, marginBottom: "1.25rem" }}>{agent.desc}</p>
-                <button onClick={() => startCall(agent.retellId, agent.name, agent.role)} style={{ background: agent.color, color: "#fff", padding: "0.75rem 1.5rem", borderRadius: "8px", border: "none", cursor: "pointer", fontWeight: 600, fontSize: "0.875rem", display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
-                  <Phone size={14} /> Try Demo
-                </button>
+
+                <div>
+                  <p
+                    style={{
+                      fontSize: "0.6875rem",
+                      fontWeight: 700,
+                      textTransform: "uppercase",
+                      letterSpacing: "0.1em",
+                      color: "#9CA3AF",
+                      marginBottom: "0.3rem",
+                    }}
+                  >
+                    HOSPITALITY
+                  </p>
+
+                  <p
+                    style={{
+                      fontSize: "1.0625rem",
+                      fontWeight: 800,
+                      color: "#111827",
+                      marginBottom: "0.2rem",
+                      letterSpacing: "-0.01em",
+                    }}
+                  >
+                    {agent.name}
+                  </p>
+
+                  <p
+                    style={{
+                      fontSize: "0.75rem",
+                      color: "#6B7280",
+                      lineHeight: 1.4,
+                    }}
+                  >
+                    {agent.role}
+                  </p>
+                </div>
+
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.375rem",
+                    background: "#F0FDF4",
+                    border: "1px solid #BBF7D0",
+                    padding: "0.35rem 0.875rem",
+                    borderRadius: "9999px",
+                  }}
+                >
+                  <div
+                    style={{
+                      width: 7,
+                      height: 7,
+                      borderRadius: "50%",
+                      background: "#10B981",
+                    }}
+                  />
+
+                  <span
+                    style={{
+                      fontSize: "0.7rem",
+                      fontWeight: 700,
+                      color: "#10B981",
+                    }}
+                  >
+                    Tap to call
+                  </span>
+                </div>
               </motion.div>
             ))}
           </div>
@@ -119,7 +258,15 @@ export default function HomeServicesPage() {
             <p style={{ fontSize: "0.75rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#f472b6", marginBottom: "0.5rem" }}>Features</p>
             <h2 style={{ fontSize: "clamp(1.75rem, 3vw, 2.5rem)", fontWeight: 800, color: "#111827", letterSpacing: "-0.025em" }}>Built for field service businesses</h2>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1.5rem" }}>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(2, 1fr)",
+              gap: "1.5rem",
+              maxWidth: "900px",
+              margin: "0 auto",
+            }}
+          >
             {features.map((f, i) => (
               <motion.div key={f.title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }}
                 style={{ background: "#F9FAFB", border: "1px solid #E5E7EB", borderRadius: "16px", padding: "1.75rem" }}>
