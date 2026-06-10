@@ -119,6 +119,7 @@ export default function HomePage() {
             <Image src="/enlight-lab-logo.png" alt="Enlight Lab" width={200} height={42} style={{ objectFit: "contain" }} />
           </div>
           <div className="nav-links">
+            <button className="nav-link" onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}>Features</button>
             <button className="nav-link" onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })}>How It Works</button>
             <button className="nav-link" onClick={() => document.getElementById('industries')?.scrollIntoView({ behavior: 'smooth' })}>Industries</button>
             <button className="nav-link" onClick={() => document.getElementById('faq')?.scrollIntoView({ behavior: 'smooth' })}>FAQ</button>
@@ -322,6 +323,62 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Features */}
+      <section id="features" className="section" style={{ background: "#EFF6FF" }}>
+        <div className="container">
+          <div style={{ textAlign: "center", marginBottom: "3rem" }}>
+            <p style={{ fontSize: "0.75rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#4F46E5", marginBottom: "0.5rem" }}>Features</p>
+            <h2 className="section-title">
+              Answer every call.{" "}
+              <span style={{ background: "#111827", color: "#fff", padding: "0.1em 0.4em", borderRadius: "6px" }}>Book every job.</span>
+            </h2>
+            <p style={{ color: "#6B7280", fontSize: "1rem", marginTop: "0.75rem" }}>
+              Voice by Enlight Lab handles the phone so you can stay on the job.
+            </p>
+          </div>
+          <div className="features-section-grid">
+            {[
+              { color: "#EF4444", icon: Phone, title: "Zero Calls to Voicemail", desc: "While you're on the job, we're on the phone. Every caller gets a real answer — not a recording, not a competitor." },
+              { color: "#3B82F6", icon: Calendar, title: "Your Calendar, Always Full", desc: "New jobs get scheduled in the first call. No callbacks, no back-and-forth, no admin time." },
+              { color: "#10B981", icon: Users, title: "Only Qualified Leads Reach You", desc: "Callers get pre-screened on the spot. Your time goes to prospects worth the drive." },
+              { color: "#F97316", icon: Zap, title: "Quick Answers, Faster Bookings", desc: "Pricing, availability, and service questions handled in the first call — before it ever reaches your team." },
+              { color: "#8B5CF6", icon: Clock, title: "Revenue While You Sleep", desc: "That 11pm emergency call? Answered, qualified, and scheduled before morning." },
+              { color: "#EF4444", icon: Shield, title: "Urgent Calls, Handled Fast", desc: "Emergencies get flagged and routed to the right person immediately. No delays, no dropped balls." },
+              { color: "#3B82F6", icon: TrendingUp, title: "Plugs Into Your Workflow", desc: "Connects to 1,000+ tools — your CRM, calendar, and field service platform — out of the box." },
+              { color: "#F59E0B", icon: MessageSquare, title: "Sounds Like Your Team", desc: "Natural conversations, not robotic menus. Callers feel heard — and they book." },
+            ].map((f, i) => (
+              <motion.div
+                key={f.title}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: i * 0.07 }}
+                style={{
+                  background: "#fff",
+                  border: "1.5px solid #E5E7EB",
+                  borderRadius: "16px",
+                  padding: "1.75rem",
+                  boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
+                  transition: "box-shadow 0.2s, transform 0.2s",
+                }}
+                whileHover={{ y: -4, boxShadow: "0 8px 24px rgba(0,0,0,0.1)" }}
+              >
+                <div style={{
+                  width: "48px", height: "48px", borderRadius: "10px",
+                  background: f.color, display: "flex", alignItems: "center",
+                  justifyContent: "center", marginBottom: "1.25rem",
+                }}>
+                  <f.icon size={22} color="#fff" strokeWidth={2} />
+                </div>
+                <h3 style={{ fontSize: "0.875rem", fontWeight: 700, color: "#111827", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "0.75rem" }}>{f.title}</h3>
+                <p style={{ fontSize: "0.875rem", color: "#6B7280", lineHeight: 1.65 }}>{f.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
 
       {/* How It Works */}
       <section id="how-it-works" className="section section-alt">
