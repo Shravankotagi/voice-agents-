@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Database, CheckCircle2, ArrowRight, RefreshCw, Zap, Shield, BarChart2, Link2, Settings } from "lucide-react";
 import Link from "next/link";
 import Footer from "@/components/Footer/Footer";
+import Image from "next/image";
 const integrations = [
   { name: "HubSpot", color: "#FF7A59" },
   { name: "Salesforce", color: "#00A1E0" },
@@ -33,9 +34,22 @@ const stats = [
 export default function CRMIntegrationPage() {
   return (
     <div style={{ minHeight: "100vh", background: "#fff", fontFamily: "Inter, system-ui, sans-serif" }}>
-      <nav style={{ borderBottom: "1px solid #E5E7EB", padding: "1rem 2rem", display: "flex", alignItems: "center", justifyContent: "space-between", position: "sticky", top: 0, background: "#fff", zIndex: 50 }}>
-        <Link href="/" style={{ fontSize: "1.25rem", fontWeight: 700, color: "#4F46E5", textDecoration: "none" }}>← Back to Home</Link>
-        <a href="https://cal.com/dhananjay-goel/30min" target="_blank" rel="noopener noreferrer" style={{ background: "#4F46E5", color: "#fff", padding: "0.5rem 1.25rem", borderRadius: "8px", textDecoration: "none", fontWeight: 600, fontSize: "0.875rem" }}>Book Demo</a>
+      <nav className="navbar">
+        <div className="container">
+          <div className="nav-brand">
+            <Image src="/enlight-lab-logo.png" alt="Enlight Lab" width={200} height={42} style={{ objectFit: "contain" }} />
+          </div>
+          <div className="nav-links">
+            <button className="nav-link" onClick={() => document.getElementById('solutions')?.scrollIntoView({ behavior: 'smooth' })}>Solutions</button>
+            <button className="nav-link" onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}>Features</button>
+            <button className="nav-link" onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })}>How It Works</button>
+            <button className="nav-link" onClick={() => document.getElementById('industries')?.scrollIntoView({ behavior: 'smooth' })}>Industries</button>
+            <button className="nav-link" onClick={() => document.getElementById('faq')?.scrollIntoView({ behavior: 'smooth' })}>FAQ</button>
+          </div>
+          <a href="https://cal.com/dhananjay-goel/30min" target="_blank" rel="noopener noreferrer" className="btn btn-primary" style={{ padding: "0.5rem 1.25rem", fontSize: "0.875rem" }}>
+            Book Demo
+          </a>
+        </div>
       </nav>
 
       <section style={{ padding: "5rem 2rem", background: "linear-gradient(135deg, #F0F4FF 0%, #fff 100%)", textAlign: "center" }}>

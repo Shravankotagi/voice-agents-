@@ -78,14 +78,9 @@ const footerLinks = [
   ]},
   { title: "Company", links: [
     { label: "About Us", href: "https://enlightlab.com/about" },
-    { label: "Case Studies", href: "https://enlightlab.com/case-studies" },
+    { label: "Case Studies", href: "https://enlightlab.com/case-study/" },
     { label: "Contact", href: "https://enlightlab.com/contact" },
     { label: "Blog", href: "https://enlightlab.com/blog" },
-  ]},
-  { title: "Legal", links: [
-    { label: "Privacy Policy", href: "https://enlightlab.com/privacy" },
-    { label: "Terms of Service", href: "https://enlightlab.com/terms" },
-    { label: "Cookie Policy", href: "https://enlightlab.com/cookies" },
   ]},
 ];
 
@@ -403,9 +398,9 @@ export default function HomePage() {
               { name: "MAX", role: "Sales Conversion Agent", industry: "Ecommerce", color: "#f97316", retellId: "agent_c4e856cd16c890eaa1d738e11d" },
               { name: "LUCKY", role: "Concierge Agent", industry: "Hospitality", color: "#ec4899", retellId: "agent_5ae818c99ed491aba70e90c4ad" },
               { name: "Ryan Mitchell", role: "Real Estate Agent", industry: "Real Estate", color: "#f59e0b", retellId: "agent_b58c6c076b3e6a2a84d4f96afa" },
-              { name: "Mike Thompson", role: "Plumbing Intake Agent", industry: "Home Services", color: "#10b981", retellId: "agent_7a2e179e5304e28672360a15ee" },
-              { name: "Sarah Johnson", role: "HVAC Scheduling Agent", industry: "Home Services", color: "#059669", retellId: "agent_015cf5b6284d3bb41708fcc29e" },
-              { name: "David Miller", role: "Electrician Quote Agent", industry: "Home Services", color: "#047857", retellId: "agent_8821bb64745c21c48f2526b2b5" },
+              { name: "Mike Thompson", role: "Plumbing Intake Agent", industry: "Home Services", color: "#06b6d4", retellId: "agent_7a2e179e5304e28672360a15ee" },
+              { name: "Sarah Johnson", role: "HVAC Scheduling Agent", industry: "Home Services", color: "#8b5cf6", retellId: "agent_015cf5b6284d3bb41708fcc29e" },
+              { name: "David Miller", role: "Electrician Quote Agent", industry: "Home Services", color: "#f43f5e", retellId: "agent_8821bb64745c21c48f2526b2b5" },
             ].map((agent, i) => (
               <motion.div
                 key={agent.name}
@@ -682,7 +677,7 @@ export default function HomePage() {
                 <div className="footer-col-title">{col.title}</div>
                 <div className="footer-col-links">
                   {col.links.map((l) => (
-                    <a key={l.label} href={l.href} target="_blank" rel="noopener noreferrer" className="footer-col-link">{l.label}</a>
+                    <a key={l.label} href={l.href} target="" rel="noopener noreferrer" className="footer-col-link">{l.label}</a>
                   ))}
                 </div>
               </div>
@@ -691,8 +686,8 @@ export default function HomePage() {
           <div className="footer-bottom">
             <p className="footer-copy">Copyright 2026 Voice by Enlight Lab</p>
             <div style={{ display: "flex", gap: "1.5rem" }}>
-              <a href="https://enlightlab.com/privacy" target="_blank" rel="noopener noreferrer" className="footer-col-link">Privacy Policy</a>
-              <a href="https://enlightlab.com/website-service-usage-terms-conditions/" target="_blank" rel="noopener noreferrer" className="footer-col-link">Terms of Use</a>
+              <a href="https://enlightlab.com/privacy" target="" rel="noopener noreferrer" className="footer-col-link">Privacy Policy</a>
+              <a href="https://enlightlab.com/website-service-usage-terms-conditions/" target="" rel="noopener noreferrer" className="footer-col-link">Terms of Use</a>
             </div>
           </div>
         </div>

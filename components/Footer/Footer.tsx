@@ -46,15 +46,7 @@ const footerColumns = [
       
     ],
   },
-  {
-    title: "Legal",
-    links: [
-      { label: "Privacy Policy", href: "https://enlightlab.com" },
-      { label: "Terms of Service", href: "https://enlightlab.com/website-service-usage-terms-conditions/" },
-      { label: "Cookie Policy", href: "https://enlightlab.com" },
-      { label: "GDPR", href: "https://enlightlab.com" },
-    ],
-  },
+  
 ];
 
 const socialLinks = [

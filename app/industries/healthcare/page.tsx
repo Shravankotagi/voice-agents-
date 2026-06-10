@@ -3,6 +3,16 @@ import { motion } from "framer-motion";
 import { Stethoscope, CheckCircle2, ArrowRight, Shield, Clock, Calendar, Phone, Heart, Activity } from "lucide-react";
 import Link from "next/link";
 import Footer from "@/components/Footer/Footer";
+import { useCallStore } from "@/store/callStore";
+import Image from "next/image";
+
+async function startCall(agentId: string, agentName: string, agentRole: string) {
+  try {
+    const { startLiveCall } = useCallStore.getState();
+    await startLiveCall({ id: agentName.toLowerCase().replace(" ", "-"), name: agentName, role: agentRole, retellAgentId: agentId } as any);
+  } catch (e) { console.error(e); }
+}
+
 
 const features = [
   { icon: Calendar, title: "Appointment Scheduling", desc: "AI schedules, confirms, and reschedules patient appointments 24/7 with real-time calendar sync." },
@@ -14,8 +24,8 @@ const features = [
 ];
 
 const agents = [
-  { name: "SARA", role: "Patient Services Agent", desc: "Schedules appointments, recommends doctors, and handles patient inquiries.", color: "#a78bfa" },
-  { name: "RIYA", role: "Clinical Screening Agent", desc: "Performs symptom assessment and patient triage before consultation.", color: "#818cf8" },
+  { name: "SARA", role: "Patient Services Agent", desc: "Schedules appointments, recommends doctors, and handles patient inquiries.", color: "#a78bfa", retellId: "agent_b7aeab2c389d64e0ae9ec3d999" },
+  { name: "RIYA", role: "Clinical Screening Agent", desc: "Performs symptom assessment and patient triage before consultation.", color: "#818cf8", retellId: "agent_cce30852caccbdd3021ef4aa01" },
 ];
 
 const stats = [
@@ -28,9 +38,22 @@ const stats = [
 export default function HealthcarePage() {
   return (
     <div style={{ minHeight: "100vh", background: "#fff", fontFamily: "Inter, system-ui, sans-serif" }}>
-      <nav style={{ borderBottom: "1px solid #E5E7EB", padding: "1rem 2rem", display: "flex", alignItems: "center", justifyContent: "space-between", position: "sticky", top: 0, background: "#fff", zIndex: 50 }}>
-        <Link href="/" style={{ fontSize: "1.25rem", fontWeight: 700, color: "#4F46E5", textDecoration: "none" }}>← Back to Home</Link>
-        <a href="https://cal.com/dhananjay-goel/30min" target="_blank" rel="noopener noreferrer" style={{ background: "#4F46E5", color: "#fff", padding: "0.5rem 1.25rem", borderRadius: "8px", textDecoration: "none", fontWeight: 600, fontSize: "0.875rem" }}>Book Demo</a>
+      <nav className="navbar">
+        <div className="container">
+          <div className="nav-brand">
+            <Image src="/enlight-lab-logo.png" alt="Enlight Lab" width={200} height={42} style={{ objectFit: "contain" }} />
+          </div>
+          <div className="nav-links">
+            <button className="nav-link" onClick={() => document.getElementById('solutions')?.scrollIntoView({ behavior: 'smooth' })}>Solutions</button>
+            <button className="nav-link" onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}>Features</button>
+            <button className="nav-link" onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })}>How It Works</button>
+            <button className="nav-link" onClick={() => document.getElementById('industries')?.scrollIntoView({ behavior: 'smooth' })}>Industries</button>
+            <button className="nav-link" onClick={() => document.getElementById('faq')?.scrollIntoView({ behavior: 'smooth' })}>FAQ</button>
+          </div>
+          <a href="https://cal.com/dhananjay-goel/30min" target="_blank" rel="noopener noreferrer" className="btn btn-primary" style={{ padding: "0.5rem 1.25rem", fontSize: "0.875rem" }}>
+            Book Demo
+          </a>
+        </div>
       </nav>
 
       <section style={{ padding: "5rem 2rem", background: "linear-gradient(135deg, #FAF5FF 0%, #fff 100%)", textAlign: "center" }}>
@@ -49,9 +72,9 @@ export default function HealthcarePage() {
             <a href="https://cal.com/dhananjay-goel/30min" target="_blank" rel="noopener noreferrer" style={{ background: "#a78bfa", color: "#fff", padding: "0.875rem 2rem", borderRadius: "8px", textDecoration: "none", fontWeight: 700, fontSize: "1rem", display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
               Book a Demo <ArrowRight size={16} />
             </a>
-            <Link href="/" style={{ border: "2px solid #a78bfa", color: "#a78bfa", padding: "0.875rem 2rem", borderRadius: "8px", textDecoration: "none", fontWeight: 700, fontSize: "1rem" }}>
+            <button onClick={() => startCall("agent_b7aeab2c389d64e0ae9ec3d999", "SARA", "Patient Services Agent")} style={{ border: "2px solid #a78bfa", color: "#a78bfa", padding: "0.875rem 2rem", borderRadius: "8px", background: "transparent", cursor: "pointer", fontWeight: 700, fontSize: "1rem" }}>
               Try Live Agent
-            </Link>
+            </button>
           </div>
         </motion.div>
       </section>
@@ -84,9 +107,9 @@ export default function HealthcarePage() {
                 <h3 style={{ fontSize: "1.25rem", fontWeight: 800, color: "#111827", marginBottom: "0.25rem" }}>{agent.name}</h3>
                 <p style={{ fontSize: "0.875rem", fontWeight: 600, color: agent.color, marginBottom: "0.75rem" }}>{agent.role}</p>
                 <p style={{ fontSize: "0.875rem", color: "#6B7280", lineHeight: 1.6, marginBottom: "1.25rem" }}>{agent.desc}</p>
-                <Link href="/" style={{ background: agent.color, color: "#fff", padding: "0.75rem 1.5rem", borderRadius: "8px", textDecoration: "none", fontWeight: 600, fontSize: "0.875rem", display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
+                <button onClick={() => startCall(agent.retellId, agent.name, agent.role)} style={{ background: agent.color, color: "#fff", padding: "0.75rem 1.5rem", borderRadius: "8px", border: "none", cursor: "pointer", fontWeight: 600, fontSize: "0.875rem", display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
                   <Phone size={14} /> Try Demo
-                </Link>
+                </button>
               </motion.div>
             ))}
           </div>
