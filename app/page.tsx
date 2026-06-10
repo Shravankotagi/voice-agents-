@@ -348,7 +348,7 @@ export default function HomePage() {
                 const info = industryInfo[activeIndustry];
                 if (!info) return null;
                 return (
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "3rem", alignItems: "center", background: "#F9FAFB", borderRadius: "20px", padding: "2.5rem", border: "1px solid #E5E7EB" }}>
+                  <div className="industry-info-panel" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "3rem", alignItems: "center", background: "#F9FAFB", borderRadius: "20px", padding: "2.5rem", border: "1px solid #E5E7EB" }}>
                     {/* Left */}
                     <div>
                       <h3 style={{ fontSize: "clamp(1.5rem, 3vw, 2rem)", fontWeight: 800, color: "#111827", letterSpacing: "-0.025em", lineHeight: 1.2, marginBottom: "1rem" }}>{info.headline}</h3>
