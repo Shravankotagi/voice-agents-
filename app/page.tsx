@@ -307,7 +307,7 @@ export default function HomePage() {
             </h2>
             <p style={{ color: "#6B7280", fontSize: "1rem", marginTop: "0.75rem" }}>No complex setup. No coding required. Just results.</p>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "1.5rem" }}>
+          <div className="setup-grid">
             {[
               { n: "01", icon: LayoutTemplate, title: "Pick a Template", desc: "Choose from industry-specific agent templates built for your business type." },
               { n: "02", icon: Settings2, title: "Customize", desc: "Add your business info, services, pricing, and brand personality." },
@@ -369,7 +369,7 @@ export default function HomePage() {
       <section className="section">
         <div className="container">
           <h2 style={{ textAlign: "center", marginBottom: "2rem" }}>What our customers say</h2>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1.5rem" }}>
+          <div className="testimonials-grid">
             {[
               { name: "John D.", biz: "HVAC Business Owner", quote: "Our AI agent books 15+ jobs a week without us lifting a finger." },
               { name: "Priya M.", biz: "Healthcare Clinic", quote: "SARA handles 80% of our appointment calls. Patients love it." },

@@ -43,7 +43,7 @@ const footerColumns = [
       { label: "Book a Demo", href: "https://cal.com/dhananjay-goel/30min" },
       { label: "How It Works", href: "/#how-it-works" },
       { label: "FAQ", href: "/#faq" },
-      { label: "Pricing", href: "/#pricing" },
+      
     ],
   },
   {
