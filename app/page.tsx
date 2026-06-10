@@ -163,7 +163,7 @@ export default function HomePage() {
               <p style={{ fontSize: "0.75rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#9CA3AF", marginBottom: "1rem", textAlign: "center" }}>
                 ↓ LIVE AGENTS — TAP TO CALL NOW
               </p>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.25rem" }}>
                 {[
                   { name: "SARA", role: "Patient Services Agent", color: "#a78bfa", retellId: "agent_b7aeab2c389d64e0ae9ec3d999", industry: "Healthcare" },
                   { name: "BHASKAR", role: "Banking Fraud Agent", color: "#4f8ef7", retellId: "agent_71e0327cf0a27f63144aa74f09", industry: "BFSI" },
@@ -172,23 +172,76 @@ export default function HomePage() {
                 ].map((agent) => (
                   <div
                     key={agent.name}
-                    onClick={() => startCall(agent.retellId, agent.name)}
-                    style={{ background: "#fff", border: "1px solid #E5E7EB", borderRadius: "16px", padding: "1.25rem", cursor: "pointer", transition: "all 0.2s", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", gap: "0.75rem" }}
-                    onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.boxShadow = `0 8px 24px ${agent.color}33`; (e.currentTarget as HTMLDivElement).style.borderColor = agent.color; }}
-                    onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.boxShadow = "none"; (e.currentTarget as HTMLDivElement).style.borderColor = "#E5E7EB"; }}
+                    onClick={() => startCall(agent.retellId, agent.name, agent.role)}
+                    style={{
+                      background: "#fff",
+                      border: "1.5px solid #F3F4F6",
+                      borderRadius: "20px",
+                      padding: "1.75rem 1.25rem",
+                      cursor: "pointer",
+                      transition: "all 0.25s",
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      textAlign: "center",
+                      gap: "0.875rem",
+                      boxShadow: "0 2px 12px rgba(0,0,0,0.06)",
+                    }}
+                    onMouseEnter={e => {
+                      const el = e.currentTarget as HTMLDivElement;
+                      el.style.boxShadow = `0 8px 32px ${agent.color}40`;
+                      el.style.borderColor = `${agent.color}60`;
+                      el.style.transform = "translateY(-4px)";
+                    }}
+                    onMouseLeave={e => {
+                      const el = e.currentTarget as HTMLDivElement;
+                      el.style.boxShadow = "0 2px 12px rgba(0,0,0,0.06)";
+                      el.style.borderColor = "#F3F4F6";
+                      el.style.transform = "translateY(0)";
+                    }}
                   >
-                    {/* Avatar circle */}
-                    <div style={{ width: "72px", height: "72px", borderRadius: "50%", background: `radial-gradient(circle at 35% 35%, ${agent.color}cc, ${agent.color})`, boxShadow: `0 4px 16px ${agent.color}66`, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                      <Phone size={24} color="#fff" />
+                    {/* Avatar circle with glow */}
+                    <div style={{ position: "relative" }}>
+                      <div style={{
+                        position: "absolute",
+                        inset: "-6px",
+                        borderRadius: "50%",
+                        background: `radial-gradient(circle, ${agent.color}30 0%, transparent 70%)`,
+                      }} />
+                      <div style={{
+                        width: "90px",
+                        height: "90px",
+                        borderRadius: "50%",
+                        background: `radial-gradient(circle at 35% 30%, ${agent.color}ee, ${agent.color})`,
+                        boxShadow: `0 8px 24px ${agent.color}66, inset 0 -4px 8px rgba(0,0,0,0.15), inset 0 4px 8px rgba(255,255,255,0.3)`,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        position: "relative",
+                      }}>
+                        <Phone size={28} color="#fff" strokeWidth={1.75} />
+                      </div>
                     </div>
+
+                    {/* Info */}
                     <div>
-                      <p style={{ fontSize: "0.6875rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", color: "#9CA3AF", marginBottom: "0.25rem" }}>{agent.industry}</p>
-                      <p style={{ fontSize: "1rem", fontWeight: 700, color: "#111827", marginBottom: "0.2rem" }}>{agent.name}</p>
-                      <p style={{ fontSize: "0.75rem", color: "#6B7280" }}>{agent.role}</p>
+                      <p style={{ fontSize: "0.6875rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#9CA3AF", marginBottom: "0.3rem" }}>{agent.industry}</p>
+                      <p style={{ fontSize: "1.0625rem", fontWeight: 800, color: "#111827", marginBottom: "0.2rem", letterSpacing: "-0.01em" }}>{agent.name}</p>
+                      <p style={{ fontSize: "0.75rem", color: "#6B7280", lineHeight: 1.4 }}>{agent.role}</p>
                     </div>
-                    <div style={{ display: "flex", alignItems: "center", gap: "0.375rem", background: "#F0FDF4", padding: "0.3rem 0.75rem", borderRadius: "9999px" }}>
+
+                    {/* Tap to call badge */}
+                    <div style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "0.375rem",
+                      background: "#F0FDF4",
+                      border: "1px solid #BBF7D0",
+                      padding: "0.35rem 0.875rem",
+                      borderRadius: "9999px",
+                    }}>
                       <div style={{ width: 7, height: 7, borderRadius: "50%", background: "#10B981" }} />
-                      <span style={{ fontSize: "0.7rem", fontWeight: 600, color: "#10B981" }}>Tap to call</span>
+                      <span style={{ fontSize: "0.7rem", fontWeight: 700, color: "#10B981", letterSpacing: "0.02em" }}>Tap to call</span>
                     </div>
                   </div>
                 ))}
