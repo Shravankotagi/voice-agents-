@@ -788,7 +788,7 @@ function Footer() {
                 marginTop: "0.5rem",
               }}
             >
-              contact@enlightai.com
+              contact@enlightlab.com
             </button>
           </div>
           {footerCols.map((col) => (

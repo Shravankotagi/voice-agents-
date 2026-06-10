@@ -155,21 +155,21 @@ export default function ContactPage() {
               icon={<MessageSquare size={24} />}
               title="Sales Inquiries"
               description="Talk to our sales team"
-              email="sales@enlightai.com"
+              email="sales@enlightlab.com"
               responseTime="Response within 4 hours"
             />
             <ContactCard
               icon={<Phone size={24} />}
               title="Technical Support"
               description="Get help with your implementation"
-              email="support@enlightai.com"
+              email="support@enlightlab.com"
               responseTime="Response within 24 hours"
             />
             <ContactCard
               icon={<Users size={24} />}
               title="Partnerships"
               description="Explore partnership opportunities"
-              email="partners@enlightai.com"
+              email="partners@enlightlab.com"
               responseTime="Response within 48 hours"
             />
           </div>
@@ -486,7 +486,7 @@ export default function ContactPage() {
             <p className="social-links-label">Connect with us</p>
             <div className="social-links-row">
               <a
-                href="https://linkedin.com/company/enlightai"
+                href="https://www.linkedin.com/company/enlightlab/posts/?feedView=all"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="social-link"
@@ -496,7 +496,7 @@ export default function ContactPage() {
                 <span>Globe</span>
               </a>
               <a
-                href="https://twitter.com/enlightai"
+                href="https://twitter.com/enligh"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="social-link"
@@ -506,7 +506,7 @@ export default function ContactPage() {
                 <span>Globe/X</span>
               </a>
               <a
-                href="https://youtube.com/@enlightai"
+                href="https://youtube.com/@enlightlab"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="social-link"

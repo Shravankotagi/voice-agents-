@@ -172,7 +172,7 @@ function Footer() {
             <div>
               <h4 style={{ color: "#fff", fontSize: "0.875rem", fontWeight: 700, marginBottom: "1rem", textTransform: "uppercase", letterSpacing: "0.06em" }}>Contact</h4>
               <div style={{ display: "flex", flexDirection: "column", gap: "0.625rem" }}>
-                <span style={{ color: "rgba(255,255,255,0.7)", fontSize: "0.875rem" }}>hello@enlightai.com</span>
+                <span style={{ color: "rgba(255,255,255,0.7)", fontSize: "0.875rem" }}>hello@enlightlab.com</span>
                 <span style={{ color: "rgba(255,255,255,0.7)", fontSize: "0.875rem" }}>+1 (415) 555-0123</span>
                 <span style={{ color: "rgba(255,255,255,0.7)", fontSize: "0.875rem" }}>San Francisco, CA</span>
               </div>
@@ -602,9 +602,9 @@ export default function AboutPage() {
             </p>
             <div style={{ display: "flex", justifyContent: "center", flexWrap: "wrap", gap: "1.5rem", marginBottom: "2.5rem" }}>
               {[
-                { icon: Mail, title: "General Inquiries", email: "hello@enlightai.com" },
-                { icon: Globe, title: "Press Inquiries", email: "press@enlightai.com" },
-                { icon: Building2, title: "Partnerships", email: "partners@enlightai.com" }
+                { icon: Mail, title: "General Inquiries", email: "hello@enlightlab.com" },
+                { icon: Globe, title: "Press Inquiries", email: "press@enlightlab.com" },
+                { icon: Building2, title: "Partnerships", email: "partners@enlightlab.com" }
               ].map((contact, i) => (
                 <div key={i} style={{ padding: "1.5rem 2rem", background: "rgba(255,255,255,0.08)", borderRadius: "12px", border: "1px solid rgba(255,255,255,0.15)", textAlign: "center", minWidth: "240px" }}>
                   <contact.icon size={24} color="#60A5FA" style={{ marginBottom: "0.75rem" }} />

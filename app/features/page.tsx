@@ -376,7 +376,7 @@ function Footer() {
               ecommerce, and education.
             </p>
             <a
-              href="mailto:contact@enlightai.com"
+              href="mailto:contact@enlightlab.com"
               style={{
                 background: "none",
                 border: "none",
@@ -389,7 +389,7 @@ function Footer() {
                 textDecoration: "underline",
               }}
             >
-              contact@enlightai.com
+              contact@enlightlab.com
             </a>
           </div>
           {footerCols.map((col) => (
@@ -1366,7 +1366,7 @@ export default function FeaturesPage() {
 
             {/* CTA button */}
             <a
-              href="mailto:contact@enlightai.com"
+              href="mailto:contact@enlightlab.com"
               style={{
                 display: "inline-flex",
                 alignItems: "center",
