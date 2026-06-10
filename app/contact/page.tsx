@@ -495,16 +495,7 @@ export default function ContactPage() {
                 <Globe size={22} />
                 <span>Globe</span>
               </a>
-              <a
-                href="https://twitter.com/enligh"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="social-link"
-                aria-label="Globe/X"
-              >
-                <Globe size={22} />
-                <span>Globe/X</span>
-              </a>
+              
               <a
                 href="https://youtube.com/@enlightlab"
                 target="_blank"
