@@ -2,6 +2,7 @@
 import { motion } from "framer-motion";
 import { ShoppingCart, CheckCircle2, ArrowRight, Package, RefreshCw, TrendingUp, Phone, Star, Truck } from "lucide-react";
 import Link from "next/link";
+import Footer from "@/components/Footer/Footer";
 
 const features = [
   { icon: ShoppingCart, title: "Cart Recovery", desc: "AI proactively calls customers who abandoned carts, recovering lost revenue automatically." },
@@ -61,6 +62,7 @@ export default function EcommercePage() {
         <p style={{ color: "rgba(255,255,255,0.85)", fontSize: "1.125rem", marginBottom: "2rem" }}>Book a demo and see how AI agents drive ecommerce growth.</p>
         <a href="https://cal.com/dhananjay-goel/30min" target="_blank" rel="noopener noreferrer" style={{ background: "#fff", color: "#fb923c", padding: "1rem 2.5rem", borderRadius: "8px", textDecoration: "none", fontWeight: 700, fontSize: "1rem", display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>Book a Free Demo <ArrowRight size={16} /></a>
       </section>
+      <Footer />
     </div>
   );
 }

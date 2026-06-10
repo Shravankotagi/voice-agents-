@@ -2,6 +2,7 @@
 import { motion } from "framer-motion";
 import { Users2, CheckCircle2, ArrowRight, Hotel, Utensils, Car, Star, Phone, Globe } from "lucide-react";
 import Link from "next/link";
+import Footer from "@/components/Footer/Footer";
 const features = [
   { icon: Hotel, title: "Room Reservations", desc: "AI handles booking creation, modifications, cancellations, and room upgrade requests." },
   { icon: Utensils, title: "Dining Reservations", desc: "Books restaurant tables, handles dietary requirements, and manages special occasion requests." },
@@ -59,6 +60,7 @@ export default function HospitalityPage() {
         <p style={{ color: "rgba(255,255,255,0.85)", fontSize: "1.125rem", marginBottom: "2rem" }}>Book a demo and see NIKITA and LUCKY in action.</p>
         <a href="https://cal.com/dhananjay-goel/30min" target="_blank" rel="noopener noreferrer" style={{ background: "#fff", color: "#f472b6", padding: "1rem 2.5rem", borderRadius: "8px", textDecoration: "none", fontWeight: 700, fontSize: "1rem", display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>Book a Free Demo <ArrowRight size={16} /></a>
       </section>
+      <Footer />
     </div>
   );
 }

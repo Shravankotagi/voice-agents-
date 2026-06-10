@@ -2,6 +2,8 @@
 import { motion } from "framer-motion";
 import { Building2, CheckCircle2, ArrowRight, Home, Users, MapPin, Phone, TrendingUp, Calendar } from "lucide-react";
 import Link from "next/link";
+import Footer from "@/components/Footer/Footer";
+
 const features = [
   { icon: Users, title: "Buyer Qualification", desc: "AI collects budget, location preferences, timeline, and financing status from every prospect." },
   { icon: Home, title: "Seller Intake", desc: "Gathers property details, pricing expectations, and motivation to prepare agents for listing meetings." },
@@ -56,6 +58,7 @@ export default function RealEstatePage() {
         <p style={{ color: "rgba(255,255,255,0.85)", fontSize: "1.125rem", marginBottom: "2rem" }}>Book a demo to see how AI qualifies and converts real estate leads.</p>
         <a href="https://cal.com/dhananjay-goel/30min" target="_blank" rel="noopener noreferrer" style={{ background: "#fff", color: "#f59e0b", padding: "1rem 2.5rem", borderRadius: "8px", textDecoration: "none", fontWeight: 700, fontSize: "1rem", display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>Book a Free Demo <ArrowRight size={16} /></a>
       </section>
+      <Footer />
     </div>
   );
 }

@@ -2,6 +2,7 @@
 import { motion } from "framer-motion";
 import { Calendar, CheckCircle2, ArrowRight, Bell, RefreshCw, Globe, Link2, Clock, UserCheck } from "lucide-react";
 import Link from "next/link";
+import Footer from "@/components/Footer/Footer";
 
 const features = [
   { icon: Calendar, title: "Real-time Availability", desc: "Syncs with your calendar live — agents only offer slots that are actually available." },
@@ -123,6 +124,7 @@ export default function AppointmentBookingPage() {
           Book a Free Demo <ArrowRight size={16} />
         </a>
       </section>
+      <Footer />
     </div>
   );
 }

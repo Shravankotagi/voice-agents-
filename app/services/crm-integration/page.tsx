@@ -2,7 +2,7 @@
 import { motion } from "framer-motion";
 import { Database, CheckCircle2, ArrowRight, RefreshCw, Zap, Shield, BarChart2, Link2, Settings } from "lucide-react";
 import Link from "next/link";
-
+import Footer from "@/components/Footer/Footer";
 const integrations = [
   { name: "HubSpot", color: "#FF7A59" },
   { name: "Salesforce", color: "#00A1E0" },
@@ -113,6 +113,7 @@ export default function CRMIntegrationPage() {
           Book a Free Demo <ArrowRight size={16} />
         </a>
       </section>
+      <Footer />
     </div>
   );
 }

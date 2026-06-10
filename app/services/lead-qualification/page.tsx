@@ -2,6 +2,7 @@
 import { motion } from "framer-motion";
 import { Filter, CheckCircle2, ArrowRight, Target, BarChart2, Zap, Database, TrendingUp, Shield } from "lucide-react";
 import Link from "next/link";
+import Footer from "@/components/Footer/Footer";
 
 const features = [
   { icon: Target, title: "BANT Qualification", desc: "AI agents qualify leads on Budget, Authority, Need, and Timeline in natural conversation." },
@@ -123,6 +124,7 @@ export default function LeadQualificationPage() {
           Book a Free Demo <ArrowRight size={16} />
         </a>
       </section>
+      <Footer />
     </div>
   );
 }

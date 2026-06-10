@@ -4,59 +4,55 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-// ─── DATA ────────────────────────────────────────────────────────────
 const trustLogos = ["Mozilla Foundation", "Emblazer", "Go2Andaman", "Homeloft", "HUMA"];
 
 const footerColumns = [
   {
-    title: "Product",
+    title: "Services",
     links: [
-      { label: "AI Voice Agents", href: "#" },
-      { label: "Features", href: "#" },
-      { label: "Integrations", href: "#" },
-      { label: "Security", href: "#" },
-      { label: "Pricing", href: "#" },
-      { label: "Enterprise", href: "#" },
+      { label: "Inbound Agents", href: "/services/inbound-agents" },
+      { label: "Outbound Agents", href: "/services/outbound-agents" },
+      { label: "Appointment Booking", href: "/services/appointment-booking" },
+      { label: "Lead Qualification", href: "/services/lead-qualification" },
+      { label: "CRM Integration", href: "/services/crm-integration" },
     ],
   },
   {
-    title: "Solutions",
+    title: "Industries",
     links: [
-      { label: "Healthcare", href: "#" },
-      { label: "BFSI", href: "#" },
-      { label: "Hospitality", href: "#" },
-      { label: "Ecommerce", href: "#" },
-      { label: "EdTech", href: "#" },
-      { label: "Logistics", href: "#" },
+      { label: "Healthcare", href: "/industries/healthcare" },
+      { label: "Ecommerce", href: "/industries/ecommerce" },
+      { label: "BFSI", href: "/industries/bfsi" },
+      { label: "Home Services", href: "/industries/home-services" },
+      { label: "Real Estate", href: "/industries/real-estate" },
+      { label: "Hospitality", href: "/industries/hospitality" },
     ],
   },
   {
     title: "Company",
     links: [
-      { label: "About", href: "#" },
-      { label: "Careers", href: "#" },
-      { label: "Press", href: "#" },
-      { label: "Contact", href: "#" },
-      { label: "Blog", href: "#" },
+      { label: "About", href: "https://enlightlab.com/about" },
+      { label: "Case Studies", href: "https://enlightlab.com/case-studies" },
+      { label: "Contact", href: "https://enlightlab.com/contact" },
+      { label: "Blog", href: "https://enlightlab.com/blog" },
     ],
   },
   {
     title: "Resources",
     links: [
-      { label: "Documentation", href: "#" },
-      { label: "API Reference", href: "#" },
-      { label: "Case Studies", href: "#" },
-      { label: "Webinars", href: "#" },
-      { label: "Community", href: "#" },
+      { label: "Book a Demo", href: "https://cal.com/dhananjay-goel/30min" },
+      { label: "How It Works", href: "/#how-it-works" },
+      { label: "FAQ", href: "/#faq" },
+      { label: "Pricing", href: "/#pricing" },
     ],
   },
   {
     title: "Legal",
     links: [
-      { label: "Privacy Policy", href: "#" },
-      { label: "Terms of Service", href: "#" },
-      { label: "Cookie Policy", href: "#" },
-      { label: "GDPR", href: "#" },
+      { label: "Privacy Policy", href: "https://enlightlab.com" },
+      { label: "Terms of Service", href: "https://enlightlab.com/website-service-usage-terms-conditions/" },
+      { label: "Cookie Policy", href: "https://enlightlab.com" },
+      { label: "GDPR", href: "https://enlightlab.com" },
     ],
   },
 ];
@@ -82,7 +78,6 @@ const socialLinks = [
   },
 ];
 
-// ─── STYLES ──────────────────────────────────────────────────────────
 const styles = {
   trustBar: {
     background: "#1A2AB8",
@@ -123,25 +118,8 @@ const styles = {
     background: "#FFFFFF",
     borderTop: "1px solid #E5E7EB",
   },
-  footerMain: {
-    maxWidth: "1200px",
-    margin: "0 auto",
-    padding: "3.5rem 2rem 2.5rem",
-    display: "grid",
-    gridTemplateColumns: "1.5fr repeat(5, 1fr)",
-    gap: "2rem",
-    "@media (maxWidth: 1024px)": {
-      gridTemplateColumns: "repeat(3, 1fr)",
-    },
-    "@media (maxWidth: 640px)": {
-      gridTemplateColumns: "repeat(2, 1fr)",
-    },
-  },
   brand: {
     paddingRight: "2rem",
-  },
-  brandLogo: {
-    marginBottom: "1rem",
   },
   brandTagline: {
     fontSize: "0.875rem",
@@ -159,7 +137,6 @@ const styles = {
     fontWeight: 600,
     color: "#2563EB",
     textDecoration: "none",
-    transition: "color 0.15s ease",
   },
   socialLinks: {
     display: "flex",
@@ -233,7 +210,6 @@ const styles = {
   },
 };
 
-// ─── COMPONENT ───────────────────────────────────────────────────────
 export default function Footer() {
   return (
     <footer style={styles.footer}>
@@ -258,21 +234,14 @@ export default function Footer() {
 
       {/* Main Footer */}
       <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "3.5rem 2rem 2.5rem" }}>
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(6, 1fr)",
-            gap: "2rem",
-          }}
-          className="footer-grid"
-        >
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: "2rem" }} className="footer-grid">
           {/* Brand Column */}
           <div style={styles.brand}>
-            <div style={styles.brandLogo}>
-              <Image src="/Layer_1.png" alt="Voice by Enlight Lab" width={140} height={36} style={{ objectFit: "contain", height: "32px", width: "auto" }} />
+            <div style={{ marginBottom: "1rem" }}>
+              <Image src="/enlight-lab-logo.png" alt="Voice by Enlight Lab" width={140} height={36} style={{ objectFit: "contain", height: "32px", width: "auto" }} />
             </div>
             <p style={styles.brandTagline}>
-              Enterprise AI Voice Agents for healthcare, BFSI, hospitality, ecommerce, and education.
+              Enterprise AI Voice Agents for healthcare, BFSI, hospitality, ecommerce, and more.
             </p>
             <div style={styles.brandContact}>
               <a href="mailto:contact@enlightai.com" style={styles.contactEmail}>
@@ -311,7 +280,7 @@ export default function Footer() {
               <h3 style={styles.columnTitle}>{col.title}</h3>
               <div style={styles.columnLinks}>
                 {col.links.map((link) => (
-                  <a
+                  <Link
                     key={link.label}
                     href={link.href}
                     style={styles.columnLink}
@@ -319,7 +288,7 @@ export default function Footer() {
                     onMouseLeave={(e) => ((e.target as HTMLElement).style.color = "#374151")}
                   >
                     {link.label}
-                  </a>
+                  </Link>
                 ))}
               </div>
             </div>
@@ -334,38 +303,23 @@ export default function Footer() {
             Copyright &copy; 2026 Voice by Enlight Lab. All Rights Reserved.
           </p>
           <div style={styles.bottomLinks}>
-            <a href="#" style={styles.bottomLink}>Privacy Policy</a>
-            <a href="#" style={styles.bottomLink}>Terms of Service</a>
-            <a href="#" style={styles.bottomLink}>Cookie Policy</a>
-            <a href="#" style={styles.bottomLink}>GDPR</a>
+            <a href="https://enlightlab.com" style={styles.bottomLink}>Privacy Policy</a>
+            <a href="https://enlightlab.com/website-service-usage-terms-conditions/" target="_blank" rel="noopener noreferrer" style={styles.bottomLink}>Terms of Service</a>
+            <a href="https://enlightlab.com" style={styles.bottomLink}>Cookie Policy</a>
+            <a href="https://enlightlab.com" style={styles.bottomLink}>GDPR</a>
           </div>
         </div>
       </div>
 
-      {/* Responsive Styles via CSS */}
       <style jsx>{`
         @media (max-width: 1024px) {
-          .footer-grid {
-            grid-template-columns: repeat(3, 1fr) !important;
-          }
+          .footer-grid { grid-template-columns: repeat(3, 1fr) !important; }
         }
         @media (max-width: 768px) {
-          .footer-grid {
-            grid-template-columns: repeat(2, 1fr) !important;
-          }
+          .footer-grid { grid-template-columns: repeat(2, 1fr) !important; }
         }
         @media (max-width: 480px) {
-          .footer-grid {
-            grid-template-columns: 1fr !important;
-          }
-          .footer-bottom-inner {
-            flex-direction: column;
-            text-align: center;
-          }
-          .bottom-links {
-            flex-wrap: wrap;
-            justify-content: center;
-          }
+          .footer-grid { grid-template-columns: 1fr !important; }
         }
       `}</style>
     </footer>

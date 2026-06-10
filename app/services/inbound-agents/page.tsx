@@ -2,7 +2,7 @@
 import { motion } from "framer-motion";
 import { PhoneIncoming, CheckCircle2, ArrowRight, Clock, Shield, Zap, HeadphonesIcon, TrendingUp, Users } from "lucide-react";
 import Link from "next/link";
-
+import Footer from "@/components/Footer/Footer";
 const features = [
   { icon: Clock, title: "24/7 Availability", desc: "Never miss a call. Our AI agents answer every inbound call around the clock, even on holidays." },
   { icon: Shield, title: "HIPAA & PCI Compliant", desc: "Enterprise-grade security ensures every conversation meets compliance requirements." },
@@ -129,6 +129,7 @@ export default function InboundAgentsPage() {
           Book a Free Demo <ArrowRight size={16} />
         </a>
       </section>
+      <Footer />
     </div>
   );
 }

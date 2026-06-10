@@ -2,6 +2,7 @@
 import { motion } from "framer-motion";
 import { Home, CheckCircle2, ArrowRight, Wrench, Calendar, Phone, Clock, MapPin, Star } from "lucide-react";
 import Link from "next/link";
+import Footer from "@/components/Footer/Footer";
 const features = [
   { icon: Wrench, title: "Emergency Detection", desc: "AI identifies urgent situations like burst pipes or gas leaks and routes them to on-call technicians immediately." },
   { icon: Calendar, title: "Service Scheduling", desc: "Books appointments based on technician availability, location, and job type in real-time." },
@@ -60,6 +61,7 @@ export default function HomeServicesPage() {
         <p style={{ color: "rgba(255,255,255,0.85)", fontSize: "1.125rem", marginBottom: "2rem" }}>Book a demo and see how AI books 15+ jobs a week on autopilot.</p>
         <a href="https://cal.com/dhananjay-goel/30min" target="_blank" rel="noopener noreferrer" style={{ background: "#fff", color: "#10b981", padding: "1rem 2.5rem", borderRadius: "8px", textDecoration: "none", fontWeight: 700, fontSize: "1rem", display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>Book a Free Demo <ArrowRight size={16} /></a>
       </section>
+      <Footer />
     </div>
   );
 }

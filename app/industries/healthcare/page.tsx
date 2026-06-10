@@ -2,6 +2,7 @@
 import { motion } from "framer-motion";
 import { Stethoscope, CheckCircle2, ArrowRight, Shield, Clock, Calendar, Phone, Heart, Activity } from "lucide-react";
 import Link from "next/link";
+import Footer from "@/components/Footer/Footer";
 
 const features = [
   { icon: Calendar, title: "Appointment Scheduling", desc: "AI schedules, confirms, and reschedules patient appointments 24/7 with real-time calendar sync." },
@@ -120,6 +121,7 @@ export default function HealthcarePage() {
           Book a Free Demo <ArrowRight size={16} />
         </a>
       </section>
+      <Footer />
     </div>
   );
 }

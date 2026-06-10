@@ -2,6 +2,7 @@
 import { motion } from "framer-motion";
 import { PhoneOutgoing, CheckCircle2, ArrowRight, Target, TrendingUp, RefreshCw, MessageSquare, BarChart2, Clock } from "lucide-react";
 import Link from "next/link";
+import Footer from "@/components/Footer/Footer";
 
 const features = [
   { icon: Target, title: "Smart Lead Targeting", desc: "AI identifies the best time and approach to reach each prospect for maximum conversion." },
@@ -123,6 +124,7 @@ export default function OutboundAgentsPage() {
           Book a Free Demo <ArrowRight size={16} />
         </a>
       </section>
+      <Footer />
     </div>
   );
 }

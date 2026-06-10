@@ -2,6 +2,8 @@
 import { motion } from "framer-motion";
 import { Building, CheckCircle2, ArrowRight, Shield, Lock, FileText, Phone, AlertTriangle, CreditCard } from "lucide-react";
 import Link from "next/link";
+import Footer from "@/components/Footer/Footer";
+
 const features = [
   { icon: AlertTriangle, title: "Fraud Detection & Resolution", desc: "AI identifies suspicious patterns, alerts customers, and initiates dispute resolution instantly." },
   { icon: Lock, title: "Card Blocking", desc: "Customers can block compromised cards via voice — verified and processed in real-time." },
@@ -59,6 +61,7 @@ export default function BFSIPage() {
         <p style={{ color: "rgba(255,255,255,0.85)", fontSize: "1.125rem", marginBottom: "2rem" }}>Book a demo and see compliance-ready AI agents in action.</p>
         <a href="https://cal.com/dhananjay-goel/30min" target="_blank" rel="noopener noreferrer" style={{ background: "#fff", color: "#4f8ef7", padding: "1rem 2.5rem", borderRadius: "8px", textDecoration: "none", fontWeight: 700, fontSize: "1rem", display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>Book a Free Demo <ArrowRight size={16} /></a>
       </section>
+      <Footer />
     </div>
   );
 }
