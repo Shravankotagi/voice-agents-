@@ -213,25 +213,7 @@ const styles = {
 export default function Footer() {
   return (
     <footer style={styles.footer}>
-      {/* Trust Bar */}
-      <div style={styles.trustBar}>
-        <div style={styles.trustInner}>
-          <span style={styles.trustLabel}>Trusted by Fortune-Grade Global Leaders</span>
-          <div style={styles.trustLogos}>
-            {trustLogos.map((logo) => (
-              <span
-                key={logo}
-                style={styles.trustLogo}
-                onMouseEnter={(e) => ((e.target as HTMLElement).style.opacity = "1")}
-                onMouseLeave={(e) => ((e.target as HTMLElement).style.opacity = "0.7")}
-              >
-                {logo}
-              </span>
-            ))}
-          </div>
-        </div>
-      </div>
-
+     
       {/* Main Footer */}
       <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "3.5rem 2rem 2.5rem" }}>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: "2rem" }} className="footer-grid">
