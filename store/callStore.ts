@@ -73,20 +73,6 @@ export const useCallStore = create<CallState>((set, get) => ({
 
       const { RetellWebClient } = await import("retell-client-js-sdk");
       const retellClient = new RetellWebClient();
-
-      // iOS Safari requires AudioContext to be resumed from a user gesture
-      try {
-        const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
-        if (AudioContext) {
-          const audioCtx = new AudioContext();
-          if (audioCtx.state === "suspended") {
-            await audioCtx.resume();
-          }
-        }
-      } catch (e) {
-        console.warn("AudioContext unlock failed:", e);
-      }
-
       
       // Store client so endCall can stop it
       set({ _retellClient: retellClient });
