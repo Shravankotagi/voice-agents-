@@ -23,7 +23,7 @@ const features = [
 ];
 
 const agents = [
-  { name: "Ryan Mitchell", role: "Real Estate Agent", desc: "Qualifies buyers, sellers, and investors and schedules property consultations.", color: "#f59e0b", retellId: "agent_606ddbea4bbf4fbec7fa9025e5" },
+  { name: "RYAN", role: "Real Estate Agent", desc: "Qualifies buyers, sellers, and investors and schedules property consultations.", color: "#f59e0b", retellId: "agent_606ddbea4bbf4fbec7fa9025e5" },
 ];
 
 const stats = [

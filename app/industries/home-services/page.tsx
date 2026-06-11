@@ -23,9 +23,9 @@ const features = [
 ];
 
 const agents = [
-  { name: "Mike Thompson", role: "Plumbing Intake Agent", desc: "Handles incoming plumbing requests, identifies emergencies, and schedules visits.", color: "#06b6d4", retellId: "agent_15407575cc1758938e5875dfff" },
-  { name: "Sarah Johnson", role: "HVAC Scheduling Agent", desc: "Manages HVAC appointments, maintenance scheduling, and urgent service prioritization.", color: "#8b5cf6", retellId: "agent_5260b5be1db138f848f2b94bb8" },
-  { name: "David Miller", role: "Electrician Quote Agent", desc: "Qualifies electrical requests and schedules on-site estimates.", color: "#f43f5e", retellId: "agent_bcee2ed253599ef57b565912c9" },
+  { name: "MIKE", role: "Plumbing Intake Agent", desc: "Handles incoming plumbing requests, identifies emergencies, and schedules visits.", color: "#06b6d4", retellId: "agent_15407575cc1758938e5875dfff" },
+  { name: "SARAH", role: "HVAC Scheduling Agent", desc: "Manages HVAC appointments, maintenance scheduling, and urgent service prioritization.", color: "#8b5cf6", retellId: "agent_5260b5be1db138f848f2b94bb8" },
+  { name: "DAVID", role: "Electrician Quote Agent", desc: "Qualifies electrical requests and schedules on-site estimates.", color: "#f43f5e", retellId: "agent_bcee2ed253599ef57b565912c9" },
 ];
 
 const stats = [

@@ -18,28 +18,28 @@ const industries = [
 
 const agents: Record<string, { name: string; role: string; description: string; capabilities: string[]; type: string; retellId: string }[]> = {
   healthcare: [
-    { name: "Emily Parker", role: "Patient Services Agent", description: "Schedules appointments, recommends doctors, and handles patient inquiries.", capabilities: ["Appointment scheduling", "Doctor recommendations", "Hospital info", "Emergency routing"], type: "Inbound", retellId: "agent_ddf03bcc20dc6fdd83adbc290c" },
-    { name: "Nicole Turner", role: "Clinical Screening Agent", description: "Performs symptom assessment and patient triage before consultation.", capabilities: ["Symptom collection", "Risk assessment", "Urgency classification", "Care recommendations"], type: "Inbound", retellId: "agent_670481e5581961108e2370f85c" },
+    { name: "EMILY", role: "Patient Services Agent", description: "Schedules appointments, recommends doctors, and handles patient inquiries.", capabilities: ["Appointment scheduling", "Doctor recommendations", "Hospital info", "Emergency routing"], type: "Inbound", retellId: "agent_ddf03bcc20dc6fdd83adbc290c" },
+    { name: "NICOLE", role: "Clinical Screening Agent", description: "Performs symptom assessment and patient triage before consultation.", capabilities: ["Symptom collection", "Risk assessment", "Urgency classification", "Care recommendations"], type: "Inbound", retellId: "agent_670481e5581961108e2370f85c" },
   ],
   ecommerce: [
-    { name: "Sam Altman", role: "Customer Resolution Agent", description: "Handles delivery issues, refund escalations, and return requests.", capabilities: ["Delivery exceptions", "Refund processing", "Return authorization", "Order tracking"], type: "Inbound", retellId: "agent_cdf245f90ff14ff0e307e09dbf" },
-    { name: "Andrew Collins", role: "Sales Conversion Agent", description: "Recovers abandoned carts via voice. Surfaces alternatives and closes checkout.", capabilities: ["Cart recovery", "Product matching", "Offer application", "Checkout assistance"], type: "Outbound", retellId: "agent_714ffb20c4149edaf5cb6fbe19" },
+    { name: "Sam", role: "Customer Resolution Agent", description: "Handles delivery issues, refund escalations, and return requests.", capabilities: ["Delivery exceptions", "Refund processing", "Return authorization", "Order tracking"], type: "Inbound", retellId: "agent_cdf245f90ff14ff0e307e09dbf" },
+    { name: "Andrew", role: "Sales Conversion Agent", description: "Recovers abandoned carts via voice. Surfaces alternatives and closes checkout.", capabilities: ["Cart recovery", "Product matching", "Offer application", "Checkout assistance"], type: "Outbound", retellId: "agent_714ffb20c4149edaf5cb6fbe19" },
   ],
   bfsi: [
-    { name: "Brandon Cooper", role: "Banking Fraud Agent", description: "Handles fraud disputes, blocks cards, and initiates dispute resolution.", capabilities: ["Fraud detection", "Card blocking", "Dispute filing", "Credit issuance"], type: "Inbound", retellId: "agent_dfe1866c6e0c9ac883546b48ca" },
-    { name: "Victor Reed", role: "Insurance Claims Agent", description: "Files FNOL, verifies coverage, and assigns surveyors for claims processing.", capabilities: ["FNOL filing", "Coverage verification", "Surveyor assignment", "Claim tracking"], type: "Inbound", retellId: "agent_8729165b472337b00fa205b921" },
+    { name: "Brandon", role: "Banking Fraud Agent", description: "Handles fraud disputes, blocks cards, and initiates dispute resolution.", capabilities: ["Fraud detection", "Card blocking", "Dispute filing", "Credit issuance"], type: "Inbound", retellId: "agent_dfe1866c6e0c9ac883546b48ca" },
+    { name: "Victor", role: "Insurance Claims Agent", description: "Files FNOL, verifies coverage, and assigns surveyors for claims processing.", capabilities: ["FNOL filing", "Coverage verification", "Surveyor assignment", "Claim tracking"], type: "Inbound", retellId: "agent_8729165b472337b00fa205b921" },
   ],
   homeservices: [
-    { name: "Mike Thompson", role: "Plumbing Intake Agent", description: "Handles incoming plumbing requests, identifies emergencies, and schedules visits.", capabilities: ["Emergency detection", "Service scheduling", "Customer intake", "Urgent routing"], type: "Inbound", retellId: "agent_15407575cc1758938e5875dfff" },
-    { name: "Sarah Johnson", role: "HVAC Scheduling Agent", description: "Manages HVAC appointments, maintenance scheduling, and urgent service prioritization.", capabilities: ["AC/heating inquiries", "Repair booking", "Maintenance scheduling", "Priority handling"], type: "Inbound", retellId: "agent_5260b5be1db138f848f2b94bb8" },
-    { name: "David Miller", role: "Electrician Quote Agent", description: "Qualifies electrical requests and schedules on-site estimates.", capabilities: ["Project capture", "Site inspection scheduling", "Quote requests", "Job qualification"], type: "Inbound", retellId: "agent_bcee2ed253599ef57b565912c9" },
+    { name: "Mike", role: "Plumbing Intake Agent", description: "Handles incoming plumbing requests, identifies emergencies, and schedules visits.", capabilities: ["Emergency detection", "Service scheduling", "Customer intake", "Urgent routing"], type: "Inbound", retellId: "agent_15407575cc1758938e5875dfff" },
+    { name: "Sarah", role: "HVAC Scheduling Agent", description: "Manages HVAC appointments, maintenance scheduling, and urgent service prioritization.", capabilities: ["AC/heating inquiries", "Repair booking", "Maintenance scheduling", "Priority handling"], type: "Inbound", retellId: "agent_5260b5be1db138f848f2b94bb8" },
+    { name: "David", role: "Electrician Quote Agent", description: "Qualifies electrical requests and schedules on-site estimates.", capabilities: ["Project capture", "Site inspection scheduling", "Quote requests", "Job qualification"], type: "Inbound", retellId: "agent_bcee2ed253599ef57b565912c9" },
   ],
   realestate: [
     { name: "Ryan Mitchell", role: "Real Estate Agent", description: "Qualifies buyers, sellers, and investors and schedules property consultations.", capabilities: ["Buyer requirements", "Seller info collection", "Investment qualification", "Tour booking"], type: "Inbound", retellId: "agent_606ddbea4bbf4fbec7fa9025e5" },
   ],
   hospitality: [
-    { name: "Daniel Walker", role: "Concierge Agent", description: "Arranges dining, spa, transportation, and special occasion bookings.", capabilities: ["Dining reservations", "Spa scheduling", "Transportation", "Local recommendations"], type: "Inbound", retellId: "agent_445484ee39011669181e6e57fb" },
-    { name: "Lauren Brooks", role: "Reservations Agent", description: "Manages hotel reservations, booking modifications, and stay requests.", capabilities: ["Booking creation", "Modifications", "Room upgrades", "Group bookings"], type: "Inbound", retellId: "agent_391c1b87a83ef3b1e46560429e" },
+    { name: "Daniel", role: "Concierge Agent", description: "Arranges dining, spa, transportation, and special occasion bookings.", capabilities: ["Dining reservations", "Spa scheduling", "Transportation", "Local recommendations"], type: "Inbound", retellId: "agent_445484ee39011669181e6e57fb" },
+    { name: "Lauren", role: "Reservations Agent", description: "Manages hotel reservations, booking modifications, and stay requests.", capabilities: ["Booking creation", "Modifications", "Room upgrades", "Group bookings"], type: "Inbound", retellId: "agent_391c1b87a83ef3b1e46560429e" },
   ],
 };
 
@@ -182,10 +182,10 @@ export default function HomePage() {
               </p>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.25rem" }}>
                 {[
-                  { name: "Emily Parker", role: "Patient Services Agent", color: "#a78bfa", retellId: "agent_ddf03bcc20dc6fdd83adbc290c", industry: "Healthcare" },
-                  { name: "Brandon Cooper", role: "Banking Fraud Agent", color: "#4f8ef7", retellId: "agent_dfe1866c6e0c9ac883546b48ca", industry: "BFSI" },
-                  { name: "Lauren Brooks", role: "Reservations Agent", color: "#f472b6", retellId: "agent_391c1b87a83ef3b1e46560429e", industry: "Hospitality" },
-                  { name: "Sam Altman", role: "Customer Resolution Agent", color: "#fb923c", retellId: "agent_cdf245f90ff14ff0e307e09dbf", industry: "Ecommerce" },
+                  { name: "EMILY", role: "Patient Services Agent", color: "#a78bfa", retellId: "agent_ddf03bcc20dc6fdd83adbc290c", industry: "Healthcare" },
+                  { name: "BRANDON", role: "Banking Fraud Agent", color: "#4f8ef7", retellId: "agent_dfe1866c6e0c9ac883546b48ca", industry: "BFSI" },
+                  { name: "LAUREN", role: "Reservations Agent", color: "#f472b6", retellId: "agent_391c1b87a83ef3b1e46560429e", industry: "Hospitality" },
+                  { name: "SAM", role: "Customer Resolution Agent", color: "#fb923c", retellId: "agent_cdf245f90ff14ff0e307e09dbf", industry: "Ecommerce" },
                 ].map((agent) => (
                   <div
                     key={agent.name}
@@ -410,18 +410,18 @@ export default function HomePage() {
           </div>
           <div className="agents-showcase-grid">
             {[
-              { name: "Emily Parker", role: "Patient Services Agent", industry: "Healthcare", color: "#a78bfa", retellId: "agent_ddf03bcc20dc6fdd83adbc290c" },
-              { name: "Brandon Cooper", role: "Banking Fraud Agent", industry: "BFSI", color: "#4f8ef7", retellId: "agent_dfe1866c6e0c9ac883546b48ca" },
-              { name: "Lauren Brooks", role: "Reservations Agent", industry: "Hospitality", color: "#f472b6", retellId: "agent_391c1b87a83ef3b1e46560429e" },
-              { name: "Sam Altman", role: "Customer Resolution Agent", industry: "Ecommerce", color: "#fb923c", retellId: "agent_cdf245f90ff14ff0e307e09dbf" },
-              { name: "Nicole Turner", role: "Clinical Screening Agent", industry: "Healthcare", color: "#818cf8", retellId: "agent_670481e5581961108e2370f85c" },
-              { name: "Victor Reed", role: "Insurance Claims Agent", industry: "BFSI", color: "#3b82f6", retellId: "agent_8729165b472337b00fa205b921" },
-              { name: "Andrew Collins", role: "Sales Conversion Agent", industry: "Ecommerce", color: "#f97316", retellId: "agent_714ffb20c4149edaf5cb6fbe19" },
-              { name: "Daniel Walker", role: "Concierge Agent", industry: "Hospitality", color: "#ec4899", retellId: "agent_445484ee39011669181e6e57fb" },
-              { name: "Ryan Mitchell", role: "Real Estate Agent", industry: "Real Estate", color: "#f59e0b", retellId: "agent_606ddbea4bbf4fbec7fa9025e5" },
-              { name: "Mike Thompson", role: "Plumbing Intake Agent", industry: "Home Services", color: "#06b6d4", retellId: "agent_15407575cc1758938e5875dfff" },
-              { name: "Sarah Johnson", role: "HVAC Scheduling Agent", industry: "Home Services", color: "#8b5cf6", retellId: "agent_5260b5be1db138f848f2b94bb8" },
-              { name: "David Miller", role: "Electrician Quote Agent", industry: "Home Services", color: "#f43f5e", retellId: "agent_bcee2ed253599ef57b565912c9" },
+              { name: "EMILY", role: "Patient Services Agent", industry: "Healthcare", color: "#a78bfa", retellId: "agent_ddf03bcc20dc6fdd83adbc290c" },
+              { name: "BRANDON", role: "Banking Fraud Agent", industry: "BFSI", color: "#4f8ef7", retellId: "agent_dfe1866c6e0c9ac883546b48ca" },
+              { name: "LAUREN", role: "Reservations Agent", industry: "Hospitality", color: "#f472b6", retellId: "agent_391c1b87a83ef3b1e46560429e" },
+              { name: "SAM", role: "Customer Resolution Agent", industry: "Ecommerce", color: "#fb923c", retellId: "agent_cdf245f90ff14ff0e307e09dbf" },
+              { name: "NICOLE", role: "Clinical Screening Agent", industry: "Healthcare", color: "#818cf8", retellId: "agent_670481e5581961108e2370f85c" },
+              { name: "VICTOR", role: "Insurance Claims Agent", industry: "BFSI", color: "#3b82f6", retellId: "agent_8729165b472337b00fa205b921" },
+              { name: "ANDREW", role: "Sales Conversion Agent", industry: "Ecommerce", color: "#f97316", retellId: "agent_714ffb20c4149edaf5cb6fbe19" },
+              { name: "DANIEL", role: "Concierge Agent", industry: "Hospitality", color: "#ec4899", retellId: "agent_445484ee39011669181e6e57fb" },
+              { name: "RYAN", role: "Real Estate Agent", industry: "Real Estate", color: "#f59e0b", retellId: "agent_606ddbea4bbf4fbec7fa9025e5" },
+              { name: "MIKE", role: "Plumbing Intake Agent", industry: "Home Services", color: "#06b6d4", retellId: "agent_15407575cc1758938e5875dfff" },
+              { name: "SARAH", role: "HVAC Scheduling Agent", industry: "Home Services", color: "#8b5cf6", retellId: "agent_5260b5be1db138f848f2b94bb8" },
+              { name: "DAVID", role: "Electrician Quote Agent", industry: "Home Services", color: "#f43f5e", retellId: "agent_bcee2ed253599ef57b565912c9" },
             ].map((agent, i) => (
               <motion.div
                 key={agent.name}
@@ -634,7 +634,7 @@ export default function HomePage() {
           <div className="testimonials-grid">
             {[
               { name: "John D.", biz: "HVAC Business Owner", quote: "Our AI agent books 15+ jobs a week without us lifting a finger." },
-              { name: "Priya M.", biz: "Healthcare Clinic", quote: "Emily Parker handles 80% of our appointment calls. Patients love it." },
+              { name: "Priya M.", biz: "Healthcare Clinic", quote: "EMILY handles 80% of our appointment calls. Patients love it." },
               { name: "Mike R.", biz: "Plumbing Co.", quote: "We never miss a lead now. ROI paid for itself in week one." },
             ].map(t => (
               <div key={t.name} style={{ background: "#F9FAFB", borderRadius: "16px", padding: "1.5rem", border: "1px solid #E5E7EB" }}>

@@ -24,8 +24,8 @@ const features = [
 ];
 
 const agents = [
-  { name: "Brandon Cooper", role: "Banking Fraud Agent", desc: "Handles fraud disputes, blocks cards, and initiates dispute resolution.", color: "#4f8ef7", retellId: "agent_dfe1866c6e0c9ac883546b48ca" },
-  { name: "Victor Reed", role: "Insurance Claims Agent", desc: "Files FNOL, verifies coverage, and assigns surveyors for claims processing.", color: "#3b82f6", retellId: "agent_8729165b472337b00fa205b921" },
+  { name: "BRANDON", role: "Banking Fraud Agent", desc: "Handles fraud disputes, blocks cards, and initiates dispute resolution.", color: "#4f8ef7", retellId: "agent_dfe1866c6e0c9ac883546b48ca" },
+  { name: "VICTOR", role: "Insurance Claims Agent", desc: "Files FNOL, verifies coverage, and assigns surveyors for claims processing.", color: "#3b82f6", retellId: "agent_8729165b472337b00fa205b921" },
 ];
 
 const stats = [
