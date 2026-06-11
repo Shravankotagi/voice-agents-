@@ -115,12 +115,7 @@ export const useCallStore = create<CallState>((set, get) => ({
           useCallStore.setState({ transcript: messages });
         }
       });
-      await retellClient.startCall({
-        accessToken: data.access_token,
-        sampleRate: 1000,
-        captureDeviceId: "default",
-        emitRawAudioSamples: false,
-      });
+      await retellClient.startCall({ accessToken: data.access_token });
 
     } catch (e) {
       console.error("Failed to start call:", e);
