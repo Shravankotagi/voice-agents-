@@ -87,7 +87,7 @@ export const useCallStore = create<CallState>((set, get) => ({
         console.warn("AudioContext unlock failed:", e);
       }
 
-
+      
       // Store client so endCall can stop it
       set({ _retellClient: retellClient });
 
@@ -117,7 +117,7 @@ export const useCallStore = create<CallState>((set, get) => ({
       });
       await retellClient.startCall({
         accessToken: data.access_token,
-        sampleRate: 24000,
+        sampleRate: 1000,
         captureDeviceId: "default",
         emitRawAudioSamples: false,
       });
