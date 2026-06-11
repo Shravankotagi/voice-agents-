@@ -24,8 +24,8 @@ const features = [
 ];
 
 const agents = [
-  { name: "BHASKAR", role: "Banking Fraud Agent", desc: "Handles fraud disputes, blocks cards, and initiates dispute resolution.", color: "#4f8ef7", retellId: "agent_71e0327cf0a27f63144aa74f09" },
-  { name: "ARYAN", role: "Insurance Claims Agent", desc: "Files FNOL, verifies coverage, and assigns surveyors for claims processing.", color: "#3b82f6", retellId: "agent_a8945a4965d741e547517361b0" },
+  { name: "Brandon Cooper", role: "Banking Fraud Agent", desc: "Handles fraud disputes, blocks cards, and initiates dispute resolution.", color: "#4f8ef7", retellId: "agent_dfe1866c6e0c9ac883546b48ca" },
+  { name: "Victor Reed", role: "Insurance Claims Agent", desc: "Files FNOL, verifies coverage, and assigns surveyors for claims processing.", color: "#3b82f6", retellId: "agent_8729165b472337b00fa205b921" },
 ];
 
 const stats = [
@@ -86,7 +86,7 @@ export default function BFSIPage() {
             <a href="https://cal.com/dhananjay-goel/30min" target="_blank" rel="noopener noreferrer" style={{ background: "#4f8ef7", color: "#fff", padding: "0.875rem 2rem", borderRadius: "8px", textDecoration: "none", fontWeight: 700, fontSize: "1rem", display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
               Book a Demo <ArrowRight size={16} />
             </a>
-            <button onClick={() => startCall("agent_71e0327cf0a27f63144aa74f09", "BHASKAR", "Banking Fraud Agent")} style={{ border: "2px solid #4f8ef7", color: "#4f8ef7", padding: "0.875rem 2rem", borderRadius: "8px", background: "transparent", cursor: "pointer", fontWeight: 700, fontSize: "1rem" }}>
+            <button onClick={() => startCall("agent_dfe1866c6e0c9ac883546b48ca", "Brandon Cooper", "Banking Fraud Agent")} style={{ border: "2px solid #4f8ef7", color: "#4f8ef7", padding: "0.875rem 2rem", borderRadius: "8px", background: "transparent", cursor: "pointer", fontWeight: 700, fontSize: "1rem" }}>
               Try Live Agent
             </button>
           </div>

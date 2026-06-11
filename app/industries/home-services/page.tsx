@@ -23,9 +23,9 @@ const features = [
 ];
 
 const agents = [
-  { name: "Mike Thompson", role: "Plumbing Intake Agent", desc: "Handles incoming plumbing requests, identifies emergencies, and schedules visits.", color: "#06b6d4", retellId: "agent_7a2e179e5304e28672360a15ee" },
-  { name: "Sarah Johnson", role: "HVAC Scheduling Agent", desc: "Manages HVAC appointments, maintenance scheduling, and urgent service prioritization.", color: "#8b5cf6", retellId: "agent_015cf5b6284d3bb41708fcc29e" },
-  { name: "David Miller", role: "Electrician Quote Agent", desc: "Qualifies electrical requests and schedules on-site estimates.", color: "#f43f5e", retellId: "agent_8821bb64745c21c48f2526b2b5" },
+  { name: "Mike Thompson", role: "Plumbing Intake Agent", desc: "Handles incoming plumbing requests, identifies emergencies, and schedules visits.", color: "#06b6d4", retellId: "agent_15407575cc1758938e5875dfff" },
+  { name: "Sarah Johnson", role: "HVAC Scheduling Agent", desc: "Manages HVAC appointments, maintenance scheduling, and urgent service prioritization.", color: "#8b5cf6", retellId: "agent_5260b5be1db138f848f2b94bb8" },
+  { name: "David Miller", role: "Electrician Quote Agent", desc: "Qualifies electrical requests and schedules on-site estimates.", color: "#f43f5e", retellId: "agent_bcee2ed253599ef57b565912c9" },
 ];
 
 const stats = [
@@ -85,7 +85,7 @@ export default function HomeServicesPage() {
             <a href="https://cal.com/dhananjay-goel/30min" target="_blank" rel="noopener noreferrer" style={{ background: "#10b981", color: "#fff", padding: "0.875rem 2rem", borderRadius: "8px", textDecoration: "none", fontWeight: 700, fontSize: "1rem", display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
               Book a Demo <ArrowRight size={16} />
             </a>
-            <button onClick={() => startCall("agent_7a2e179e5304e28672360a15ee", "Mike Thompson", "Plumbing Intake Agent")} style={{ border: "2px solid #10b981", color: "#10b981", padding: "0.875rem 2rem", borderRadius: "8px", background: "transparent", cursor: "pointer", fontWeight: 700, fontSize: "1rem" }}>
+            <button onClick={() => startCall("agent_15407575cc1758938e5875dfff", "Mike Thompson", "Plumbing Intake Agent")} style={{ border: "2px solid #10b981", color: "#10b981", padding: "0.875rem 2rem", borderRadius: "8px", background: "transparent", cursor: "pointer", fontWeight: 700, fontSize: "1rem" }}>
               Try Live Agent
             </button>
           </div>
