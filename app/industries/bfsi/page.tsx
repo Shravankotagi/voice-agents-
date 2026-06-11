@@ -86,7 +86,7 @@ export default function BFSIPage() {
             <a href="https://cal.com/dhananjay-goel/30min" target="_blank" rel="noopener noreferrer" style={{ background: "#4f8ef7", color: "#fff", padding: "0.875rem 2rem", borderRadius: "8px", textDecoration: "none", fontWeight: 700, fontSize: "1rem", display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
               Book a Demo <ArrowRight size={16} />
             </a>
-            <button onClick={() => startCall("agent_dfe1866c6e0c9ac883546b48ca", "Brandon Cooper", "Banking Fraud Agent")} style={{ border: "2px solid #4f8ef7", color: "#4f8ef7", padding: "0.875rem 2rem", borderRadius: "8px", background: "transparent", cursor: "pointer", fontWeight: 700, fontSize: "1rem" }}>
+            <button onClick={() => startCall("agent_dfe1866c6e0c9ac883546b48ca", "BRANDON", "Banking Fraud Agent")} style={{ border: "2px solid #4f8ef7", color: "#4f8ef7", padding: "0.875rem 2rem", borderRadius: "8px", background: "transparent", cursor: "pointer", fontWeight: 700, fontSize: "1rem" }}>
               Try Live Agent
             </button>
           </div>

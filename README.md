@@ -55,29 +55,29 @@ Built by **Enlight Lab** to demonstrate what truly autonomous voice AI looks lik
 
 | Agent | Role | What It Does |
 |:---:|:---|:---|
-| **Natalie Parker** | Lead Qualifier | Qualifies inbound leads, matches programs, books counsellor sessions |
+| **Natalie** | Lead Qualifier | Qualifies inbound leads, matches programs, books counsellor sessions |
 | **KIRAN** | Onboarding Agent | Guides newly enrolled students through the full onboarding flow |
 
 ### 🏥 HealthTech
 
 | Agent | Role | What It Does |
 |:---:|:---|:---|
-| **Emily Parker** | Scheduling Agent | Books appointments and verifies insurance without human involvement |
-| **Nicole Turner** | Triage Agent | Assesses symptoms and classifies urgency for clinical routing |
+| **Emily** | Scheduling Agent | Books appointments and verifies insurance without human involvement |
+| **Nicole** | Triage Agent | Assesses symptoms and classifies urgency for clinical routing |
 
 ### 🏦 BFSI
 
 | Agent | Role | What It Does |
 |:---:|:---|:---|
-| **Brandon Cooper** | Fraud Resolution | Resolves disputes and issues provisional credits autonomously |
-| **Victor Reed** | Claims Agent | Files FNOL (First Notice of Loss) and assigns adjusters in one call |
+| **Brandon** | Fraud Resolution | Resolves disputes and issues provisional credits autonomously |
+| **Victor** | Claims Agent | Files FNOL (First Notice of Loss) and assigns adjusters in one call |
 
 ### 🏨 Hospitality
 
 | Agent | Role | What It Does |
 |:---:|:---|:---|
-| **Daniel Walker** | Concierge | Manages spa, dining, and local experience bookings |
-| **Lauren Brooks** | Reservations | Handles room reservations and checkout extension requests |
+| **Daniel** | Concierge | Manages spa, dining, and local experience bookings |
+| **Lauren** | Reservations | Handles room reservations and checkout extension requests |
 
 ---
 
