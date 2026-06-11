@@ -22,24 +22,24 @@ const agents: Record<string, { name: string; role: string; description: string; 
     { name: "NICOLE", role: "Clinical Screening Agent", description: "Performs symptom assessment and patient triage before consultation.", capabilities: ["Symptom collection", "Risk assessment", "Urgency classification", "Care recommendations"], type: "Inbound", retellId: "agent_670481e5581961108e2370f85c" },
   ],
   ecommerce: [
-    { name: "Sam", role: "Customer Resolution Agent", description: "Handles delivery issues, refund escalations, and return requests.", capabilities: ["Delivery exceptions", "Refund processing", "Return authorization", "Order tracking"], type: "Inbound", retellId: "agent_cdf245f90ff14ff0e307e09dbf" },
-    { name: "Andrew", role: "Sales Conversion Agent", description: "Recovers abandoned carts via voice. Surfaces alternatives and closes checkout.", capabilities: ["Cart recovery", "Product matching", "Offer application", "Checkout assistance"], type: "Outbound", retellId: "agent_714ffb20c4149edaf5cb6fbe19" },
+    { name: "SAM", role: "Customer Resolution Agent", description: "Handles delivery issues, refund escalations, and return requests.", capabilities: ["Delivery exceptions", "Refund processing", "Return authorization", "Order tracking"], type: "Inbound", retellId: "agent_cdf245f90ff14ff0e307e09dbf" },
+    { name: "ANDREW", role: "Sales Conversion Agent", description: "Recovers abandoned carts via voice. Surfaces alternatives and closes checkout.", capabilities: ["Cart recovery", "Product matching", "Offer application", "Checkout assistance"], type: "Outbound", retellId: "agent_714ffb20c4149edaf5cb6fbe19" },
   ],
   bfsi: [
-    { name: "Brandon", role: "Banking Fraud Agent", description: "Handles fraud disputes, blocks cards, and initiates dispute resolution.", capabilities: ["Fraud detection", "Card blocking", "Dispute filing", "Credit issuance"], type: "Inbound", retellId: "agent_dfe1866c6e0c9ac883546b48ca" },
-    { name: "Victor", role: "Insurance Claims Agent", description: "Files FNOL, verifies coverage, and assigns surveyors for claims processing.", capabilities: ["FNOL filing", "Coverage verification", "Surveyor assignment", "Claim tracking"], type: "Inbound", retellId: "agent_8729165b472337b00fa205b921" },
+    { name: "BRANDON", role: "Banking Fraud Agent", description: "Handles fraud disputes, blocks cards, and initiates dispute resolution.", capabilities: ["Fraud detection", "Card blocking", "Dispute filing", "Credit issuance"], type: "Inbound", retellId: "agent_dfe1866c6e0c9ac883546b48ca" },
+    { name: "VICTOR", role: "Insurance Claims Agent", description: "Files FNOL, verifies coverage, and assigns surveyors for claims processing.", capabilities: ["FNOL filing", "Coverage verification", "Surveyor assignment", "Claim tracking"], type: "Inbound", retellId: "agent_8729165b472337b00fa205b921" },
   ],
   homeservices: [
-    { name: "Mike", role: "Plumbing Intake Agent", description: "Handles incoming plumbing requests, identifies emergencies, and schedules visits.", capabilities: ["Emergency detection", "Service scheduling", "Customer intake", "Urgent routing"], type: "Inbound", retellId: "agent_15407575cc1758938e5875dfff" },
-    { name: "Sarah", role: "HVAC Scheduling Agent", description: "Manages HVAC appointments, maintenance scheduling, and urgent service prioritization.", capabilities: ["AC/heating inquiries", "Repair booking", "Maintenance scheduling", "Priority handling"], type: "Inbound", retellId: "agent_5260b5be1db138f848f2b94bb8" },
-    { name: "David", role: "Electrician Quote Agent", description: "Qualifies electrical requests and schedules on-site estimates.", capabilities: ["Project capture", "Site inspection scheduling", "Quote requests", "Job qualification"], type: "Inbound", retellId: "agent_bcee2ed253599ef57b565912c9" },
+    { name: "MIKE", role: "Plumbing Intake Agent", description: "Handles incoming plumbing requests, identifies emergencies, and schedules visits.", capabilities: ["Emergency detection", "Service scheduling", "Customer intake", "Urgent routing"], type: "Inbound", retellId: "agent_15407575cc1758938e5875dfff" },
+    { name: "SARAH", role: "HVAC Scheduling Agent", description: "Manages HVAC appointments, maintenance scheduling, and urgent service prioritization.", capabilities: ["AC/heating inquiries", "Repair booking", "Maintenance scheduling", "Priority handling"], type: "Inbound", retellId: "agent_5260b5be1db138f848f2b94bb8" },
+    { name: "DAVID", role: "Electrician Quote Agent", description: "Qualifies electrical requests and schedules on-site estimates.", capabilities: ["Project capture", "Site inspection scheduling", "Quote requests", "Job qualification"], type: "Inbound", retellId: "agent_bcee2ed253599ef57b565912c9" },
   ],
   realestate: [
-    { name: "Ryan Mitchell", role: "Real Estate Agent", description: "Qualifies buyers, sellers, and investors and schedules property consultations.", capabilities: ["Buyer requirements", "Seller info collection", "Investment qualification", "Tour booking"], type: "Inbound", retellId: "agent_606ddbea4bbf4fbec7fa9025e5" },
+    { name: "RYAN", role: "Real Estate Agent", description: "Qualifies buyers, sellers, and investors and schedules property consultations.", capabilities: ["Buyer requirements", "Seller info collection", "Investment qualification", "Tour booking"], type: "Inbound", retellId: "agent_606ddbea4bbf4fbec7fa9025e5" },
   ],
   hospitality: [
-    { name: "Daniel", role: "Concierge Agent", description: "Arranges dining, spa, transportation, and special occasion bookings.", capabilities: ["Dining reservations", "Spa scheduling", "Transportation", "Local recommendations"], type: "Inbound", retellId: "agent_445484ee39011669181e6e57fb" },
-    { name: "Lauren", role: "Reservations Agent", description: "Manages hotel reservations, booking modifications, and stay requests.", capabilities: ["Booking creation", "Modifications", "Room upgrades", "Group bookings"], type: "Inbound", retellId: "agent_391c1b87a83ef3b1e46560429e" },
+    { name: "DANIEL", role: "Concierge Agent", description: "Arranges dining, spa, transportation, and special occasion bookings.", capabilities: ["Dining reservations", "Spa scheduling", "Transportation", "Local recommendations"], type: "Inbound", retellId: "agent_445484ee39011669181e6e57fb" },
+    { name: "LAUREN", role: "Reservations Agent", description: "Manages hotel reservations, booking modifications, and stay requests.", capabilities: ["Booking creation", "Modifications", "Room upgrades", "Group bookings"], type: "Inbound", retellId: "agent_391c1b87a83ef3b1e46560429e" },
   ],
 };
 

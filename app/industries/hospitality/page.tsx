@@ -84,7 +84,7 @@ export default function HomeServicesPage() {
             <a href="https://cal.com/dhananjay-goel/30min" target="_blank" rel="noopener noreferrer" style={{ background: "#f472b6", color: "#fff", padding: "0.875rem 2rem", borderRadius: "8px", textDecoration: "none", fontWeight: 700, fontSize: "1rem", display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
               Book a Demo <ArrowRight size={16} />
             </a>
-            <button onClick={() => startCall("agent_15407575cc1758938e5875dfff", "Mike Thompson", "Plumbing Intake Agent")} style={{ border: "2px solid #f472b6", color: "#f472b6", padding: "0.875rem 2rem", borderRadius: "8px", background: "transparent", cursor: "pointer", fontWeight: 700, fontSize: "1rem" }}>
+            <button onClick={() => startCall("agent_15407575cc1758938e5875dfff", "MIKE", "Plumbing Intake Agent")} style={{ border: "2px solid #f472b6", color: "#f472b6", padding: "0.875rem 2rem", borderRadius: "8px", background: "transparent", cursor: "pointer", fontWeight: 700, fontSize: "1rem" }}>
               Try Live Agent
             </button>
           </div>

@@ -282,7 +282,7 @@ export default function HealthcarePage() {
 
       <section style={{ padding: "5rem 2rem", background: "#a78bfa", textAlign: "center" }}>
         <h2 style={{ fontSize: "clamp(1.75rem, 3vw, 2.5rem)", fontWeight: 800, color: "#fff", marginBottom: "1rem", letterSpacing: "-0.025em" }}>Transform your patient communication</h2>
-        <p style={{ color: "rgba(255,255,255,0.85)", fontSize: "1.125rem", marginBottom: "2rem" }}>Book a free demo and see EMILY Parker in action.</p>
+        <p style={{ color: "rgba(255,255,255,0.85)", fontSize: "1.125rem", marginBottom: "2rem" }}>Book a free demo and see EMILY in action.</p>
         <a href="https://cal.com/dhananjay-goel/30min" target="_blank" rel="noopener noreferrer" style={{ background: "#fff", color: "#a78bfa", padding: "1rem 2.5rem", borderRadius: "8px", textDecoration: "none", fontWeight: 700, fontSize: "1rem", display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
           Book a Free Demo <ArrowRight size={16} />
         </a>

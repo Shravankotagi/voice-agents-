@@ -83,7 +83,7 @@ export default function RealEstatePage() {
             <a href="https://cal.com/dhananjay-goel/30min" target="_blank" rel="noopener noreferrer" style={{ background: "#f59e0b", color: "#fff", padding: "0.875rem 2rem", borderRadius: "8px", textDecoration: "none", fontWeight: 700, fontSize: "1rem", display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
               Book a Demo <ArrowRight size={16} />
             </a>
-            <button onClick={() => startCall("agent_606ddbea4bbf4fbec7fa9025e5", "Ryan Mitchell", "Real Estate Agent")} style={{ border: "2px solid #f59e0b", color: "#f59e0b", padding: "0.875rem 2rem", borderRadius: "8px", background: "transparent", cursor: "pointer", fontWeight: 700, fontSize: "1rem" }}>
+            <button onClick={() => startCall("agent_606ddbea4bbf4fbec7fa9025e5", "RYAN", "Real Estate Agent")} style={{ border: "2px solid #f59e0b", color: "#f59e0b", padding: "0.875rem 2rem", borderRadius: "8px", background: "transparent", cursor: "pointer", fontWeight: 700, fontSize: "1rem" }}>
               Try Live Agent
             </button>
           </div>
