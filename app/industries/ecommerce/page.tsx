@@ -23,8 +23,8 @@ const features = [
 ];
 
 const agents = [
-  { name: "Sam Altman", role: "Customer Resolution Agent", desc: "Handles delivery issues, refund escalations, and return requests.", color: "#fb923c", retellId: "agent_cdf245f90ff14ff0e307e09dbf" },
-  { name: "Andrew Collins", role: "Sales Conversion Agent", desc: "Recovers abandoned carts and closes checkout via voice.", color: "#f97316", retellId: "agent_714ffb20c4149edaf5cb6fbe19" },
+  { name: "SAM", role: "Customer Resolution Agent", desc: "Handles delivery issues, refund escalations, and return requests.", color: "#fb923c", retellId: "agent_cdf245f90ff14ff0e307e09dbf" },
+  { name: "ANDREW", role: "Sales Conversion Agent", desc: "Recovers abandoned carts and closes checkout via voice.", color: "#f97316", retellId: "agent_714ffb20c4149edaf5cb6fbe19" },
 ];
 
 const stats = [
@@ -84,7 +84,7 @@ export default function EcommercePage() {
             <a href="https://cal.com/dhananjay-goel/30min" target="_blank" rel="noopener noreferrer" style={{ background: "#fb923c", color: "#fff", padding: "0.875rem 2rem", borderRadius: "8px", textDecoration: "none", fontWeight: 700, fontSize: "1rem", display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
               Book a Demo <ArrowRight size={16} />
             </a>
-            <button onClick={() => startCall("agent_cdf245f90ff14ff0e307e09dbf", "Sam Altman", "Customer Resolution Agent")} style={{ border: "2px solid #fb923c", color: "#fb923c", padding: "0.875rem 2rem", borderRadius: "8px", background: "transparent", cursor: "pointer", fontWeight: 700, fontSize: "1rem" }}>
+            <button onClick={() => startCall("agent_cdf245f90ff14ff0e307e09dbf", "Sam", "Customer Resolution Agent")} style={{ border: "2px solid #fb923c", color: "#fb923c", padding: "0.875rem 2rem", borderRadius: "8px", background: "transparent", cursor: "pointer", fontWeight: 700, fontSize: "1rem" }}>
               Try Live Agent
             </button>
           </div>

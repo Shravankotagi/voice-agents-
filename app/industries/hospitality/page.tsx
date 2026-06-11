@@ -23,8 +23,8 @@ const features = [
 ];
 
 const agents = [
- { name: "Daniel Walker", role: "Concierge Agent", desc: "Arranges dining, spa, transportation, and special occasion bookings.", color: "#f472b6",retellId: "agent_445484ee39011669181e6e57fb" },
-  { name: "Lauren Brooks", role: "Reservations Agent", desc: "Manages hotel reservations, booking modifications, and stay requests.", color: "#ec4899",retellId: "agent_391c1b87a83ef3b1e46560429e" },
+ { name: "DANIEL", role: "Concierge Agent", desc: "Arranges dining, spa, transportation, and special occasion bookings.", color: "#f472b6",retellId: "agent_445484ee39011669181e6e57fb" },
+  { name: "LAUREN", role: "Reservations Agent", desc: "Manages hotel reservations, booking modifications, and stay requests.", color: "#ec4899",retellId: "agent_391c1b87a83ef3b1e46560429e" },
 ];
 
 const stats = [
