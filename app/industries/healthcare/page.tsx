@@ -24,8 +24,8 @@ const features = [
 ];
 
 const agents = [
-  { name: "SARA", role: "Patient Services Agent", desc: "Schedules appointments, recommends doctors, and handles patient inquiries.", color: "#a78bfa", retellId: "agent_b7aeab2c389d64e0ae9ec3d999" },
-  { name: "RIYA", role: "Clinical Screening Agent", desc: "Performs symptom assessment and patient triage before consultation.", color: "#818cf8", retellId: "agent_cce30852caccbdd3021ef4aa01" },
+  { name: "Emily Parker", role: "Patient Services Agent", desc: "Schedules appointments, recommends doctors, and handles patient inquiries.", color: "#a78bfa", retellId: "agent_ddf03bcc20dc6fdd83adbc290c" },
+  { name: "Nicole Turner", role: "Clinical Screening Agent", desc: "Performs symptom assessment and patient triage before consultation.", color: "#818cf8", retellId: "agent_670481e5581961108e2370f85c" },
 ];
 
 const stats = [
@@ -86,7 +86,7 @@ export default function HealthcarePage() {
             <a href="https://cal.com/dhananjay-goel/30min" target="_blank" rel="noopener noreferrer" style={{ background: "#a78bfa", color: "#fff", padding: "0.875rem 2rem", borderRadius: "8px", textDecoration: "none", fontWeight: 700, fontSize: "1rem", display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
               Book a Demo <ArrowRight size={16} />
             </a>
-            <button onClick={() => startCall("agent_b7aeab2c389d64e0ae9ec3d999", "SARA", "Patient Services Agent")} style={{ border: "2px solid #a78bfa", color: "#a78bfa", padding: "0.875rem 2rem", borderRadius: "8px", background: "transparent", cursor: "pointer", fontWeight: 700, fontSize: "1rem" }}>
+            <button onClick={() => startCall("agent_ddf03bcc20dc6fdd83adbc290c", "SARA", "Patient Services Agent")} style={{ border: "2px solid #a78bfa", color: "#a78bfa", padding: "0.875rem 2rem", borderRadius: "8px", background: "transparent", cursor: "pointer", fontWeight: 700, fontSize: "1rem" }}>
               Try Live Agent
             </button>
           </div>
@@ -282,7 +282,7 @@ export default function HealthcarePage() {
 
       <section style={{ padding: "5rem 2rem", background: "#a78bfa", textAlign: "center" }}>
         <h2 style={{ fontSize: "clamp(1.75rem, 3vw, 2.5rem)", fontWeight: 800, color: "#fff", marginBottom: "1rem", letterSpacing: "-0.025em" }}>Transform your patient communication</h2>
-        <p style={{ color: "rgba(255,255,255,0.85)", fontSize: "1.125rem", marginBottom: "2rem" }}>Book a free demo and see SARA in action.</p>
+        <p style={{ color: "rgba(255,255,255,0.85)", fontSize: "1.125rem", marginBottom: "2rem" }}>Book a free demo and see Emily Parker in action.</p>
         <a href="https://cal.com/dhananjay-goel/30min" target="_blank" rel="noopener noreferrer" style={{ background: "#fff", color: "#a78bfa", padding: "1rem 2.5rem", borderRadius: "8px", textDecoration: "none", fontWeight: 700, fontSize: "1rem", display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
           Book a Free Demo <ArrowRight size={16} />
         </a>

@@ -23,8 +23,8 @@ const features = [
 ];
 
 const agents = [
- { name: "LUCKY", role: "Concierge Agent", desc: "Arranges dining, spa, transportation, and special occasion bookings.", color: "#f472b6",retellId: "agent_5ae818c99ed491aba70e90c4ad" },
-  { name: "NIKITA", role: "Reservations Agent", desc: "Manages hotel reservations, booking modifications, and stay requests.", color: "#ec4899",retellId: "agent_c8ad0b041fba067ea02f6ca850" },
+ { name: "Daniel Walker", role: "Concierge Agent", desc: "Arranges dining, spa, transportation, and special occasion bookings.", color: "#f472b6",retellId: "agent_445484ee39011669181e6e57fb" },
+  { name: "Lauren Brooks", role: "Reservations Agent", desc: "Manages hotel reservations, booking modifications, and stay requests.", color: "#ec4899",retellId: "agent_391c1b87a83ef3b1e46560429e" },
 ];
 
 const stats = [
@@ -84,7 +84,7 @@ export default function HomeServicesPage() {
             <a href="https://cal.com/dhananjay-goel/30min" target="_blank" rel="noopener noreferrer" style={{ background: "#f472b6", color: "#fff", padding: "0.875rem 2rem", borderRadius: "8px", textDecoration: "none", fontWeight: 700, fontSize: "1rem", display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
               Book a Demo <ArrowRight size={16} />
             </a>
-            <button onClick={() => startCall("agent_7a2e179e5304e28672360a15ee", "Mike Thompson", "Plumbing Intake Agent")} style={{ border: "2px solid #f472b6", color: "#f472b6", padding: "0.875rem 2rem", borderRadius: "8px", background: "transparent", cursor: "pointer", fontWeight: 700, fontSize: "1rem" }}>
+            <button onClick={() => startCall("agent_15407575cc1758938e5875dfff", "Mike Thompson", "Plumbing Intake Agent")} style={{ border: "2px solid #f472b6", color: "#f472b6", padding: "0.875rem 2rem", borderRadius: "8px", background: "transparent", cursor: "pointer", fontWeight: 700, fontSize: "1rem" }}>
               Try Live Agent
             </button>
           </div>

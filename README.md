@@ -48,36 +48,36 @@ Built by **Enlight Lab** to demonstrate what truly autonomous voice AI looks lik
 
 | Agent | Role | What It Does |
 |:---:|:---|:---|
-| **SAM** | Support Agent | Resolves delivery issues, processes refunds and returns end-to-end |
-| **MAX** | Sales Agent | Re-engages abandoned carts and closes checkout in real time |
+| **Sam Altman** | Support Agent | Resolves delivery issues, processes refunds and returns end-to-end |
+| **Andrew Collins** | Sales Agent | Re-engages abandoned carts and closes checkout in real time |
 
 ### 🎓 EdTech
 
 | Agent | Role | What It Does |
 |:---:|:---|:---|
-| **ISHA** | Lead Qualifier | Qualifies inbound leads, matches programs, books counsellor sessions |
+| **Natalie Parker** | Lead Qualifier | Qualifies inbound leads, matches programs, books counsellor sessions |
 | **KIRAN** | Onboarding Agent | Guides newly enrolled students through the full onboarding flow |
 
 ### 🏥 HealthTech
 
 | Agent | Role | What It Does |
 |:---:|:---|:---|
-| **SARA** | Scheduling Agent | Books appointments and verifies insurance without human involvement |
-| **RIYA** | Triage Agent | Assesses symptoms and classifies urgency for clinical routing |
+| **Emily Parker** | Scheduling Agent | Books appointments and verifies insurance without human involvement |
+| **Nicole Turner** | Triage Agent | Assesses symptoms and classifies urgency for clinical routing |
 
 ### 🏦 BFSI
 
 | Agent | Role | What It Does |
 |:---:|:---|:---|
-| **BHASKAR** | Fraud Resolution | Resolves disputes and issues provisional credits autonomously |
-| **ARYAN** | Claims Agent | Files FNOL (First Notice of Loss) and assigns adjusters in one call |
+| **Brandon Cooper** | Fraud Resolution | Resolves disputes and issues provisional credits autonomously |
+| **Victor Reed** | Claims Agent | Files FNOL (First Notice of Loss) and assigns adjusters in one call |
 
 ### 🏨 Hospitality
 
 | Agent | Role | What It Does |
 |:---:|:---|:---|
-| **LUCKY** | Concierge | Manages spa, dining, and local experience bookings |
-| **NIKITA** | Reservations | Handles room reservations and checkout extension requests |
+| **Daniel Walker** | Concierge | Manages spa, dining, and local experience bookings |
+| **Lauren Brooks** | Reservations | Handles room reservations and checkout extension requests |
 
 ### 🏠 Home Services
 
@@ -149,17 +149,24 @@ pnpm install
 Create a `.env.local` file at the project root:
 
 ```env
+<<<<<<< HEAD
 # Retell Agent IDs — Original Agents
 NEXT_PUBLIC_RETELL_SAM_ID=your_sam_agent_id
 NEXT_PUBLIC_RETELL_MAX_ID=your_max_agent_id
 NEXT_PUBLIC_RETELL_ISHA_ID=your_isha_agent_id
+=======
+# Retell Agent IDs
+NEXT_PUBLIC_RETELL_Sam Altman_ID=your_Sam Altman_agent_id
+NEXT_PUBLIC_RETELL_Andrew Collins_ID=your_Andrew Collins_agent_id
+NEXT_PUBLIC_RETELL_Natalie Parker_ID=your_Natalie Parker_agent_id
+>>>>>>> 547ddca (fix done)
 NEXT_PUBLIC_RETELL_KIRAN_ID=your_kiran_agent_id
-NEXT_PUBLIC_RETELL_SARA_ID=your_sara_agent_id
-NEXT_PUBLIC_RETELL_RIYA_ID=your_riya_agent_id
-NEXT_PUBLIC_RETELL_BHASKAR_ID=your_bhaskar_agent_id
-NEXT_PUBLIC_RETELL_ARYAN_ID=your_aryan_agent_id
-NEXT_PUBLIC_RETELL_LUCKY_ID=your_lucky_agent_id
-NEXT_PUBLIC_RETELL_NIKITA_ID=your_nikita_agent_id
+NEXT_PUBLIC_RETELL_Emily Parker_ID=your_Emily Parker_agent_id
+NEXT_PUBLIC_RETELL_Nicole Turner_ID=your_Nicole Turner_agent_id
+NEXT_PUBLIC_RETELL_Brandon Cooper_ID=your_Brandon Cooper_agent_id
+NEXT_PUBLIC_RETELL_Victor Reed_ID=your_Victor Reed_agent_id
+NEXT_PUBLIC_RETELL_Daniel Walker_ID=your_Daniel Walker_agent_id
+NEXT_PUBLIC_RETELL_Lauren Brooks_ID=your_Lauren Brooks_agent_id
 
 # Retell Agent IDs — Home Services Agents
 NEXT_PUBLIC_RETELL_ETHAN_ID=your_ethan_agent_id
