@@ -41,7 +41,7 @@ export default function HomeServicesPage() {
       <nav className="navbar">
         <div className="container">
           <div className="nav-brand">
-            <Image src="/enlight-lab-logo.png" alt="Enlight Lab" width={200} height={42} style={{ objectFit: "contain" }} />
+            <Link href="/" style={{ display: "flex", flexDirection: "column", alignItems: "center", textDecoration: "none" }}><Image src="/enlight-lab-logo.png" alt="Enlight Lab" width={200} height={42} style={{ objectFit: "contain" }} /><span style={{ fontSize: "0.625rem", fontWeight: 700, color: "#0A1F6B", letterSpacing: "0.15em", textTransform: "uppercase", marginTop: "-4px" }}>AI Voice Agents</span></Link>
           </div>
           <div className="nav-links">
             <Link href="/#solutions" className="nav-link">
@@ -64,7 +64,7 @@ export default function HomeServicesPage() {
               FAQ
             </Link>
           </div>
-          <a href="https://cal.com/dhananjay-goel/30min" target="_blank" rel="noopener noreferrer" className="btn btn-primary" style={{ padding: "0.5rem 1.25rem", fontSize: "0.875rem" }}>
+          <a href="https://cal.com/dhananjay-goel/30min"  rel="noopener noreferrer" className="btn btn-primary" style={{ padding: "0.5rem 1.25rem", fontSize: "0.875rem" }}>
             Book Demo
           </a>
         </div>
@@ -82,7 +82,7 @@ export default function HomeServicesPage() {
             Never miss a job again. AI agents answer every call, book every appointment, and dispatch your team — even while you're on the job site.
           </p>
           <div style={{ display: "flex", gap: "1rem", justifyContent: "center", flexWrap: "wrap" }}>
-            <a href="https://cal.com/dhananjay-goel/30min" target="_blank" rel="noopener noreferrer" style={{ background: "#10b981", color: "#fff", padding: "0.875rem 2rem", borderRadius: "8px", textDecoration: "none", fontWeight: 700, fontSize: "1rem", display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
+            <a href="https://cal.com/dhananjay-goel/30min"  rel="noopener noreferrer" style={{ background: "#10b981", color: "#fff", padding: "0.875rem 2rem", borderRadius: "8px", textDecoration: "none", fontWeight: 700, fontSize: "1rem", display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
               Book a Demo <ArrowRight size={16} />
             </a>
             <button onClick={() => startCall("agent_15407575cc1758938e5875dfff", "Mike Thompson", "Plumbing Intake Agent")} style={{ border: "2px solid #10b981", color: "#10b981", padding: "0.875rem 2rem", borderRadius: "8px", background: "transparent", cursor: "pointer", fontWeight: 700, fontSize: "1rem" }}>
@@ -183,7 +183,7 @@ export default function HomeServicesPage() {
                     marginBottom: "0.3rem",
                   }}
                 >
-                  BFSI
+                  Home Services
                 </p>
 
                 <p
@@ -278,7 +278,7 @@ export default function HomeServicesPage() {
       <section style={{ padding: "5rem 2rem", background: "#10b981", textAlign: "center" }}>
         <h2 style={{ fontSize: "clamp(1.75rem, 3vw, 2.5rem)", fontWeight: 800, color: "#fff", marginBottom: "1rem", letterSpacing: "-0.025em" }}>Never miss another job opportunity</h2>
         <p style={{ color: "rgba(255,255,255,0.85)", fontSize: "1.125rem", marginBottom: "2rem" }}>Book a demo and see how AI books 15+ jobs a week on autopilot.</p>
-        <a href="https://cal.com/dhananjay-goel/30min" target="_blank" rel="noopener noreferrer" style={{ background: "#fff", color: "#10b981", padding: "1rem 2.5rem", borderRadius: "8px", textDecoration: "none", fontWeight: 700, fontSize: "1rem", display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
+        <a href="https://cal.com/dhananjay-goel/30min"  rel="noopener noreferrer" style={{ background: "#fff", color: "#10b981", padding: "1rem 2.5rem", borderRadius: "8px", textDecoration: "none", fontWeight: 700, fontSize: "1rem", display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
           Book a Free Demo <ArrowRight size={16} />
         </a>
       </section>
@@ -286,3 +286,4 @@ export default function HomeServicesPage() {
     </div>
   );
 }
+

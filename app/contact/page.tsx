@@ -487,7 +487,7 @@ export default function ContactPage() {
             <div className="social-links-row">
               <a
                 href="https://www.linkedin.com/company/enlightlab/posts/?feedView=all"
-                target="_blank"
+                
                 rel="noopener noreferrer"
                 className="social-link"
                 aria-label="Globe"
@@ -498,7 +498,7 @@ export default function ContactPage() {
               
               <a
                 href="https://youtube.com/@enlightlab"
-                target="_blank"
+                
                 rel="noopener noreferrer"
                 className="social-link"
                 aria-label="Globe"

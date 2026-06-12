@@ -110,6 +110,7 @@ function Navbar() {
             <div style={{ width: "10px", height: "10px", borderRadius: "50%", background: "#fff" }} />
           </div>
           <span style={{ fontSize: "1.125rem", fontWeight: 700, color: "#0A1F6B" }}>Voice by Enlight Lab</span>
+<span style={{ fontSize: "0.625rem", fontWeight: 700, color: "#6B7280", letterSpacing: "0.15em", textTransform: "uppercase", display: "block" }}>AI Voice Agents</span>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: "0.25rem" }}>
           {[
@@ -147,6 +148,7 @@ function Footer() {
                 <div style={{ width: "10px", height: "10px", borderRadius: "50%", background: "#fff" }} />
               </div>
               <span style={{ fontSize: "1.125rem", fontWeight: 700, color: "#fff" }}>Voice by Enlight Lab</span>
+<span style={{ fontSize: "0.625rem", fontWeight: 700, color: "#6B7280", letterSpacing: "0.15em", textTransform: "uppercase", display: "block" }}>AI Voice Agents</span>
             </div>
             <p style={{ color: "rgba(255,255,255,0.7)", fontSize: "0.875rem", lineHeight: 1.6 }}>
               Transforming enterprise customer operations with AI voice technology.
@@ -299,6 +301,7 @@ export default function AboutPage() {
             <span style={{ display: "inline-block", padding: "0.375rem 1rem", borderRadius: "9999px", background: "#DBEAFE", color: "#2563EB", fontSize: "0.8125rem", fontWeight: 700, marginBottom: "1.5rem" }}>
               About Voice by Enlight Lab
             </span>
+ <span style={{ fontSize: "0.625rem", fontWeight: 700, color: "#6B7280", letterSpacing: "0.15em", textTransform: "uppercase", display: "block" }}>AI Voice Agents</span>
             <h1 style={{ fontSize: "clamp(2.25rem, 5vw, 3.5rem)", fontWeight: 800, color: "#0A1F6B", letterSpacing: "-0.03em", lineHeight: 1.1, marginBottom: "1.5rem" }}>
               Transforming Enterprise Customer Operations with AI Voice
             </h1>

@@ -39,7 +39,7 @@ export default function RealEstatePage() {
       <nav className="navbar">
         <div className="container">
           <div className="nav-brand">
-            <Image src="/enlight-lab-logo.png" alt="Enlight Lab" width={200} height={42} style={{ objectFit: "contain" }} />
+            <Link href="/" style={{ display: "flex", flexDirection: "column", alignItems: "center", textDecoration: "none" }}><Image src="/enlight-lab-logo.png" alt="Enlight Lab" width={200} height={42} style={{ objectFit: "contain" }} /><span style={{ fontSize: "0.625rem", fontWeight: 700, color: "#0A1F6B", letterSpacing: "0.15em", textTransform: "uppercase", marginTop: "-4px" }}>AI Voice Agents</span></Link>
           </div>
           <div className="nav-links">
             <Link href="/#solutions" className="nav-link">
@@ -62,7 +62,7 @@ export default function RealEstatePage() {
               FAQ
             </Link>
           </div>
-          <a href="https://cal.com/dhananjay-goel/30min" target="_blank" rel="noopener noreferrer" className="btn btn-primary" style={{ padding: "0.5rem 1.25rem", fontSize: "0.875rem" }}>
+          <a href="https://cal.com/dhananjay-goel/30min"  rel="noopener noreferrer" className="btn btn-primary" style={{ padding: "0.5rem 1.25rem", fontSize: "0.875rem" }}>
             Book Demo
           </a>
         </div>
@@ -80,7 +80,7 @@ export default function RealEstatePage() {
             Qualify every buyer, seller, and investor lead before your agents spend a minute on them. AI handles intake, qualification, and tour scheduling automatically.
           </p>
           <div style={{ display: "flex", gap: "1rem", justifyContent: "center", flexWrap: "wrap" }}>
-            <a href="https://cal.com/dhananjay-goel/30min" target="_blank" rel="noopener noreferrer" style={{ background: "#f59e0b", color: "#fff", padding: "0.875rem 2rem", borderRadius: "8px", textDecoration: "none", fontWeight: 700, fontSize: "1rem", display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
+            <a href="https://cal.com/dhananjay-goel/30min"  rel="noopener noreferrer" style={{ background: "#f59e0b", color: "#fff", padding: "0.875rem 2rem", borderRadius: "8px", textDecoration: "none", fontWeight: 700, fontSize: "1rem", display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
               Book a Demo <ArrowRight size={16} />
             </a>
             <button onClick={() => startCall("agent_606ddbea4bbf4fbec7fa9025e5", "RYAN", "Real Estate Agent")} style={{ border: "2px solid #f59e0b", color: "#f59e0b", padding: "0.875rem 2rem", borderRadius: "8px", background: "transparent", cursor: "pointer", fontWeight: 700, fontSize: "1rem" }}>
@@ -180,7 +180,7 @@ export default function RealEstatePage() {
                     marginBottom: "0.3rem",
                   }}
                 >
-                  HOSPITALITY
+                  Real Estate
                 </p>
 
                 <p
@@ -273,7 +273,7 @@ export default function RealEstatePage() {
       <section style={{ padding: "5rem 2rem", background: "#f59e0b", textAlign: "center" }}>
         <h2 style={{ fontSize: "clamp(1.75rem, 3vw, 2.5rem)", fontWeight: 800, color: "#fff", marginBottom: "1rem", letterSpacing: "-0.025em" }}>Close more deals with less effort</h2>
         <p style={{ color: "rgba(255,255,255,0.85)", fontSize: "1.125rem", marginBottom: "2rem" }}>Book a demo to see how AI qualifies and converts real estate leads.</p>
-        <a href="https://cal.com/dhananjay-goel/30min" target="_blank" rel="noopener noreferrer" style={{ background: "#fff", color: "#f59e0b", padding: "1rem 2.5rem", borderRadius: "8px", textDecoration: "none", fontWeight: 700, fontSize: "1rem", display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
+        <a href="https://cal.com/dhananjay-goel/30min"  rel="noopener noreferrer" style={{ background: "#fff", color: "#f59e0b", padding: "1rem 2.5rem", borderRadius: "8px", textDecoration: "none", fontWeight: 700, fontSize: "1rem", display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
           Book a Free Demo <ArrowRight size={16} />
         </a>
       </section>
@@ -281,3 +281,4 @@ export default function RealEstatePage() {
     </div>
   );
 }
+

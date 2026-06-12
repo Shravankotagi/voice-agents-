@@ -34,13 +34,13 @@ const stats = [
   { v: "4.9/5", l: "Customer rating" },
 ];
 
-export default function HomeServicesPage() {
+export default function HospitalityPage() {
   return (
     <div style={{ minHeight: "100vh", background: "#fff", fontFamily: "Inter, system-ui, sans-serif" }}>
       <nav className="navbar">
         <div className="container">
           <div className="nav-brand">
-            <Image src="/enlight-lab-logo.png" alt="Enlight Lab" width={200} height={42} style={{ objectFit: "contain" }} />
+            <Link href="/" style={{ display: "flex", flexDirection: "column", alignItems: "center", textDecoration: "none" }}><Image src="/enlight-lab-logo.png" alt="Enlight Lab" width={200} height={42} style={{ objectFit: "contain" }} /><span style={{ fontSize: "0.625rem", fontWeight: 700, color: "#0A1F6B", letterSpacing: "0.15em", textTransform: "uppercase", marginTop: "-4px" }}>AI Voice Agents</span></Link>
           </div>
           <div className="nav-links">
             <Link href="/#solutions" className="nav-link">
@@ -63,7 +63,7 @@ export default function HomeServicesPage() {
               FAQ
             </Link>
           </div>
-          <a href="https://cal.com/dhananjay-goel/30min" target="_blank" rel="noopener noreferrer" className="btn btn-primary" style={{ padding: "0.5rem 1.25rem", fontSize: "0.875rem" }}>
+          <a href="https://cal.com/dhananjay-goel/30min"  rel="noopener noreferrer" className="btn btn-primary" style={{ padding: "0.5rem 1.25rem", fontSize: "0.875rem" }}>
             Book Demo
           </a>
         </div>
@@ -72,16 +72,16 @@ export default function HomeServicesPage() {
       <section style={{ padding: "5rem 2rem", background: "linear-gradient(135deg, #ECFDF5 0%, #fff 100%)", textAlign: "center" }}>
         <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} style={{ maxWidth: "760px", margin: "0 auto" }}>
           <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "#ECFDF5", padding: "0.4rem 1rem", borderRadius: "9999px", fontSize: "0.8rem", fontWeight: 700, color: "#f472b6", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "1.5rem" }}>
-            <Home size={14} /> Home Services
+            <Home size={14} /> HOSPITALITY
           </div>
           <h1 style={{ fontSize: "clamp(2.5rem, 5vw, 3.75rem)", fontWeight: 800, color: "#111827", letterSpacing: "-0.03em", lineHeight: 1.1, marginBottom: "1.5rem" }}>
-            AI Voice Agents for<br /><span style={{ color: "#f472b6" }}>Home Services</span>
+            AI Voice Agents for<br /><span style={{ color: "#f472b6" }}>HOSPITALITY</span>
           </h1>
           <p style={{ fontSize: "1.125rem", color: "#6B7280", lineHeight: 1.7, maxWidth: "600px", margin: "0 auto 2.5rem" }}>
             Never miss a job again. AI agents answer every call, book every appointment, and dispatch your team — even while you're on the job site.
           </p>
           <div style={{ display: "flex", gap: "1rem", justifyContent: "center", flexWrap: "wrap" }}>
-            <a href="https://cal.com/dhananjay-goel/30min" target="_blank" rel="noopener noreferrer" style={{ background: "#f472b6", color: "#fff", padding: "0.875rem 2rem", borderRadius: "8px", textDecoration: "none", fontWeight: 700, fontSize: "1rem", display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
+            <a href="https://cal.com/dhananjay-goel/30min"  rel="noopener noreferrer" style={{ background: "#f472b6", color: "#fff", padding: "0.875rem 2rem", borderRadius: "8px", textDecoration: "none", fontWeight: 700, fontSize: "1rem", display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
               Book a Demo <ArrowRight size={16} />
             </a>
             <button onClick={() => startCall("agent_15407575cc1758938e5875dfff", "MIKE", "Plumbing Intake Agent")} style={{ border: "2px solid #f472b6", color: "#f472b6", padding: "0.875rem 2rem", borderRadius: "8px", background: "transparent", cursor: "pointer", fontWeight: 700, fontSize: "1rem" }}>
@@ -106,7 +106,7 @@ export default function HomeServicesPage() {
         <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: "3rem" }}>
             <p style={{ fontSize: "0.75rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#f472b6", marginBottom: "0.5rem" }}>Live Agents</p>
-            <h2 style={{ fontSize: "clamp(1.75rem, 3vw, 2.5rem)", fontWeight: 800, color: "#111827", letterSpacing: "-0.025em" }}>Your home services AI team</h2>
+            <h2 style={{ fontSize: "clamp(1.75rem, 3vw, 2.5rem)", fontWeight: 800, color: "#111827", letterSpacing: "-0.025em" }}>Your Hospitality AI team</h2>
           </div>
           <div
             style={{
@@ -284,7 +284,7 @@ export default function HomeServicesPage() {
       <section style={{ padding: "5rem 2rem", background: "#f472b6", textAlign: "center" }}>
         <h2 style={{ fontSize: "clamp(1.75rem, 3vw, 2.5rem)", fontWeight: 800, color: "#fff", marginBottom: "1rem", letterSpacing: "-0.025em" }}>Never miss another job opportunity</h2>
         <p style={{ color: "rgba(255,255,255,0.85)", fontSize: "1.125rem", marginBottom: "2rem" }}>Book a demo and see how AI books 15+ jobs a week on autopilot.</p>
-        <a href="https://cal.com/dhananjay-goel/30min" target="_blank" rel="noopener noreferrer" style={{ background: "#fff", color: "#f472b6", padding: "1rem 2.5rem", borderRadius: "8px", textDecoration: "none", fontWeight: 700, fontSize: "1rem", display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
+        <a href="https://cal.com/dhananjay-goel/30min"  rel="noopener noreferrer" style={{ background: "#fff", color: "#f472b6", padding: "1rem 2.5rem", borderRadius: "8px", textDecoration: "none", fontWeight: 700, fontSize: "1rem", display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
           Book a Free Demo <ArrowRight size={16} />
         </a>
       </section>
@@ -292,3 +292,4 @@ export default function HomeServicesPage() {
     </div>
   );
 }
+

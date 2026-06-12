@@ -201,6 +201,8 @@ function Navbar() {
           <span style={{ fontWeight: 700, fontSize: "1rem", color: "#0A1F6B" }}>
             Voice by Enlight Lab
           </span>
+
+            <span style={{ fontSize: "0.625rem", fontWeight: 700, color: "#6B7280", letterSpacing: "0.15em", textTransform: "uppercase", display: "block" }}>AI Voice Agents</span>
         </a>
         <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
           <a
@@ -583,6 +585,8 @@ function Footer() {
               <span style={{ fontWeight: 700, fontSize: "1rem", color: "#fff" }}>
                 Voice by Enlight Lab
               </span>
+
+                <span style={{ fontSize: "0.625rem", fontWeight: 700, color: "#6B7280", letterSpacing: "0.15em", textTransform: "uppercase", display: "block" }}>AI Voice Agents</span>
             </div>
             <p className="footer-tagline">
               Enterprise AI Voice Agents for mission-critical operations.

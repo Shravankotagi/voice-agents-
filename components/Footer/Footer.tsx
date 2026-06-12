@@ -227,7 +227,7 @@ export default function Footer() {
                   <a
                     key={social.label}
                     href={social.href}
-                    target="_blank"
+                    
                     rel="noopener noreferrer"
                     aria-label={social.label}
                     style={styles.socialButton}
@@ -278,8 +278,8 @@ export default function Footer() {
             Copyright &copy; 2026 Voice by Enlight Lab. All Rights Reserved.
           </p>
           <div style={styles.bottomLinks}>
-            <a href="https://enlightlab.com" style={styles.bottomLink}>Privacy Policy</a>
-            <a href="https://enlightlab.com/website-service-usage-terms-conditions/" target="_blank" rel="noopener noreferrer" style={styles.bottomLink}>Terms of Service</a>
+            <a href="https://enlightlab.com/privacy-policy/" style={styles.bottomLink}>Privacy Policy</a>
+            <a href="https://enlightlab.com/website-service-usage-terms-conditions/" rel="noopener noreferrer" style={styles.bottomLink}>Terms of Service</a>
             <a href="https://enlightlab.com" style={styles.bottomLink}>Cookie Policy</a>
             <a href="https://enlightlab.com" style={styles.bottomLink}>GDPR</a>
           </div>

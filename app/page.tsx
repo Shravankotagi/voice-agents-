@@ -1,7 +1,8 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, Check, ChevronDown, Phone, Calendar, MessageSquare, Shield, Users, TrendingUp, Clock, Star, Heart, ShoppingCart, Building, Home, Building2, Zap, Users2 } from "lucide-react";
 import { useCallStore } from "@/store/callStore";
@@ -132,7 +133,12 @@ export default function HomePage() {
       <nav className="navbar">
         <div className="container">
           <div className="nav-brand">
-            <Image src="/enlight-lab-logo.png" alt="Enlight Lab" width={200} height={42} style={{ objectFit: "contain" }} />
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+              <Link href="/" style={{ display: "flex", flexDirection: "column", alignItems: "center", textDecoration: "none" }}>
+                <Image src="/enlight-lab-logo.png" alt="Enlight Lab" width={200} height={42} style={{ objectFit: "contain" }} />
+                <span style={{ fontSize: "0.625rem", fontWeight: 700, color: "#0A1F6B", letterSpacing: "0.15em", textTransform: "uppercase", marginTop: "-4px" }}>AI VOICE AGENTS</span>
+              </Link>
+            </div>
           </div>
           <div className="nav-links">
             <button className="nav-link" onClick={() => document.getElementById('solutions')?.scrollIntoView({ behavior: 'smooth' })}>Solutions</button>
@@ -141,7 +147,7 @@ export default function HomePage() {
             <button className="nav-link" onClick={() => document.getElementById('industries')?.scrollIntoView({ behavior: 'smooth' })}>Industries</button>
             <button className="nav-link" onClick={() => document.getElementById('faq')?.scrollIntoView({ behavior: 'smooth' })}>FAQ</button>
           </div>
-          <a href="https://cal.com/dhananjay-goel/30min" target="_blank" rel="noopener noreferrer" className="btn btn-primary" style={{ padding: "0.5rem 1.25rem", fontSize: "0.875rem" }}>
+          <a href="https://cal.com/dhananjay-goel/30min"  rel="noopener noreferrer" className="btn btn-primary" style={{ padding: "0.5rem 1.25rem", fontSize: "0.875rem" }}>
             Book Demo
           </a>
         </div>
@@ -167,11 +173,11 @@ export default function HomePage() {
                 From customer support to bookings, sales, and follow ups fully automated, 24/7.
               </p>
               <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
-                <a href="https://cal.com/dhananjay-goel/30min" target="_blank" rel="noopener noreferrer" className="btn btn-primary">Book a Demo <ArrowRight size={16} /></a>
+                <a href="https://cal.com/dhananjay-goel/30min"  rel="noopener noreferrer" className="btn btn-primary">Book a Demo <ArrowRight size={16} /></a>
                 <button className="btn btn-outline" onClick={() => document.getElementById('industries')?.scrollIntoView({ behavior: 'smooth' })}>See Agent Demos</button>
               </div>
               <p style={{ marginTop: "1.5rem", fontSize: "0.875rem", color: "#6B7280" }}>
-                ✓ No credit card required &nbsp;&nbsp;✓ Setup in 3 days &nbsp;&nbsp; ✓ Cancel anytime
+                ✓ No credit card required   ✓ Setup in 3 days    ✓ Cancel anytime
               </p>
             </motion.div>
 
@@ -325,14 +331,14 @@ export default function HomePage() {
                   color: string;
                 }> = {
                   healthcare: {
-                    headline: "AI that speaks patient — not tech.",
+                    headline: "AI that speaks patient ? not tech.",
                     desc: "From appointment scheduling to clinical screening, our HIPAA-compliant agents handle the full patient communication lifecycle so your staff can focus on care.",
                     features: ["Schedule & confirm appointments 24/7", "Pre-visit symptom triage & intake", "Insurance verification before visits", "Post-visit follow-up calls", "Emergency routing to on-call staff", "HIPAA compliant by design"],
                     stat: "92%", statLabel: "of appointment calls automated", color: "#a78bfa",
                   },
                   ecommerce: {
                     headline: "Turn missed calls into completed orders.",
-                    desc: "AI agents recover abandoned carts, resolve support tickets, and drive repeat purchases — all without adding headcount to your support team.",
+                    desc: "AI agents recover abandoned carts, resolve support tickets, and drive repeat purchases ? all without adding headcount to your support team.",
                     features: ["Abandoned cart recovery via voice", "Order tracking & delivery updates", "Return & refund authorization", "Upsell during support calls", "Post-purchase review collection", "CRM sync after every interaction"],
                     stat: "23%", statLabel: "cart recovery rate on average", color: "#fb923c",
                   },
@@ -344,19 +350,19 @@ export default function HomePage() {
                   },
                   homeservices: {
                     headline: "Never miss a job while you're on one.",
-                    desc: "While your team is on-site, our AI agents answer every inbound call, qualify the job, and book the appointment — integrated with ServiceTitan and Jobber.",
+                    desc: "While your team is on-site, our AI agents answer every inbound call, qualify the job, and book the appointment ? integrated with ServiceTitan and Jobber.",
                     features: ["Answer every call 24/7", "Emergency detection & routing", "Job scheduling & dispatch", "Arrival time updates to customers", "Post-service review requests", "ServiceTitan & Jobber integration"],
                     stat: "15+", statLabel: "jobs booked per week on autopilot", color: "#10b981",
                   },
                   realestate: {
                     headline: "Qualify leads before your agents pick up.",
-                    desc: "AI agents pre-qualify every buyer, seller, and investor lead — collecting requirements, budget, and timeline — so your agents only spend time on sales-ready prospects.",
+                    desc: "AI agents pre-qualify every buyer, seller, and investor lead ? collecting requirements, budget, and timeline ? so your agents only spend time on sales-ready prospects.",
                     features: ["Buyer & seller intake qualification", "Investment criteria collection", "Property tour scheduling", "Long-term lead nurturing follow-ups", "CRM auto-logging after every call", "New listing match notifications"],
                     stat: "3x", statLabel: "more qualified leads for your team", color: "#f59e0b",
                   },
                   hospitality: {
                     headline: "5-star service at every touchpoint.",
-                    desc: "From room reservations to concierge requests, our multilingual agents deliver exceptional guest experiences around the clock — without adding front desk staff.",
+                    desc: "From room reservations to concierge requests, our multilingual agents deliver exceptional guest experiences around the clock ? without adding front desk staff.",
                     features: ["Room booking & modifications", "Dining & spa reservations", "Transportation arrangements", "In-stay service requests", "Multilingual guest support", "Upsell room upgrades automatically"],
                     stat: "3.2x", statLabel: "more bookings via proactive outreach", color: "#f472b6",
                   },
@@ -374,7 +380,7 @@ export default function HomePage() {
                         <span style={{ fontSize: "0.875rem", color: "#6B7280", lineHeight: 1.4, maxWidth: "140px" }}>{info.statLabel}</span>
                       </div>
                       <br />
-                      <a href="https://cal.com/dhananjay-goel/30min" target="_blank" rel="noopener noreferrer"
+                      <a href="https://cal.com/dhananjay-goel/30min"  rel="noopener noreferrer"
                         style={{ background: info.color, color: "#fff", padding: "0.875rem 1.75rem", borderRadius: "10px", textDecoration: "none", fontWeight: 700, fontSize: "0.9375rem", display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
                         Book a Demo <ArrowRight size={15} />
                       </a>
@@ -382,7 +388,7 @@ export default function HomePage() {
                     {/* Right: features */}
                     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem" }}>
                       {info.features.map((feat) => (
-                        <div key={feat} style={{ display: "flex", alignItems: "flex-start", gap: "0.625rem", background: "#fff", border: "1px solid #E5E7EB", borderRadius: "10px", padding: "0.875rem 1rem" }}>
+                        <div key={feat} style={{ display: "flex", alignItems: "center", gap: "0.625rem", background: "#fff", border: "1px solid #E5E7EB", borderRadius: "10px", padding: "0.875rem 1rem" }}>
                           <Check size={15} color={info.color} strokeWidth={2.5} style={{ flexShrink: 0, marginTop: "2px" }} />
                           <span style={{ fontSize: "0.8125rem", fontWeight: 500, color: "#374151", lineHeight: 1.4 }}>{feat}</span>
                         </div>
@@ -444,6 +450,24 @@ export default function HomePage() {
                   gap: "0.875rem",
                   boxShadow: "0 2px 12px rgba(0,0,0,0.06)",
                 }}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                 onMouseEnter={e => {
                   const el = e.currentTarget as HTMLDivElement;
                   el.style.boxShadow = `0 8px 32px ${agent.color}40`;
@@ -492,14 +516,14 @@ export default function HomePage() {
           </div>
           <div className="features-section-grid">
             {[
-              { color: "#EF4444", icon: Phone, title: "Zero Calls to Voicemail", desc: "While you're on the job, we're on the phone. Every caller gets a real answer — not a recording, not a competitor." },
+              { color: "#EF4444", icon: Phone, title: "Zero Calls to Voicemail", desc: "While you're on the job, we're on the phone. Every caller gets a real answer ? not a recording, not a competitor." },
               { color: "#3B82F6", icon: Calendar, title: "Your Calendar, Always Full", desc: "New jobs get scheduled in the first call. No callbacks, no back-and-forth, no admin time." },
               { color: "#10B981", icon: Users, title: "Only Qualified Leads Reach You", desc: "Callers get pre-screened on the spot. Your time goes to prospects worth the drive." },
-              { color: "#F97316", icon: Zap, title: "Quick Answers, Faster Bookings", desc: "Pricing, availability, and service questions handled in the first call — before it ever reaches your team." },
+              { color: "#F97316", icon: Zap, title: "Quick Answers, Faster Bookings", desc: "Pricing, availability, and service questions handled in the first call ? before it ever reaches your team." },
               { color: "#8B5CF6", icon: Clock, title: "Revenue While You Sleep", desc: "That 11pm emergency call? Answered, qualified, and scheduled before morning." },
               { color: "#EF4444", icon: Shield, title: "Urgent Calls, Handled Fast", desc: "Emergencies get flagged and routed to the right person immediately. No delays, no dropped balls." },
-              { color: "#3B82F6", icon: TrendingUp, title: "Plugs Into Your Workflow", desc: "Connects to 1,000+ tools — your CRM, calendar, and field service platform — out of the box." },
-              { color: "#F59E0B", icon: MessageSquare, title: "Sounds Like Your Team", desc: "Natural conversations, not robotic menus. Callers feel heard — and they book." },
+              { color: "#3B82F6", icon: TrendingUp, title: "Plugs Into Your Workflow", desc: "Connects to 1,000+ tools ? your CRM, calendar, and field service platform ? out of the box." },
+              { color: "#F59E0B", icon: MessageSquare, title: "Sounds Like Your Team", desc: "Natural conversations, not robotic menus. Callers feel heard ? and they book." },
             ].map((f, i) => (
               <motion.div
                 key={f.title}
@@ -598,7 +622,7 @@ export default function HomePage() {
                 <p style={{ fontSize: "0.875rem", color: "#6B7280", lineHeight: 1.6 }}>{step.desc}</p>
                 {/* Connector arrow (not on last) */}
                 {i < 3 && (
-                  <div style={{ position: "absolute", right: "-16px", top: "50%", transform: "translateY(-50%)", color: "#D1D5DB", fontSize: "1.25rem", zIndex: 1 }}>â†’</div>
+                  <div style={{ position: "absolute", right: "-16px", top: "50%", transform: "translateY(-50%)", color: "#D1D5DB", fontSize: "1.25rem", zIndex: 1 }}>?</div>
                 )}
               </motion.div>
             ))}
@@ -679,7 +703,7 @@ export default function HomePage() {
           <p style={{ fontSize: "1.125rem", color: "rgba(255,255,255,0.8)", marginBottom: "2rem" }}>
             Book a free demo and see how AI voice agents can transform your business.
           </p>
-          <a href="https://cal.com/dhananjay-goel/30min" target="_blank" rel="noopener noreferrer" className="btn" style={{ background: "#fff", color: "#4F46E5", padding: "1rem 2rem", fontSize: "1rem" }}>
+          <a href="https://cal.com/dhananjay-goel/30min"  rel="noopener noreferrer" className="btn" style={{ background: "#fff", color: "#4F46E5", padding: "1rem 2rem", fontSize: "1rem" }}>
             Book a Free Demo <ArrowRight size={16} />
           </a>
         </div>
@@ -707,7 +731,7 @@ export default function HomePage() {
           <div className="footer-bottom">
             <p className="footer-copy">Copyright 2026 Voice by Enlight Lab</p>
             <div style={{ display: "flex", gap: "1.5rem" }}>
-              <a href="https://enlightlab.com/privacy" target="" rel="noopener noreferrer" className="footer-col-link">Privacy Policy</a>
+              <a href="https://enlightlab.com/privacy-policy/" target="" rel="noopener noreferrer" className="footer-col-link">Privacy Policy</a>
               <a href="https://enlightlab.com/website-service-usage-terms-conditions/" target="" rel="noopener noreferrer" className="footer-col-link">Terms of Use</a>
             </div>
           </div>
@@ -715,4 +739,4 @@ export default function HomePage() {
       </footer>
     </div>
   );
-}
+} 

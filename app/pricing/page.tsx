@@ -722,6 +722,8 @@ function Navbar() {
           <span style={{ fontSize: "1.125rem", fontWeight: 700, color: "var(--text-heading)" }}>
             Voice by Enlight Lab
           </span>
+
+            <span style={{ fontSize: "0.625rem", fontWeight: 700, color: "#6B7280", letterSpacing: "0.15em", textTransform: "uppercase", display: "block" }}>AI Voice Agents</span>
         </a>
         <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
           <a href="/" style={{
@@ -805,6 +807,8 @@ function Footer() {
               <span style={{ fontSize: "1.125rem", fontWeight: 700, color: "#fff" }}>
                 Voice by Enlight Lab
               </span>
+
+                <span style={{ fontSize: "0.625rem", fontWeight: 700, color: "#6B7280", letterSpacing: "0.15em", textTransform: "uppercase", display: "block" }}>AI Voice Agents</span>
             </div>
             <p style={{ fontSize: "0.875rem", color: "rgba(255,255,255,0.7)", maxWidth: "300px" }}>
               Enterprise AI voice agents that scale operations and reduce costs.

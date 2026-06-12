@@ -113,6 +113,7 @@ export default function Navbar() {
                 }}
               />
             </div>
+            <div style={{ display: "flex", flexDirection: "column", lineHeight: 1.1 }}>
             <span
               style={{
                 fontSize: "1rem",
@@ -123,6 +124,18 @@ export default function Navbar() {
             >
               Voice by Enlight Lab
             </span>
+            <span
+              style={{
+                fontSize: "0.625rem",
+                fontWeight: 700,
+                color: "#6B7280",
+                letterSpacing: "0.15em",
+                textTransform: "uppercase",
+              }}
+            >
+              AI Voice Agents
+            </span>
+          </div>
           </Link>
 
           {/* Desktop Navigation */}
