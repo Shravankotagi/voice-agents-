@@ -1,5 +1,5 @@
 ﻿"use client";
-
+import Footer from "@/components/Footer/Footer";
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -709,34 +709,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="footer">
-        <div className="container">
-          <div className="footer-grid">
-            <div className="footer-brand">
-              <Image src="/enlight-lab-logo.png" alt="Enlight Lab" width={180} height={42} style={{ filter: "brightness(0) invert(1)", objectFit: "contain" }} />
-              <p className="footer-tagline">AI voice agents for every business.</p>
-            </div>
-            {footerLinks.map((col) => (
-              <div key={col.title}>
-                <div className="footer-col-title">{col.title}</div>
-                <div className="footer-col-links">
-                  {col.links.map((l) => (
-                    <a key={l.label} href={l.href} target="" rel="noopener noreferrer" className="footer-col-link">{l.label}</a>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="footer-bottom">
-            <p className="footer-copy">Copyright 2026 Voice by Enlight Lab</p>
-            <div style={{ display: "flex", gap: "1.5rem" }}>
-              <a href="https://enlightlab.com/privacy-policy/" target="" rel="noopener noreferrer" className="footer-col-link">Privacy Policy</a>
-              <a href="https://enlightlab.com/website-service-usage-terms-conditions/" target="" rel="noopener noreferrer" className="footer-col-link">Terms of Use</a>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 } 
