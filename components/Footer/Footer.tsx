@@ -216,7 +216,8 @@ export default function Footer() {
               <Image src="/enlight-lab-logo.png" alt="Voice by Enlight Lab" width={140} height={36} style={{ objectFit: "contain", height: "32px", width: "auto" }} />
             </div>
             <p style={styles.brandTagline}>
-              Enterprise AI Voice Agents for healthcare, BFSI, hospitality, ecommerce, and more.
+              Enterprise AI Voice Agents for sales, support, scheduling, and operations - built to automate conversations and accelerate growth.
+ 
             </p>
             <div style={styles.brandContact}>
               <a href="mailto:contact@enlightlab.com" style={styles.contactEmail}>
@@ -280,8 +281,6 @@ export default function Footer() {
           <div style={styles.bottomLinks}>
             <a href="https://enlightlab.com/privacy-policy/" style={styles.bottomLink}>Privacy Policy</a>
             <a href="https://enlightlab.com/website-service-usage-terms-conditions/" rel="noopener noreferrer" style={styles.bottomLink}>Terms of Service</a>
-            <a href="https://enlightlab.com" style={styles.bottomLink}>Cookie Policy</a>
-            <a href="https://enlightlab.com" style={styles.bottomLink}>GDPR</a>
           </div>
         </div>
       </div>

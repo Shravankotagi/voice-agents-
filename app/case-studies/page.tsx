@@ -765,7 +765,7 @@ function Footer() {
             <div style={{ marginBottom: "0.75rem" }}>
               <Image
                 src="/Layer_1.png"
-                alt="Enlight AI"
+                alt="Enlight Lab"
                 width={140}
                 height={36}
                 style={{ objectFit: "contain", height: "32px", width: "auto" }}
