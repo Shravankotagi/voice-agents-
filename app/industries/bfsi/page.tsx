@@ -80,7 +80,7 @@ export default function BFSIPage() {
             AI Voice Agents for<br /><span style={{ color: "#4f8ef7" }}>Banking & Finance</span>
           </h1>
           <p style={{ fontSize: "1.125rem", color: "#6B7280", lineHeight: 1.7, maxWidth: "600px", margin: "0 auto 2.5rem" }}>
-            Enterprise-grade AI agents for fraud resolution, insurance claims, account management, and loan processing — built for the compliance demands of financial services.
+            Enterprise grade AI agents for fraud resolution, insurance claims, account management, and loan processing built for the compliance demands of financial services.
           </p>
           <div style={{ display: "flex", gap: "1rem", justifyContent: "center", flexWrap: "wrap" }}>
             <a href="https://cal.com/dhananjay-goel/30min"  rel="noopener noreferrer" style={{ background: "#4f8ef7", color: "#fff", padding: "0.875rem 2rem", borderRadius: "8px", textDecoration: "none", fontWeight: 700, fontSize: "1rem", display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
@@ -259,7 +259,7 @@ export default function BFSIPage() {
         <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: "3rem" }}>
             <p style={{ fontSize: "0.75rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#4f8ef7", marginBottom: "0.5rem" }}>Features</p>
-            <h2 style={{ fontSize: "clamp(1.75rem, 3vw, 2.5rem)", fontWeight: 800, color: "#111827", letterSpacing: "-0.025em" }}>Enterprise-grade for financial services</h2>
+            <h2 style={{ fontSize: "clamp(1.75rem, 3vw, 2.5rem)", fontWeight: 800, color: "#111827", letterSpacing: "-0.025em" }}>Enterprise grade for financial services</h2>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1.5rem" }}>
             {features.map((f, i) => (

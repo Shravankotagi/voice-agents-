@@ -79,7 +79,7 @@ export default function HomeServicesPage() {
             AI Voice Agents for<br /><span style={{ color: "#10b981" }}>Home Services</span>
           </h1>
           <p style={{ fontSize: "1.125rem", color: "#6B7280", lineHeight: 1.7, maxWidth: "600px", margin: "0 auto 2.5rem" }}>
-            Never miss a job again. AI agents answer every call, book every appointment, and dispatch your team — even while you're on the job site.
+            Never miss an opportunity again. Our AI agents answer every call, schedule appointments, and dispatch your team automatically even while you're busy on the job site.
           </p>
           <div style={{ display: "flex", gap: "1rem", justifyContent: "center", flexWrap: "wrap" }}>
             <a href="https://cal.com/dhananjay-goel/30min"  rel="noopener noreferrer" style={{ background: "#10b981", color: "#fff", padding: "0.875rem 2rem", borderRadius: "8px", textDecoration: "none", fontWeight: 700, fontSize: "1rem", display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>

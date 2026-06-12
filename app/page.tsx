@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import Image from "next/image";
@@ -622,7 +622,7 @@ export default function HomePage() {
                 <p style={{ fontSize: "0.875rem", color: "#6B7280", lineHeight: 1.6 }}>{step.desc}</p>
                 {/* Connector arrow (not on last) */}
                 {i < 3 && (
-                  <div style={{ position: "absolute", right: "-16px", top: "50%", transform: "translateY(-50%)", color: "#D1D5DB", fontSize: "1.25rem", zIndex: 1 }}>?</div>
+                  <div style={{ position: "absolute", right: "-19px", top: "50%", transform: "translateY(-50%)", color: "#a59a9a", fontSize: "1.5rem", zIndex: 10 }}> → </div>
                 )}
               </motion.div>
             ))}

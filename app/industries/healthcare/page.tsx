@@ -80,7 +80,7 @@ export default function HealthcarePage() {
             <span style={{ color: "#a78bfa" }}>Healthcare & Clinics</span>
           </h1>
           <p style={{ fontSize: "1.125rem", color: "#6B7280", lineHeight: 1.7, marginBottom: "2.5rem", maxWidth: "600px", margin: "0 auto 2.5rem" }}>
-            HIPAA-compliant AI agents that handle patient scheduling, clinical screening, insurance verification, and follow-ups — so your staff focuses on care, not calls.
+            HIPAA-compliant AI agents that handle patient scheduling, clinical screening, insurance verification, and follow ups so your staff focuses on care, not calls.
           </p>
           <div style={{ display: "flex", gap: "1rem", justifyContent: "center", flexWrap: "wrap" }}>
             <a href="https://cal.com/dhananjay-goel/30min"  rel="noopener noreferrer" style={{ background: "#a78bfa", color: "#fff", padding: "0.875rem 2rem", borderRadius: "8px", textDecoration: "none", fontWeight: 700, fontSize: "1rem", display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>

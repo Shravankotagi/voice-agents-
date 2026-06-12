@@ -78,7 +78,7 @@ export default function EcommercePage() {
             AI Voice Agents for<br /><span style={{ color: "#fb923c" }}>Ecommerce & Retail</span>
           </h1>
           <p style={{ fontSize: "1.125rem", color: "#6B7280", lineHeight: 1.7, marginBottom: "2.5rem", maxWidth: "600px", margin: "0 auto 2.5rem" }}>
-            Recover carts, resolve support tickets, and drive repeat purchases — all on autopilot. AI agents handle every customer touchpoint so your team focuses on growth.
+            Recover carts, resolve support tickets, and drive repeat purchases all on autopilot. AI agents handle every customer touchpoint so your team focuses on growth.
           </p>
           <div style={{ display: "flex", gap: "1rem", justifyContent: "center", flexWrap: "wrap" }}>
             <a href="https://cal.com/dhananjay-goel/30min"  rel="noopener noreferrer" style={{ background: "#fb923c", color: "#fff", padding: "0.875rem 2rem", borderRadius: "8px", textDecoration: "none", fontWeight: 700, fontSize: "1rem", display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
