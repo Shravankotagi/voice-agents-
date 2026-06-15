@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 export async function POST(req: Request) {
   try {
     console.log("API KEY LOADED:", process.env.RETELL_API_KEY);
-    const { agentId } = await req.json();
+    const { agentId, dynamicVariables } = await req.json();
     
     const response = await fetch(
       "https://api.retellai.com/v2/create-web-call",
@@ -15,6 +15,7 @@ export async function POST(req: Request) {
         },
         body: JSON.stringify({
           agent_id: agentId,
+          retell_llm_dynamic_variables: dynamicVariables,
         }),
       }
     );

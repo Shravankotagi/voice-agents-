@@ -60,7 +60,24 @@ export const useCallStore = create<CallState>((set, get) => ({
       const res = await fetch("/api/retell/create-web-call", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ agentId: agent.retellAgentId }),
+        body: JSON.stringify({ 
+        agentId: agent.retellAgentId,
+        dynamicVariables: {
+          current_datetime: new Date().toLocaleString("en-IN", {
+            timeZone: "Asia/Kolkata",
+            dateStyle: "full",
+            timeStyle: "short"
+          }),
+          time_of_day: (() => {
+            const hour = parseInt(new Intl.DateTimeFormat("en-IN", {
+              timeZone: "Asia/Kolkata",
+              hour: "numeric",
+              hour12: false
+            }).format(new Date()));
+            return hour < 12 ? "morning" : hour < 17 ? "afternoon" : "evening";
+          })()
+        }
+      }),
       });
 
       const data = await res.json();
