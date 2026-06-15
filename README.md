@@ -11,7 +11,6 @@
 ```
 
 **18 Autonomous Voice Agents · Real Workflows · Zero Human Intervention**
-
 <br />
 
 [![Next.js](https://img.shields.io/badge/Next.js_14-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)](https://nextjs.org/)
