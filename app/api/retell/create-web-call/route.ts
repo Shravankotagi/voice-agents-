@@ -1,6 +1,31 @@
 import { NextResponse } from "next/server";
 
+const ALLOWED_ORIGINS = [
+  "https://www.enlightlab.com",
+  "https://voice.enlightlab.com",
+];
+
+function getCorsHeaders(origin: string | null) {
+  const allowOrigin = origin && ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
+  return {
+    "Access-Control-Allow-Origin": allowOrigin,
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type",
+  };
+}
+
+export async function OPTIONS(req: Request) {
+  const origin = req.headers.get("origin");
+  return new NextResponse(null, {
+    status: 204,
+    headers: getCorsHeaders(origin),
+  });
+}
+
 export async function POST(req: Request) {
+  const origin = req.headers.get("origin");
+  const corsHeaders = getCorsHeaders(origin);
+
   try {
     console.log("API KEY LOADED:", process.env.RETELL_API_KEY);
     const { agentId, dynamicVariables } = await req.json();
@@ -22,7 +47,7 @@ export async function POST(req: Request) {
 
     const data = await response.json();
 
-    return NextResponse.json(data);
+    return NextResponse.json(data, { headers: corsHeaders });
 
   } catch (error) {
     console.error("Retell Error:", error);
@@ -32,10 +57,9 @@ export async function POST(req: Request) {
         error: "Failed to create call"
       },
       {
-        status: 500
+        status: 500,
+        headers: corsHeaders,
       }
     );
   }
 }
-
-
