@@ -1,10 +1,26 @@
 (function () {
   const VOICE_PLATFORM_URL = "https://voice.enlightlab.com";
 
+  const scriptTag = document.currentScript || (function () {
+    const scripts = document.getElementsByTagName("script");
+    return scripts[scripts.length - 1];
+  })();
+
+  const agentId = scriptTag.getAttribute("data-agent");
+  const agentName = scriptTag.getAttribute("data-name") || "AI Agent";
+  const agentRole = scriptTag.getAttribute("data-role") || "Voice Assistant";
+
+  if (!agentId) {
+    console.warn("[Enlight Voice] No data-agent provided.");
+    return;
+  }
+
+  const uid = agentId.slice(-8);
+
   const style = document.createElement("style");
   style.textContent = `
-    #enlight-voice-widget * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
-    #enlight-fab {
+    #enlight-voice-widget-${uid} * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+    #enlight-fab-${uid} {
       position: fixed;
       bottom: 28px;
       right: 28px;
@@ -21,9 +37,9 @@
       z-index: 999998;
       transition: transform 0.2s;
     }
-    #enlight-fab:hover { transform: scale(1.08); }
-    #enlight-fab svg { width: 26px; height: 26px; fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-    #enlight-overlay {
+    #enlight-fab-${uid}:hover { transform: scale(1.08); }
+    #enlight-fab-${uid} svg { width: 26px; height: 26px; fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    #enlight-overlay-${uid} {
       display: none;
       position: fixed;
       inset: 0;
@@ -33,8 +49,8 @@
       justify-content: center;
       padding: 1rem;
     }
-    #enlight-overlay.open { display: flex; }
-    #enlight-modal {
+    #enlight-overlay-${uid}.open { display: flex; }
+    #enlight-modal-${uid} {
       background: #fff;
       border-radius: 24px;
       padding: 2rem 1.5rem;
@@ -46,116 +62,99 @@
       align-items: center;
       gap: 1.25rem;
     }
-    #enlight-avatar {
+    #enlight-avatar-${uid} {
       width: 80px; height: 80px; border-radius: 50%;
       background: linear-gradient(135deg, #818cf8, #4F46E5);
       display: flex; align-items: center; justify-content: center;
       transition: box-shadow 0.3s;
     }
-    #enlight-avatar svg { width: 32px; height: 32px; fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-    #enlight-agent-name { font-size: 1.1rem; font-weight: 700; color: #111827; text-align: center; }
-    #enlight-agent-role { font-size: 0.8rem; color: #6B7280; text-align: center; margin-top: 2px; }
-    #enlight-status-pill {
+    #enlight-avatar-${uid} svg { width: 32px; height: 32px; fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    #enlight-agent-name-${uid} { font-size: 1.1rem; font-weight: 700; color: #111827; text-align: center; }
+    #enlight-agent-role-${uid} { font-size: 0.8rem; color: #6B7280; text-align: center; margin-top: 2px; }
+    #enlight-status-pill-${uid} {
       display: flex; align-items: center; gap: 0.5rem;
       padding: 0.4rem 1rem; border-radius: 9999px;
       background: #F9FAFB;
     }
-    #enlight-status-dot { width: 8px; height: 8px; border-radius: 50%; background: #9CA3AF; flex-shrink: 0; }
-    #enlight-status-text { font-size: 0.8rem; font-weight: 600; color: #6B7280; }
-    #enlight-transcript {
+    #enlight-status-dot-${uid} { width: 8px; height: 8px; border-radius: 50%; background: #9CA3AF; flex-shrink: 0; }
+    #enlight-status-text-${uid} { font-size: 0.8rem; font-weight: 600; color: #6B7280; }
+    #enlight-transcript-${uid} {
       width: 100%; max-height: 180px; overflow-y: auto;
       background: #F9FAFB; border-radius: 12px; padding: 0.75rem;
       display: none; flex-direction: column; gap: 0.5rem;
     }
-    .enlight-msg { display: flex; }
-    .enlight-msg.user { justify-content: flex-end; }
-    .enlight-msg.agent { justify-content: flex-start; }
-    .enlight-bubble {
+    .enlight-msg-${uid} { display: flex; }
+    .enlight-msg-${uid}.user { justify-content: flex-end; }
+    .enlight-msg-${uid}.agent { justify-content: flex-start; }
+    .enlight-bubble-${uid} {
       padding: 0.4rem 0.75rem; border-radius: 12px;
       font-size: 0.8rem; max-width: 80%; line-height: 1.4;
     }
-    .enlight-msg.user .enlight-bubble { background: #4F46E5; color: #fff; }
-    .enlight-msg.agent .enlight-bubble { background: #E5E7EB; color: #111827; }
-    #enlight-hangup {
+    .enlight-msg-${uid}.user .enlight-bubble-${uid} { background: #4F46E5; color: #fff; }
+    .enlight-msg-${uid}.agent .enlight-bubble-${uid} { background: #E5E7EB; color: #111827; }
+    #enlight-hangup-${uid} {
       width: 64px; height: 64px; border-radius: 50%;
       background: #EF4444; border: none; cursor: pointer;
       display: none; align-items: center; justify-content: center;
       box-shadow: 0 4px 16px rgba(239,68,68,0.4);
     }
-    #enlight-hangup svg { width: 24px; height: 24px; fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-    #enlight-start-btn {
+    #enlight-hangup-${uid} svg { width: 24px; height: 24px; fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    #enlight-start-btn-${uid} {
       padding: 0.65rem 2rem; border-radius: 9999px;
       background: linear-gradient(135deg, #818cf8, #4F46E5);
       color: #fff; border: none; cursor: pointer;
       font-size: 0.9rem; font-weight: 600;
       box-shadow: 0 4px 14px rgba(79,70,229,0.35);
     }
-    #enlight-start-btn:hover { opacity: 0.9; }
-    #enlight-hint { font-size: 0.75rem; color: #9CA3AF; text-align: center; }
-    @keyframes enlight-pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+    #enlight-start-btn-${uid}:hover { opacity: 0.9; }
+    #enlight-hint-${uid} { font-size: 0.75rem; color: #9CA3AF; text-align: center; }
+    @keyframes enlight-pulse-${uid} { 0%,100%{opacity:1} 50%{opacity:0.3} }
   `;
   document.head.appendChild(style);
 
-  // --- Read config from script tag ---
-  const scriptTag = document.currentScript || (function () {
-    const scripts = document.getElementsByTagName("script");
-    return scripts[scripts.length - 1];
-  })();
-
-  const agentId = scriptTag.getAttribute("data-agent");
-  const agentName = scriptTag.getAttribute("data-name") || "AI Agent";
-  const agentRole = scriptTag.getAttribute("data-role") || "Voice Assistant";
-
-  if (!agentId) {
-    console.warn("[Enlight Voice] No data-agent provided.");
-    return;
-  }
-
-  // --- Build UI ---
   const wrapper = document.createElement("div");
-  wrapper.id = "enlight-voice-widget";
+  wrapper.id = `enlight-voice-widget-${uid}`;
 
   wrapper.innerHTML = `
-    <button id="enlight-fab" title="Talk to ${agentName}">
+    <button id="enlight-fab-${uid}" title="Talk to ${agentName}">
       <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6A19.79 19.79 0 012.12 4.18 2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
     </button>
-    <div id="enlight-overlay">
-      <div id="enlight-modal">
-        <div id="enlight-avatar">
+    <div id="enlight-overlay-${uid}">
+      <div id="enlight-modal-${uid}">
+        <div id="enlight-avatar-${uid}">
           <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6A19.79 19.79 0 012.12 4.18 2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
         </div>
         <div>
-          <div id="enlight-agent-name">${agentName}</div>
-          <div id="enlight-agent-role">${agentRole}</div>
+          <div id="enlight-agent-name-${uid}">${agentName}</div>
+          <div id="enlight-agent-role-${uid}">${agentRole}</div>
         </div>
-        <div id="enlight-status-pill">
-          <div id="enlight-status-dot"></div>
-          <span id="enlight-status-text">Ready</span>
+        <div id="enlight-status-pill-${uid}">
+          <div id="enlight-status-dot-${uid}"></div>
+          <span id="enlight-status-text-${uid}">Ready</span>
         </div>
-        <div id="enlight-transcript"></div>
-        <button id="enlight-start-btn">Start Call</button>
-        <button id="enlight-hangup">
+        <div id="enlight-transcript-${uid}"></div>
+        <button id="enlight-start-btn-${uid}">Start Call</button>
+        <button id="enlight-hangup-${uid}">
           <svg viewBox="0 0 24 24"><path d="M10.68 13.31a16 16 0 006.01 6.01l2.2-2.2a2 2 0 012.12-.45c1.34.5 2.8.77 4.29.77A2 2 0 0127 19.5v4a2 2 0 01-2 2A22 22 0 013 3a2 2 0 012-2h4a2 2 0 012 2c0 1.5.27 2.95.77 4.29a2 2 0 01-.45 2.11l-2.2 2.2z" transform="rotate(135 12 12)"/></svg>
         </button>
-        <p id="enlight-hint">Tap to end call</p>
+        <p id="enlight-hint-${uid}"></p>
       </div>
     </div>
   `;
   document.body.appendChild(wrapper);
 
-  // --- Elements ---
-  const fab = document.getElementById("enlight-fab");
-  const overlay = document.getElementById("enlight-overlay");
-  const avatar = document.getElementById("enlight-avatar");
-  const statusDot = document.getElementById("enlight-status-dot");
-  const statusText = document.getElementById("enlight-status-text");
-  const transcriptEl = document.getElementById("enlight-transcript");
-  const startBtn = document.getElementById("enlight-start-btn");
-  const hangupBtn = document.getElementById("enlight-hangup");
-  const hint = document.getElementById("enlight-hint");
+  const fab = document.getElementById(`enlight-fab-${uid}`);
+  const overlay = document.getElementById(`enlight-overlay-${uid}`);
+  const avatar = document.getElementById(`enlight-avatar-${uid}`);
+  const statusDot = document.getElementById(`enlight-status-dot-${uid}`);
+  const statusText = document.getElementById(`enlight-status-text-${uid}`);
+  const transcriptEl = document.getElementById(`enlight-transcript-${uid}`);
+  const startBtn = document.getElementById(`enlight-start-btn-${uid}`);
+  const hangupBtn = document.getElementById(`enlight-hangup-${uid}`);
+  const hint = document.getElementById(`enlight-hint-${uid}`);
 
   let retellClient = null;
-  let phase = "idle"; // idle | connecting | active | ended
+  let phase = "idle";
 
   fab.addEventListener("click", () => overlay.classList.add("open"));
   overlay.addEventListener("click", (e) => { if (e.target === overlay) closeModal(); });
@@ -199,15 +198,15 @@
     statusText.textContent = text;
     statusText.style.color = dotColor;
     statusDot.style.background = dotColor;
-    statusDot.style.animation = pulse ? "enlight-pulse 1s infinite" : "none";
-    document.getElementById("enlight-status-pill").style.background = pillBg;
+    statusDot.style.animation = pulse ? `enlight-pulse-${uid} 1s infinite` : "none";
+    document.getElementById(`enlight-status-pill-${uid}`).style.background = pillBg;
   }
 
   function appendTranscript(role, text) {
     transcriptEl.style.display = "flex";
     const div = document.createElement("div");
-    div.className = `enlight-msg ${role}`;
-    div.innerHTML = `<div class="enlight-bubble">${text}</div>`;
+    div.className = `enlight-msg-${uid} ${role}`;
+    div.innerHTML = `<div class="enlight-bubble-${uid}">${text}</div>`;
     transcriptEl.appendChild(div);
     transcriptEl.scrollTop = transcriptEl.scrollHeight;
   }
@@ -238,24 +237,14 @@
         return;
       }
 
-      const script = document.createElement("script");
-      script.src = "https://cdn.jsdelivr.net/npm/retell-client-js-sdk/dist/index.umd.js";
-      script.onload = async function () {
-        retellClient = new RetellWebClient();
-
-        retellClient.on("call_started", () => setPhase("active"));
-        retellClient.on("call_ended", () => { retellClient = null; setPhase("ended"); });
-        retellClient.on("error", () => { retellClient = null; setPhase("ended"); statusText.textContent = "Error"; });
-        retellClient.on("update", (update) => {
-          if (update.transcript) {
-            transcriptEl.innerHTML = "";
-            update.transcript.forEach(msg => appendTranscript(msg.role, msg.content));
-          }
-        });
-
-        await retellClient.startCall({ accessToken: data.access_token });
-      };
-      document.head.appendChild(script);
+      if (typeof RetellWebClient === "undefined") {
+        const script = document.createElement("script");
+        script.src = "https://cdn.jsdelivr.net/npm/retell-client-js-sdk/dist/index.umd.js";
+        script.onload = () => initCall(data.access_token);
+        document.head.appendChild(script);
+      } else {
+        initCall(data.access_token);
+      }
 
     } catch (e) {
       console.error("[Enlight Voice] Error:", e);
@@ -263,6 +252,20 @@
       statusText.textContent = "Failed to connect";
     }
   });
+
+  function initCall(accessToken) {
+    retellClient = new RetellWebClient();
+    retellClient.on("call_started", () => setPhase("active"));
+    retellClient.on("call_ended", () => { retellClient = null; setPhase("ended"); });
+    retellClient.on("error", () => { retellClient = null; setPhase("ended"); statusText.textContent = "Error"; });
+    retellClient.on("update", (update) => {
+      if (update.transcript) {
+        transcriptEl.innerHTML = "";
+        update.transcript.forEach(msg => appendTranscript(msg.role, msg.content));
+      }
+    });
+    retellClient.startCall({ accessToken });
+  }
 
   hangupBtn.addEventListener("click", () => {
     if (retellClient) { try { retellClient.stopCall(); } catch (e) {} retellClient = null; }
