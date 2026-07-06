@@ -1,16 +1,11 @@
 import { NextResponse } from "next/server";
 
-const ALLOWED_ORIGINS = [
-  "https://www.enlightlab.com",
-  "https://voice.enlightlab.com",
-];
-
 function getCorsHeaders(origin: string | null) {
-  const allowOrigin = origin && ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
   return {
-    "Access-Control-Allow-Origin": allowOrigin,
-    "Access-Control-Allow-Methods": "POST, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type",
+    "Access-Control-Allow-Origin": origin || "*",
+    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With",
+    "Access-Control-Max-Age": "86400",
   };
 }
 
@@ -27,7 +22,6 @@ export async function POST(req: Request) {
   const corsHeaders = getCorsHeaders(origin);
 
   try {
-    console.log("API KEY LOADED:", process.env.RETELL_API_KEY);
     const { agentId, dynamicVariables } = await req.json();
     
     const response = await fetch(
