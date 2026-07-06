@@ -15,7 +15,7 @@
     return;
   }
 
-  const uid = agentId.slice(-8);
+  const uid = agentId.slice(-8) + "-" + Math.random().toString(36).substring(2, 7);
 
   const style = document.createElement("style");
   style.textContent = `
@@ -116,7 +116,7 @@
   wrapper.id = `enlight-voice-widget-${uid}`;
 
   wrapper.innerHTML = `
-    <button id="enlight-fab-${uid}" title="Talk to ${agentName}">
+    <button id="enlight-fab-${uid}" class="enlight-fab" title="Talk to ${agentName}">
       <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6A19.79 19.79 0 012.12 4.18 2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
     </button>
     <div id="enlight-overlay-${uid}">
@@ -143,15 +143,15 @@
   `;
   document.body.appendChild(wrapper);
 
-  const fab = document.getElementById(`enlight-fab-${uid}`);
-  const overlay = document.getElementById(`enlight-overlay-${uid}`);
-  const avatar = document.getElementById(`enlight-avatar-${uid}`);
-  const statusDot = document.getElementById(`enlight-status-dot-${uid}`);
-  const statusText = document.getElementById(`enlight-status-text-${uid}`);
-  const transcriptEl = document.getElementById(`enlight-transcript-${uid}`);
-  const startBtn = document.getElementById(`enlight-start-btn-${uid}`);
-  const hangupBtn = document.getElementById(`enlight-hangup-${uid}`);
-  const hint = document.getElementById(`enlight-hint-${uid}`);
+  const fab = wrapper.querySelector(`#enlight-fab-${uid}`);
+  const overlay = wrapper.querySelector(`#enlight-overlay-${uid}`);
+  const avatar = wrapper.querySelector(`#enlight-avatar-${uid}`);
+  const statusDot = wrapper.querySelector(`#enlight-status-dot-${uid}`);
+  const statusText = wrapper.querySelector(`#enlight-status-text-${uid}`);
+  const transcriptEl = wrapper.querySelector(`#enlight-transcript-${uid}`);
+  const startBtn = wrapper.querySelector(`#enlight-start-btn-${uid}`);
+  const hangupBtn = wrapper.querySelector(`#enlight-hangup-${uid}`);
+  const hint = wrapper.querySelector(`#enlight-hint-${uid}`);
 
   let retellClient = null;
   let phase = "idle";
@@ -199,7 +199,7 @@
     statusText.style.color = dotColor;
     statusDot.style.background = dotColor;
     statusDot.style.animation = pulse ? `enlight-pulse-${uid} 1s infinite` : "none";
-    document.getElementById(`enlight-status-pill-${uid}`).style.background = pillBg;
+    wrapper.querySelector(`#enlight-status-pill-${uid}`).style.background = pillBg;
   }
 
   function appendTranscript(role, text) {
@@ -237,6 +237,29 @@
         return;
       }
 
+      function loadScript(url) {
+        return new Promise((resolve, reject) => {
+          const existing = document.querySelector(`script[src="${url}"]`);
+          if (existing) {
+            if (existing.getAttribute("data-loaded") === "true") {
+              resolve();
+              return;
+            }
+            existing.addEventListener("load", () => resolve());
+            existing.addEventListener("error", (err) => reject(err));
+            return;
+          }
+          const script = document.createElement("script");
+          script.src = url;
+          script.onload = () => {
+            script.setAttribute("data-loaded", "true");
+            resolve();
+          };
+          script.onerror = (err) => reject(err);
+          document.head.appendChild(script);
+        });
+      }
+
       function getRetellConstructor() {
         if (typeof window.RetellWebClient === "function") return window.RetellWebClient;
         if (window.RetellWebClient && typeof window.RetellWebClient.RetellWebClient === "function") return window.RetellWebClient.RetellWebClient;
@@ -247,9 +270,26 @@
 
       async function initCall(accessToken) {
         try {
-          const RetellClass = getRetellConstructor();
+          // Ensure EventEmitter dependency is present globally for UMD bundle
+          if (typeof window.EventEmitter === "undefined") {
+            try {
+              await loadScript("https://cdn.jsdelivr.net/npm/eventemitter3@5.0.1/dist/eventemitter3.umd.min.js");
+              if (typeof window.EventEmitter3 !== "undefined") {
+                window.EventEmitter = window.EventEmitter3;
+              }
+            } catch (eeErr) {
+              console.warn("[Enlight Voice] Optional eventemitter3 preload warning:", eeErr);
+            }
+          }
+
+          let RetellClass = getRetellConstructor();
           if (!RetellClass) {
-            throw new Error("RetellWebClient constructor not found");
+            await loadScript("https://cdn.jsdelivr.net/npm/retell-client-js-sdk/dist/index.umd.js");
+            RetellClass = getRetellConstructor();
+          }
+
+          if (!RetellClass) {
+            throw new Error("RetellWebClient constructor not found after script load");
           }
 
           retellClient = new RetellClass();
@@ -277,25 +317,7 @@
         }
       }
 
-      const SdkClass = getRetellConstructor();
-      if (!SdkClass) {
-        const existingScript = document.querySelector('script[src*="retell-client-js-sdk"]');
-        if (existingScript) {
-          existingScript.addEventListener("load", () => initCall(data.access_token));
-        } else {
-          const script = document.createElement("script");
-          script.src = "https://cdn.jsdelivr.net/npm/retell-client-js-sdk/dist/index.umd.js";
-          script.onload = () => initCall(data.access_token);
-          script.onerror = (e) => {
-            console.error("[Enlight Voice] Failed to load Retell SDK script:", e);
-            setPhase("ended");
-            statusText.textContent = "Failed to load SDK";
-          };
-          document.head.appendChild(script);
-        }
-      } else {
-        initCall(data.access_token);
-      }
+      await initCall(data.access_token);
 
     } catch (e) {
       console.error("[Enlight Voice] Error:", e);
