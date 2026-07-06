@@ -237,11 +237,62 @@
         return;
       }
 
-      if (typeof RetellWebClient === "undefined") {
-        const script = document.createElement("script");
-        script.src = "https://cdn.jsdelivr.net/npm/retell-client-js-sdk/dist/index.umd.js";
-        script.onload = () => initCall(data.access_token);
-        document.head.appendChild(script);
+      function getRetellConstructor() {
+        if (typeof window.RetellWebClient === "function") return window.RetellWebClient;
+        if (window.RetellWebClient && typeof window.RetellWebClient.RetellWebClient === "function") return window.RetellWebClient.RetellWebClient;
+        if (window.Retell && typeof window.Retell.RetellWebClient === "function") return window.Retell.RetellWebClient;
+        if (typeof RetellWebClient === "function") return RetellWebClient;
+        return null;
+      }
+
+      async function initCall(accessToken) {
+        try {
+          const RetellClass = getRetellConstructor();
+          if (!RetellClass) {
+            throw new Error("RetellWebClient constructor not found");
+          }
+
+          retellClient = new RetellClass();
+          retellClient.on("call_started", () => setPhase("active"));
+          retellClient.on("call_ended", () => { retellClient = null; setPhase("ended"); });
+          retellClient.on("error", (err) => {
+            console.error("[Enlight Voice] Retell SDK error:", err);
+            retellClient = null;
+            setPhase("ended");
+            statusText.textContent = "Call error";
+          });
+          retellClient.on("update", (update) => {
+            if (update && update.transcript) {
+              transcriptEl.innerHTML = "";
+              update.transcript.forEach(msg => appendTranscript(msg.role, msg.content));
+            }
+          });
+
+          await retellClient.startCall({ accessToken });
+        } catch (err) {
+          console.error("[Enlight Voice] Call initialization failed:", err);
+          retellClient = null;
+          setPhase("ended");
+          statusText.textContent = "Failed to connect";
+        }
+      }
+
+      const SdkClass = getRetellConstructor();
+      if (!SdkClass) {
+        const existingScript = document.querySelector('script[src*="retell-client-js-sdk"]');
+        if (existingScript) {
+          existingScript.addEventListener("load", () => initCall(data.access_token));
+        } else {
+          const script = document.createElement("script");
+          script.src = "https://cdn.jsdelivr.net/npm/retell-client-js-sdk/dist/index.umd.js";
+          script.onload = () => initCall(data.access_token);
+          script.onerror = (e) => {
+            console.error("[Enlight Voice] Failed to load Retell SDK script:", e);
+            setPhase("ended");
+            statusText.textContent = "Failed to load SDK";
+          };
+          document.head.appendChild(script);
+        }
       } else {
         initCall(data.access_token);
       }
@@ -252,20 +303,6 @@
       statusText.textContent = "Failed to connect";
     }
   });
-
-  function initCall(accessToken) {
-    retellClient = new RetellWebClient();
-    retellClient.on("call_started", () => setPhase("active"));
-    retellClient.on("call_ended", () => { retellClient = null; setPhase("ended"); });
-    retellClient.on("error", () => { retellClient = null; setPhase("ended"); statusText.textContent = "Error"; });
-    retellClient.on("update", (update) => {
-      if (update.transcript) {
-        transcriptEl.innerHTML = "";
-        update.transcript.forEach(msg => appendTranscript(msg.role, msg.content));
-      }
-    });
-    retellClient.startCall({ accessToken });
-  }
 
   hangupBtn.addEventListener("click", () => {
     if (retellClient) { try { retellClient.stopCall(); } catch (e) {} retellClient = null; }
